@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="前端 js">
+    <link rel="shortcut icon" href="/blog/img/favicon.ico">
+
+    <title>
+        
+          Geoff的博客 | Geoff&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/blog/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/blog/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/blog/">迷人的反派角色</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/blog/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/blog/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/blog/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/blog/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<header class="intro-header" style="background-image: url('/blog/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+                <div class="site-heading">
+                    <h1>迷人的反派角色</h1>
+                    <!--<hr class="small">-->
+                    <span class="subheading">为了防止世界被破坏，为了维护世界的和平</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        
+
+<!-- USE SIDEBAR -->
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-8 col-md-offset-1
+                col-sm-12
+                col-xs-12
+                post-container
+            ">
+            
+                <!-- Main Content -->
+
+
+<div class="post-preview">
+
+    <a href="/blog/2016/07/27/node项目部署/">
+        <h2 class="post-title">
+            node项目部署上线
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言写了两个月的node项目，开发时候一直用 supervisor来当个watcher， 到部署的时候，用什么，开始在cnode找啊找，果然发现神器forever，当初我的启动命令是这样的1NODE_ENV=production forever start --minUptime 1000 --spinSleepTime 1000 -l forever.log -a -o ./log/out......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Geoff on
+        2016-07-27
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/blog/2016/07/11/移动端布局/">
+        <h2 class="post-title">
+            移动端布局&适配
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            前言如果你在移动端布局里还在使用类似下面这种viewport，写页面的时候各种百分比，稍稍一改动全部百分比都要调整，做个活动页，兼容各种尺寸的屏幕简直是要命的。1&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Geoff on
+        2016-07-11
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/blog/2016/07/02/Linux command/">
+        <h2 class="post-title">
+            Linux常用指令 & Vim
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            Linux常用指令
+cd 进入目录    /为根目录   ～为用户根目录
+pwd  显示当前完整路径名
+ls 列出当前目录下的所有文件和文件夹 
+1-a 列出目录下的所有文件，包括以 . 开头的隐含文件。
+
+rm  删除文件或目录 
+12-r 删除目录和其中的文件-f或--force 　强制删除文件或目录。
+
+zip &amp; unzip 压缩和解压文件或目录
+
+
+本机往服务器传文件，可以......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Geoff on
+        2016-07-02
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/blog/2016/06/02/guandongzhu/">
+        <h2 class="post-title">
+            关东煮店人情故事结局
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            引言
+围绕着关东煮小店的故事,讲述着小店里不同客人的不同生活,结局跌宕起伏,非常值得玩. 尤其是在盯着那些热气腾腾的关东煮的时候,真~的~会~饿~!!! 下方严重剧透,可以先玩再看.
+
+
+工厂青年结局
+婆媳大战－媳妇结局
+iPhone版本下载
+...
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Geoff on
+        2016-06-02
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/blog/2016/05/29/sublimeText插件列表/">
+        <h2 class="post-title">
+            sublimeText插件列表
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            记录自己所用插件先装上Package Control。
+选择插件常规的思路，比如说，新接触到less，sublime并不支持less语法高亮和代码提示，那就去packageControl中搜一下就好了，插件千千万，很容易就找到能解决需求的插件。
+Emmet帮助前端工程师快速编写HTML&amp;CSS, 超好用的代码简写方法. 以下是一些我常用的代码语句.1234567html:5  //直......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Geoff on
+        2016-05-29
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/blog/2016/05/20/whichMobileBrowser/">
+        <h2 class="post-title">
+            移动端浏览器检测
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            需求来源
+现在移动端的站点,多数都有一个原生APP下载页,这个下载页多用于用户分享,传播. 由于国内主要分享平台就是微信和微博,手机主要是安卓和IOS, 所以自然要识别它们,给出不同的下载地址. 这是一个很简单的例子, 随着需求的变化,可以自己继续扩充.微信浏览器只支持应用宝跳转到App Store, 如果你想在微信中跳转到App Store下载应用,自然要申请上架应用宝了.
+
+123456......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Geoff on
+        2016-05-20
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/blog/2016/05/15/flexbox/">
+        <h2 class="post-title">
+            Flexbox教程
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            什么是Flexbox
+Flexbox是CSS3提出的新的布局方法， 相比于传统的float块布局，flexbox布局方式更容易适应不同的屏幕大小。Flexbox极其十分易用，学习它也是相当的容易。需要注意的是，flexbox并不是摒弃所有之前的布局方法，像常用的很多属性还是和css2.1中是一样的，比如margin，padding，width，height等，这个css的基石，变得是围绕布局......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Geoff on
+        2016-05-15
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/blog/2016/05/05/website-gulp/">
+        <h2 class="post-title">
+            前端构建工具gulp使用－－非SPA类
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            为什么是gulp，而非grunt？
+我用grunt大概也有一年了，在中小型项目来说，grunt和gulp在执行速度上差别是可以忽略不计的，但当项目越来越大的时候，gulp明显优于grunt。
+
+
+gulp的其它优点大致如下：
+gulp基于文件流的思想，配置起来简单到爆炸💥
+npm上 gulp插件已经极其丰富,可以很容易的得到需要的插件
+
+构建需求编写配置文件之前一定要先理顺思路
+开发过程中......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Geoff on
+        2016-05-05
+    </p>
+
+</div>
+<hr>
+
+
+
+<!-- Pager -->
+
+<ul class="pager">
+    
+    
+</ul>
+
+
+
+                <!-- 如果开启评论功能 -->
+                
+
+            </div>
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/blog/tags/#布局" title="布局" rel="2">布局</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                            <a href="/blog/tags/#JavaScript" title="JavaScript" rel="2">JavaScript</a>
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Short About -->
+                <section class="visible-md visible-lg">
+                    <hr><h5><a href="/blog/about/">ABOUT ME</a></h5>
+                    <div class="short-about">
+
+                        
+                            <img src="/blog//img/avatar.jpg" />
+                        
+
+                        
+                            <p>跳坑，爬坑，跳坑，爬坑，跳坑，爬坑...!</p>
+                        
+
+                        <!-- SNS Link -->
+                        <ul class="list-inline">
+                            
+                            
+                            
+                                <li>
+                                    <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
+                                        </span>
+                                    </a>
+                                </li>
+                            
+
+                            
+                                <li>
+                                    <a target="_blank" href="http://weibo.com/geoffzhu">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            
+
+                            
+
+                            
+                                <li>
+                                    <a target="_blank"  href="https://github.com/GeoffZhu">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                            
+                            
+                            
+                            
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+        
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/geoffzhu">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/GeoffZhu">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 迷人的反派角色 2016 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/blog/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/blog/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/blog/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://geoffzhu.cn/blog/blog/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '14347cf1c49067927d95af6c107cfaab';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
