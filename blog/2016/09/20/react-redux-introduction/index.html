@@ -13,11 +13,11 @@
 
     <title>
         
-          About - Geoff的博客 | Geoff&#39;s Blog
+          Redux - Geoff的博客 | Geoff&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/about/">
+    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2016/09/20/react-redux-introduction/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
@@ -148,14 +148,14 @@
 
     <!-- Main Content -->
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/blog/img/home-bg-o.jpg')">
+<header class="intro-header" style="background-image: url('/blog/img/bg-1.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
                 <div class="site-heading">
-                    <h1>About</h1>
+                    <h1>Redux</h1>
                     <!--<hr class="small">-->
-                    <span class="subheading">Hey, this is Geoff.</span>
+                    <span class="subheading">Redux基本概念教学</span>
                 </div>
             </div>
         </div>
@@ -179,11 +179,71 @@
                 post-container
             ">
             
-                <blockquote>
-<p>写写代码，做做设计，看看产品。<br>世界那么大，多玩玩看看。</p>
+                <h1 id="Redux-基礎概念"><a href="#Redux-基礎概念" class="headerlink" title="Redux 基礎概念"></a>Redux 基礎概念</h1><p><img src="./images/redux-logo.png" alt="React Redux" title="React Redux"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面一個章節我們講解了 Flux 的功能和用法，但在實務上許多開發者較偏好的是同為 Flux-like 但較為簡潔且文件豐富清楚的 <a href="http://redux.js.org/index.html" target="_blank" rel="external">Redux</a> 當作狀態資料管理的架構。Redux 是由 Dan Abramov 所發起的一個開源的 library，其主要功能如官方首頁寫著：<code>Redux is a predictable state container for JavaScript apps.</code>，亦即 Redux 希望能提供一個可以預測的 state 管理容器，讓開發者可以可以更容易開發複雜的 JavaScript 應用程式（注意 Redux 和 React 並無相依性，只是和 React 可以有很好的整合）。</p>
+<h2 id="Flux-Redux-超級比一比"><a href="#Flux-Redux-超級比一比" class="headerlink" title="Flux/Redux 超級比一比"></a>Flux/Redux 超級比一比</h2><p>從簡單 Flux/Redux 比較圖可以看出兩者之間有些差異：</p>
+<p><img src="./images/using-redux-compare.jpg" alt="React Redux" title="React Redux"></p>
+<p>在開始實作 Redux App 之前我們先來了解一下 Redux 和 Flux 的一些差異：</p>
+<ol>
+<li><p>只使用一個 store 將整個應用程式的狀態 (state) 用物件樹 (object tree) 的方式儲存起來：</p>
+<p> 原生的 Flux 會有許多分散的 store 儲存各個不同的狀態，但在 redux 中，只會有唯一一個 store 將所有的資料用物件的方式包起來。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//原生 Flux 的 store</span></div><div class="line"><span class="keyword">const</span> userStore = &#123;</div><div class="line">    name: <span class="string">''</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> todoStore = &#123;</div><div class="line">    text: <span class="string">''</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Redux 的單一 store</span></div><div class="line"><span class="keyword">const</span> state = &#123;</div><div class="line">    userState: &#123;</div><div class="line">        name: <span class="string">''</span></div><div class="line">    &#125;,</div><div class="line">    todoState: &#123;</div><div class="line">        text: <span class="string">''</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>唯一可以改變 state 的方法就是發送 action，這部份和 Flux 類似，但 Redux 並沒有像 Flux 設計有 Dispatcher。Redux 的 action 和 Flux 的 action 都是一個包含 <code>type</code> 和 <code>payload</code> 的物件。</p>
+</li>
+<li><p>Redux 擁有 Flux 所沒有的 Reducer。Reducer 根據 action 的 type 去執行對應的 state 做變化的函式叫做 Reducer。你可以使用 switch 或是使用函式 mapping 的方式去對應處理的方式。 </p>
+</li>
+<li><p>Redux 擁有許多方便好用的輔助測試工具（例如：<a href="https://github.com/gaearon/redux-devtools" target="_blank" rel="external">redux-devtools</a>、<a href="https://github.com/gaearon/react-transform-boilerplate" target="_blank" rel="external">react-transform-boilerplate</a>），方便測試和使用 <code>Hot Module Reload</code>。</p>
+</li>
+</ol>
+<h2 id="Redux-核心概念介紹"><a href="#Redux-核心概念介紹" class="headerlink" title="Redux 核心概念介紹"></a>Redux 核心概念介紹</h2><p><img src="./images/redux-flowchart.png" alt="React Redux" title="React Redux"></p>
+<p>從上述的圖中我們可以看到 Redux 資料流的模型大致上可以簡化成： <code>View -&gt; Action -&gt; (Middleware) -&gt; Reducer</code>。當使用者和 View 互動時會觸發事件發出 Action，若有使用 Middleware 的話會在進入 Reducer 進行一些處理，當 Action 進到 Reducer 時，Reducer 會根據，action type 去 mapping 對應處理的動作，然後回傳回新的 state。View 則因為偵測到 state 更新而重繪頁面。在這個章節我們討論的是 synchronous（同步）的情形，asynchronous（非同步）的狀況會在接下來的章節進行討論。以下就用官方網站上的簡單範例來讓大家感受一下 Redux 的整個使用流程：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</div><div class="line"></div><div class="line"><span class="comment">/** </span></div><div class="line">  下面是一個簡單的 reducers ，主要功能是針對傳進來的 action type 判斷並回傳新的 state</div><div class="line">  reducer 規格：(state, action) =&gt; newState </div><div class="line">  一般而言 state 可以是 primitive、array 或 object 甚至是 ImmutableJS Data。但要留意的是不能修改到原來的 state ，</div><div class="line">  回傳的是新的 state。由於使用在 Redux 中使用 ImmutableJS 有許多好處，所以我們的範例 App 也會使用 ImmutableJS </div><div class="line">*/</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state = 0, action</span>) </span>&#123;</div><div class="line">  <span class="keyword">switch</span> (action.type) &#123;</div><div class="line">  <span class="keyword">case</span> <span class="string">'INCREMENT'</span>:</div><div class="line">    <span class="keyword">return</span> state + <span class="number">1</span>;</div><div class="line">  <span class="keyword">case</span> <span class="string">'DECREMENT'</span>:</div><div class="line">    <span class="keyword">return</span> state - <span class="number">1</span>;</div><div class="line">  <span class="keyword">default</span>:</div><div class="line">    <span class="keyword">return</span> state;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 創建 Redux store 去存放 App 的所有 state</span></div><div class="line"><span class="comment">// store 的可用 API &#123; subscribe, dispatch, getState &#125; </span></div><div class="line"><span class="keyword">let</span> store = createStore(counter);</div><div class="line"></div><div class="line"><span class="comment">// 可以使用 subscribe() 來訂閱 state 是否更新。但實務通常會使用 react-redux 來串連 React 和 Redux</span></div><div class="line">store.subscribe(() =&gt;</div><div class="line">  <span class="built_in">console</span>.log(store.getState());</div><div class="line">);</div><div class="line"></div><div class="line"><span class="comment">// 若想改變 state ，一律發 action</span></div><div class="line">store.dispatch(&#123; type: <span class="string">'INCREMENT'</span> &#125;);</div><div class="line"><span class="comment">// 1</span></div><div class="line">store.dispatch(&#123; type: <span class="string">'INCREMENT'</span> &#125;);</div><div class="line"><span class="comment">// 2</span></div><div class="line">store.dispatch(&#123; type: <span class="string">'DECREMENT'</span> &#125;);</div><div class="line"><span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<h2 id="Redux-API-入門"><a href="#Redux-API-入門" class="headerlink" title="Redux API 入門"></a>Redux API 入門</h2><ol>
+<li><p>createStore：<code>createStore(reducer, [preloadedState], [enhancer])</code></p>
+<p> 我們知道在 Redux 中只會有一個 store。在產生 store 時我們會使用 <code>createStore</code> 這個 API 來創建 store。第一個參數放入我們的 <code>reducer</code> 或是有多個 <code>reducers</code> combine（使用 <code>combineReducers</code>）在一起的 <code>rootRuducers</code>。第二個參數我們會放入希望預先載入的 <code>state</code> 例如：user session 等。第三個參數通常會放入我們想要使用用來增強 Redux 功能的 <code>middlewares</code>，若有多個 <code>middlewares</code> 的話，通常會使用 <code>applyMiddleware</code> 來整合。</p>
+</li>
+<li><p>Store</p>
+<p> 屬於 Store 的四個方法：</p>
+<ul>
+<li>getState()</li>
+<li>dispatch(action)</li>
+<li>subscribe(listener)</li>
+<li><p>replaceReducer(nextReducer)</p>
+<p>關於 Store 重點是要知道 Redux 只有一個 Sotre 負責存放整個 App 的 State，而唯一能改變 State 的方法只有發送 action。</p>
+</li>
+</ul>
+</li>
+<li><p>combineReducers：<code>combineReducers(reducers)</code></p>
+<p> combineReducers 可以將多個 reducers 進行整合並回傳一個 Function，讓我們可以將 reducer 適度分割</p>
+</li>
+<li><p>applyMiddleware：<code>applyMiddleware(...middlewares)</code>    </p>
+<p> 官方針對 Middleware 進行說明</p>
+<blockquote>
+<p>It provides a third-party extension point between dispatching an<br> action, and the moment it reaches the reducer.</p>
 </blockquote>
-<p>9月21日上午，阳光明媚，鲜花斗艳。帕洛阿尔托苹果店里欢声笑语，人头攒动。苹果公司首席执行官蒂姆·库克先生在店长欧阳猛南陪同下，不远千米，深入到一线店面，为那里的员工带去节曰的问候和良好的祝愿。<br><br>“果粉们，你们辛苦了，我代表某果公司，祝你们身体健康，生活幸福，工作成功！”库克亲切慰问广大员工和顾客，并就iOS7、iPhone 5S和iPhone 5C的销售状况进行调研。 <br><br>“您现在每月工资有多少？肾5S拿到了吗？”在店里，库克关切地向果粉们问起这一问题。当听说果粉们排到了5S，库克满意地连连点头。接着他指出，近年来苹果事业发展取得巨大成就，特别是iPhone影响剧增，老百姓对iOS满意度逐步提高，在这个转变过程中，果粉的辛勤工作功不可没。<br><br>库克看到一个中国小朋友在排队买iPhone 5S，亲切的问：“5288元一台能承受不？”小朋友回答到：“能！”当得知这位小朋友卖了一个肾来买iPhone 5S时，库克叮嘱道：“在支持苹果的同时，也要爱护身体。”<br><br>库克与购买苹果手机的果粉们兴致勃勃地参观了苹果专卖店，和员工们拉了拉家常，并饶有兴趣地玩了四盘切西瓜游戏，与普通员工同乐。<br><br>在交谈中，库克多次关心地强调：“有了iPhone 5C，就不卖iPhone 5了。”并对顾客说：“好好休息，身体是革命的本钱嘛！”会谈始终在亲切友好的气氛中进行。<br><br>顾客们就库克的讲话达成了广泛的共识，并承认世界上只有iOS最流畅，要紧紧的团结在以库克先生为首席执行官的苹果公司集体周围，一心一意抓学习，聚精会神谋发展。<br><br><br>帕洛阿尔托苹果专卖店当日原则通过《蒂姆·库克首席执行官在加州新苹果店的讲话纪要》，并下发各分店认真学习、研讨。</p>
-<p style="text-align:right;"><br>    —— <a href="http://www.zhihu.com/question/19687065" target="_blank" rel="external">李书航 － 什么是「共产中文腔调」？ </a><br></p>
+<p> 若有 NodeJS 的經驗的讀者，對於 middleware 概念應該不陌生，讓開發者可以在 req 和 res 之間進行一些操作。在 Redux 中 Middleware 則是扮演 action 到達 reducer 前的第三方擴充。而 applyMiddleware 可以將多個 <code>middlewares</code> 整合並回傳一個 Function，便於使用。</p>
+<p> 若是你要使用 asynchronous（非同步）的行為的話需要使用其中一種 middleware： <a href="https://github.com/gaearon/redux-thunk" target="_blank" rel="external">redux-thunk</a>、<a href="https://github.com/acdlite/redux-promise" target="_blank" rel="external">redux-promise</a> 或 <a href="https://github.com/pburtchaell/redux-promise-middleware" target="_blank" rel="external">redux-promise-middleware</a> ，這樣可以讓你在 actions 中 dispatch Promises 而非 function。asynchronous（非同步）運作方式就如同下圖所示：</p>
+<p> <img src="./images/react-redux-diagram.png" alt="React Redux" title="React Redux"></p>
+</li>
+<li><p>bindActionCreators：<code>bindActionCreators(actionCreators, dispatch)</code></p>
+<p> bindActionCreators 可以將 <code>actionCreators</code> 和 <code>dispatch</code> 綁定，並回傳一個 Function 或 Object，讓程式更簡潔。但若是使用 react-redux 可以用 <code>connect</code> 讓 dispatch 行為更容易管理</p>
+</li>
+<li><p>compose：<code>compose(...functions)</code></p>
+<p> compose 可以將 function 由右到左合併並回傳一個 Function，如官網範例所示：</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; createStore, combineReducers, applyMiddleware, compose &#125; <span class="keyword">from</span> <span class="string">'redux'</span></div><div class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">'redux-thunk'</span></div><div class="line"><span class="keyword">import</span> DevTools <span class="keyword">from</span> <span class="string">'./containers/DevTools'</span></div><div class="line"><span class="keyword">import</span> reducer <span class="keyword">from</span> <span class="string">'../reducers/index'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> store = createStore(</div><div class="line">  reducer,</div><div class="line">  compose(</div><div class="line">    applyMiddleware(thunk),</div><div class="line">    DevTools.instrument()</div><div class="line">  )</div><div class="line">)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>以上介紹了 Redux 的基礎概念，若是讀者覺得還是有點抽象的話也沒關係，在下一個章節我們將實際帶大家開發一個整合 <code>React</code>、<code>Redux</code> 和 <code>ImmutableJS</code> 的 TodoApp。</p>
+<h2 id="延伸閱讀"><a href="#延伸閱讀" class="headerlink" title="延伸閱讀"></a>延伸閱讀</h2><ol>
+<li><a href="http://redux.js.org/index.html" target="_blank" rel="external">Redux 官方網站</a></li>
+<li><a href="http://react-china.org/t/redux-single-source-of-truth/5564" target="_blank" rel="external">Redux架构实践——Single Source of Truth</a></li>
+<li><a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0" target="_blank" rel="external">Presentational and Container Components</a></li>
+<li><a href="https://github.com/matthew-sun/blog/issues/18" target="_blank" rel="external">使用Redux管理你的React应用</a></li>
+<li><a href="http://www.slideshare.net/JonasOhlsson/using-redux" target="_blank" rel="external">Using redux</a></li>
+</ol>
+<p>（image via <a href="https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-dark.png" target="_blank" rel="external">githubusercontent</a>、<a href="http://makeitopen.com/static/images/redux_flowchart.png" target="_blank" rel="external">makeitopen</a>、<a href="https://css-tricks.com/wp-content/uploads/2016/03/redux-article-3-03.svg" target="_blank" rel="external">css-tricks</a>、<a href="https://blog.tighten.co/assets/img/react-redux-diagram.png" target="_blank" rel="external">tighten</a>、<a href="http://blog.tryolabs.com/wp-content/uploads/2016/04/redux-simple-f8-diagram.png" target="_blank" rel="external">tryolabs</a>、<a href="https://facebook.github.io/flux/img/flux-simple-f8-diagram-with-client-action-1300w.png" target="_blank" rel="external">facebook</a>、<a href="http://www.slideshare.net/JonasOhlsson/using-redux" target="_blank" rel="external">JonasOhlsson</a>）</p>
+
 
                 <!-- 如果开启评论功能 -->
                 
@@ -193,9 +253,9 @@
                     <!-- 多说评论框 start -->
                     <div class="comment">
                         <div class="ds-thread"
-                            data-thread-key="about/index.html"
-                            data-title="About"
-                            data-url="http://geoffzhu.cn/blog/about/index.html" >
+                            data-thread-key="2016/09/20/react-redux-introduction/"
+                            data-title="Redux"
+                            data-url="http://geoffzhu.cn/blog/blog/2016/09/20/react-redux-introduction/" >
                         </div>
                     </div>
                     <!-- 多说评论框 end -->
