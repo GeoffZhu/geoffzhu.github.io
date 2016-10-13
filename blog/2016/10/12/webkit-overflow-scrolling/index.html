@@ -13,11 +13,11 @@
 
     <title>
         
-          sublimeText插件列表 - Geoff的博客 | Geoff&#39;s Blog
+          -webkit-overflow-scrolling - Geoff的博客 | Geoff&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2016/05/29/sublimeText插件列表/">
+    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2016/10/12/webkit-overflow-scrolling/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
@@ -155,7 +155,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/blog/img/home-bg.jpg')
+        background-image: url('img/bg-1.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -165,16 +165,14 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/blog/tags/#IDE" title="IDE">IDE</a>
-                        
-                          <a class="tag" href="/blog/tags/#sublimeText" title="sublimeText">sublimeText</a>
+                          <a class="tag" href="/blog/tags/#css" title="css">css</a>
                         
                     </div>
-                    <h1>sublimeText插件列表</h1>
+                    <h1>-webkit-overflow-scrolling</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by Geoff on
-                        2016-05-29
+                        2016-10-12
                     </span>
                 </div>
             </div>
@@ -193,14 +191,13 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="记录自己所用插件"><a href="#记录自己所用插件" class="headerlink" title="记录自己所用插件"></a>记录自己所用插件</h3><p>先装上Package Control。</p>
-<p>选择插件常规的思路，比如说，新接触到less，sublime并不支持less语法高亮和代码提示，那就去packageControl中搜一下就好了，插件千千万，很容易就找到能解决需求的插件。</p>
-<h4 id="Emmet"><a href="#Emmet" class="headerlink" title="Emmet"></a>Emmet</h4><p>帮助前端工程师快速编写HTML&amp;CSS, 超好用的代码简写方法. 以下是一些我常用的代码语句.<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">html</span>:<span class="number">5</span>  <span class="comment">//直接生成html5文档类型</span></div><div class="line"><span class="selector-tag">div</span><span class="selector-class">.className</span>   div<span class="selector-id">#id</span></div><div class="line"><span class="selector-tag">a</span>[href=<span class="string">'#'</span>]  <span class="comment">//不光可以写href，写标签属性的时候都可以如此</span></div><div class="line">div&gt;<span class="selector-tag">h1</span> <span class="comment">//嵌套</span></div><div class="line">ul&gt;li*<span class="number">5</span></div><div class="line"></div><div class="line">-<span class="attribute">transition</span>  //直接生成带前缀的transition属性</div></pre></td></tr></table></figure></p>
-<h4 id="ConvertToUTF8"><a href="#ConvertToUTF8" class="headerlink" title="ConvertToUTF8"></a>ConvertToUTF8</h4><p>编码转为UTF8，防乱码神器。</p>
-<h4 id="CSScomb"><a href="#CSScomb" class="headerlink" title="CSScomb"></a>CSScomb</h4><p>自动调整css顺序，快捷键 command+shift+c<br>编码转为UTF8，防乱码神器。</p>
-<h4 id="SideBarEnhancements"><a href="#SideBarEnhancements" class="headerlink" title="SideBarEnhancements"></a>SideBarEnhancements</h4><p>侧边栏＋右键菜单增强工具，可以在sublime任何目录下调出终端，还可以方便的右键在各个浏览器中打开</p>
-<h4 id="docblockr"><a href="#docblockr" class="headerlink" title="docblockr"></a>docblockr</h4><p>生成注释用<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line">/*</div></pre></td></tr></table></figure></p>
-
+                <p>###-webkit-overflow-scrolling </p>
+<p>在移动端，常有弹层可滚动的时候，但是弹层在滚动的时候没有回弹和跟随手指的效果，导致弹层滑动很硬很难用。-webkit-overflow-scrolling: touch;可以完美解决这个问题。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-webkit-overflow-scrolling</span>: <span class="selector-tag">touch</span>; <span class="comment">/* 当手指从触摸屏上移开，会保持一段时间的滚动 */</span></div><div class="line"></div><div class="line"><span class="selector-tag">-webkit-overflow-scrolling</span>: <span class="selector-tag">auto</span>; <span class="comment">/* 当手指从触摸屏上移开，滚动会立即停止 */</span></div></pre></td></tr></table></figure>
+<p>其实写这篇blog不是为了介绍这个属性，而是因为被这个属性坑了。在开发移动端网站的时候，我常常把-webkit-overflow-scrolling加在html元素上，就像这样。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">html</span>,<span class="selector-tag">body</span>&#123;</div><div class="line">	<span class="attribute">margin</span>:<span class="number">0</span>;</div><div class="line">	<span class="attribute">padding</span>:<span class="number">0</span>;</div><div class="line">	<span class="attribute">overflow-x</span>: hidden;</div><div class="line">  	<span class="attribute">-webkit-overflow-scrolling</span>: touch;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>问题就出在这里，overflow-x: hidden和-webkit-overflow-scrolling: touch的组合出现了一个奇奇怪怪得bug，只存在于IOS;<br>当我把某元素position:fixed在底部以后，这个元素被hidden掉了，常识告诉我，fixed元素是以视口为参照的，但是视口的高度好像被改变了，于是乎编了个例子，证实了这个bug的存在。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Test<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="css"></span></div><div class="line">    <span class="selector-tag">html</span>,<span class="selector-tag">body</span>&#123;</div><div class="line">      <span class="attribute">-webkit-overflow-scrolling</span>: touch;</div><div class="line">      <span class="attribute">overflow-x</span>: hidden;</div><div class="line">      <span class="attribute">font-size</span>: <span class="number">30px</span>;</div><div class="line">      <span class="attribute">line-height</span>: <span class="number">50px</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.fixed</span>&#123;</div><div class="line">      <span class="attribute">position</span>: fixed;</div><div class="line">      <span class="attribute">bottom</span>: <span class="number">0</span>;</div><div class="line">      <span class="attribute">left</span>: <span class="number">0</span>;</div><div class="line">      <span class="attribute">background</span>: red;</div><div class="line">      <span class="attribute">width</span>: <span class="number">100%</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="selector-class">.bgblue</span>&#123;</div><div class="line">      <span class="attribute">background</span>: blue;</div><div class="line">    &#125;</div><div class="line">  <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"bgblue"</span>&gt;</span>内容<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"fixed"</span>&gt;</span>底部<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
 
                 <hr>
 
@@ -209,12 +206,12 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="2016/05/29/sublimeText插件列表/"
-                    data-title="sublimeText插件列表"
-                    data-url="http://geoffzhu.cn/blog/blog/2016/05/29/sublimeText插件列表/"
-                    data-images=""
-                    data-content="记录自己所用插件先装上Package Control。
-选择插件常规的思路，比如说，新接触到l... | Geoff的博客 | Geoff&#39;s Blog " >
+                    data-thread-key="2016/10/12/webkit-overflow-scrolling/"
+                    data-title="-webkit-overflow-scrolling"
+                    data-url="http://geoffzhu.cn/blog/blog/2016/10/12/webkit-overflow-scrolling/"
+                    data-images="http://geoffzhu.cn/blog/blog/2016/10/12/webkit-overflow-scrolling/img/bg-1.jpg"
+                    data-content="###-webkit-overflow-scrolling 
+在移动端，常有弹层可滚动的时候，... | Geoff的博客 | Geoff&#39;s Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -232,13 +229,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/blog/2016/06/02/guandongzhu/" data-toggle="tooltip" data-placement="top" title="关东煮店人情故事结局">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/blog/2016/05/20/whichMobileBrowser/" data-toggle="tooltip" data-placement="top" title="移动端浏览器检测">Next Post &rarr;</a>
+                            <a href="/blog/2016/09/28/node实现缓存hashTable/" data-toggle="tooltip" data-placement="top" title="node实现HashTable缓存">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -247,9 +240,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2016/05/29/sublimeText插件列表/"
-                        data-title="sublimeText插件列表"
-                        data-url="http://geoffzhu.cn/blog/blog/2016/05/29/sublimeText插件列表/" >
+                        data-thread-key="2016/10/12/webkit-overflow-scrolling/"
+                        data-title="-webkit-overflow-scrolling"
+                        data-url="http://geoffzhu.cn/blog/blog/2016/10/12/webkit-overflow-scrolling/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -275,9 +268,7 @@
                     <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/blog/tags/#IDE" title="IDE">IDE</a>
-                        
-                          <a class="tag" href="/blog/tags/#sublimeText" title="sublimeText">sublimeText</a>
+                          <a class="tag" href="/blog/tags/#css" title="css">css</a>
                         
                     </div>
                 </section>
