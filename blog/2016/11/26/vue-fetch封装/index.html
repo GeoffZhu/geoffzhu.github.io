@@ -13,11 +13,11 @@
 
     <title>
         
-          sublimeText插件列表 - Geoff的博客 | Geoff&#39;s Blog
+          在项目中正确使用fetch的姿势 - Geoff的博客 | Geoff&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2016/05/29/sublimeText插件列表/">
+    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2016/11/26/vue-fetch封装/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
@@ -165,16 +165,16 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/blog/tags/#IDE" title="IDE">IDE</a>
+                          <a class="tag" href="/blog/tags/#js" title="js">js</a>
                         
-                          <a class="tag" href="/blog/tags/#sublimeText" title="sublimeText">sublimeText</a>
+                          <a class="tag" href="/blog/tags/#vue" title="vue">vue</a>
                         
                     </div>
-                    <h1>sublimeText插件列表</h1>
+                    <h1>在项目中正确使用fetch的姿势</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by Geoff on
-                        2016-05-29
+                        2016-11-26
                     </span>
                 </div>
             </div>
@@ -193,13 +193,17 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="记录自己所用插件"><a href="#记录自己所用插件" class="headerlink" title="记录自己所用插件"></a>记录自己所用插件</h3><p>先装上Package Control。</p>
-<p>选择插件常规的思路，比如说，新接触到less，sublime并不支持less语法高亮和代码提示，那就去packageControl中搜一下就好了，插件千千万，很容易就找到能解决需求的插件。</p>
-<h4 id="Emmet"><a href="#Emmet" class="headerlink" title="Emmet"></a>Emmet</h4><p>帮助前端工程师快速编写HTML&amp;CSS, 超好用的代码简写方法. 以下是一些我常用的代码语句.<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">html</span>:<span class="number">5</span>  <span class="comment">//直接生成html5文档类型</span></div><div class="line"><span class="selector-tag">div</span><span class="selector-class">.className</span>   div<span class="selector-id">#id</span></div><div class="line"><span class="selector-tag">a</span>[href=<span class="string">'#'</span>]  <span class="comment">//不光可以写href，写标签属性的时候都可以如此</span></div><div class="line">div&gt;<span class="selector-tag">h1</span> <span class="comment">//嵌套</span></div><div class="line">ul&gt;li*<span class="number">5</span></div><div class="line"></div><div class="line">-<span class="attribute">transition</span>  //直接生成带前缀的transition属性</div></pre></td></tr></table></figure></p>
-<h4 id="ConvertToUTF8"><a href="#ConvertToUTF8" class="headerlink" title="ConvertToUTF8"></a>ConvertToUTF8</h4><p>编码转为UTF8，防乱码神器。</p>
-<h4 id="CSScomb"><a href="#CSScomb" class="headerlink" title="CSScomb"></a>CSScomb</h4><p>自动调整css顺序，快捷键 command+shift+c<br>编码转为UTF8，防乱码神器。</p>
-<h4 id="SideBarEnhancements"><a href="#SideBarEnhancements" class="headerlink" title="SideBarEnhancements"></a>SideBarEnhancements</h4><p>侧边栏＋右键菜单增强工具，可以在sublime任何目录下调出终端，还可以方便的右键在各个浏览器中打开</p>
-<h4 id="docblockr"><a href="#docblockr" class="headerlink" title="docblockr"></a>docblockr</h4><p>生成注释用<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/** </div><div class="line">/*</div></pre></td></tr></table></figure></p>
+                <p>fetch API 非常的简单</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.fetch(url).then((res) =&gt; &#123;</div><div class="line">    res.json();</div><div class="line">&#125;).then((result) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(result);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>但是在实际项目开发中，很少会直接这么用，因为存在兼容性问题，易用性/通用性也不够。例如 GET/POST 请求、文件上传、图片获取等，实现方式都有较大的差异。</p>
+<h3 id="为什么要做更进一步的-fetch-封"><a href="#为什么要做更进一步的-fetch-封" class="headerlink" title="为什么要做更进一步的 fetch 封"></a>为什么要做更进一步的 fetch 封</h3><p>前端开发者应该都很熟悉 jQuery 中的 $.ajax/$.post/$.get 这些方法，在各种框架或库中也存在着不尽相同的 ajax API 方法实现。类似这样的 xhr api 封装屏蔽了不同平台的差异性，简化了 xhr 的使用，在一些简单的应用中似乎已经可以满足需求了，但在中大型应用中还远远不够。</p>
+<p>这些实现满足了易用性的需求，却难以完成基于业务特性和接口约定的通用逻辑处理。我在实际的项目中，看到了太多相似而重复的类似如下的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.fetch(url).then((res) =&gt; &#123;</div><div class="line">    res.json();</div><div class="line">&#125;).then((result) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (result.status) &#123;</div><div class="line">      <span class="built_in">console</span>.log(result.data);</div><div class="line">      ...</div><div class="line">      ...</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      alert(result.msg || <span class="string">'error'</span>)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;).catch((err) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(err);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>里面有大量错误处理的逻辑，还有<code>res.json()</code>这样的解析数据的中间过程。</p>
+<p>在一个 fetch 请求的生命周期中，你可能需要做的事情有很多。如果你有考虑过如下列举的一些需求，那么，你该开始做业务层的封装了。<br>+更简洁的代码逻辑<br>+统一的数据获取方式、环境切换、数据 mock 处理<br>+接口约定与出错处理<br>+前端数据缓存(memory 与 session、local 级别)<br>+通用的回调处理 (成功/失败处理，xss 注入等数据预处理)<br>+按钮状态等处理<br>+公共参数获取与上报<br>+api 埋点性能收集(如超长耗时、网络超时、50x 出错等)</p>
+<p>本仓库中有我封装的vue-fetch，依赖很多，而且是根据业务开发的，只为展示出一些思路，能让使用fetch如下面这样方便</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.$fetch(&#123;</div><div class="line">  url: url, *必填</div><div class="line">  params: params *必填</div><div class="line">  ...</div><div class="line">  ...</div><div class="line">  ...</div><div class="line">&#125;).then((result) =&gt; &#123;</div><div class="line">  <span class="comment">//不需要在这处理result.status</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>  封装中包含了错误处理和一些可以省略掉的步骤都封装在插件内部。<br>  <a href="https://github.com/GeoffZhu/manage-your-fetch/blob/master/vue-fetch.js" target="_blank" rel="external">vue-fetch</a></p>
 
 
                 <hr>
@@ -209,12 +213,12 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="2016/05/29/sublimeText插件列表/"
-                    data-title="sublimeText插件列表"
-                    data-url="http://geoffzhu.cn/blog/blog/2016/05/29/sublimeText插件列表/"
+                    data-thread-key="2016/11/26/vue-fetch封装/"
+                    data-title="在项目中正确使用fetch的姿势"
+                    data-url="http://geoffzhu.cn/blog/blog/2016/11/26/vue-fetch封装/"
                     data-images=""
-                    data-content="记录自己所用插件先装上Package Control。
-选择插件常规的思路，比如说，新接触到l... | Geoff的博客 | Geoff&#39;s Blog " >
+                    data-content="fetch API 非常的简单
+12345window.fetch(url).then((re... | Geoff的博客 | Geoff&#39;s Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -232,13 +236,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/blog/2016/06/02/guandongzhu/" data-toggle="tooltip" data-placement="top" title="关东煮店人情故事结局">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/blog/2016/05/20/whichMobileBrowser/" data-toggle="tooltip" data-placement="top" title="移动端浏览器检测">Next Post &rarr;</a>
+                            <a href="/blog/2016/11/21/vue-cli/" data-toggle="tooltip" data-placement="top" title="做自己的vue-cli">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -247,9 +247,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2016/05/29/sublimeText插件列表/"
-                        data-title="sublimeText插件列表"
-                        data-url="http://geoffzhu.cn/blog/blog/2016/05/29/sublimeText插件列表/" >
+                        data-thread-key="2016/11/26/vue-fetch封装/"
+                        data-title="在项目中正确使用fetch的姿势"
+                        data-url="http://geoffzhu.cn/blog/blog/2016/11/26/vue-fetch封装/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -275,9 +275,9 @@
                     <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/blog/tags/#IDE" title="IDE">IDE</a>
+                          <a class="tag" href="/blog/tags/#js" title="js">js</a>
                         
-                          <a class="tag" href="/blog/tags/#sublimeText" title="sublimeText">sublimeText</a>
+                          <a class="tag" href="/blog/tags/#vue" title="vue">vue</a>
                         
                     </div>
                 </section>
