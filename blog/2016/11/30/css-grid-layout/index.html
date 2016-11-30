@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="前端 js">
+    <link rel="shortcut icon" href="/blog/img/favicon.ico">
+
+    <title>
+        
+          (译)原生CSS网格布局学习笔记 - Geoff的博客 | Geoff&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2016/11/30/css-grid-layout/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/blog/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/blog/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/blog/">迷人的反派角色</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/blog/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/blog/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/blog/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/blog/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/blog/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/blog/tags/#css" title="css">css</a>
+                        
+                          <a class="tag" href="/blog/tags/#布局" title="布局">布局</a>
+                        
+                          <a class="tag" href="/blog/tags/#grid" title="grid">grid</a>
+                        
+                    </div>
+                    <h1>(译)原生CSS网格布局学习笔记</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Geoff on
+                        2016-11-30
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p><a href="https://css-tricks.com/things-ive-learned-css-grid-layout/" target="_blank" rel="external">原文地址</a></p>
+<blockquote>
+<p>译者注：此文适合有一定CSS原生网格布局使用经验的开发者（读前需要先去了解一下原生CSS网格的语法），原生CSS网格布局（Native CSS grid）截止目前还没有被任何正式版本的浏览器实现。</p>
+</blockquote>
+<p><em>以下是来自Oliver Williams的帖子. Oliver已经学习了相当长时间的原生CSS网格，可以说是在CSS网格方面有一定的发言权。在这篇文章中，他将以非同寻常的思路分析自己的CSS网格布局学习之路。我比较赞同他的想法，就是学习一门新技术的时候，把它们拆分成比较小的单元块并配上实例，一步一步的学习。这比直接学习<a href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank" rel="external">网格布局的所有东西</a>要好太多了。</em></p>
+<p>浏览器原生CSS网格预计会在2017年年初得到支持. <strong>在这之前你需要在浏览器中开启这个实验性的功能</strong> (Firefox实验版默认是开启的). <em><a href="https://www.google.com/chrome/browser/canary.html" target="_blank" rel="external">Chrome Canary</a>是当前最好的实现.</em> 同时，火狐有一个非常好的插件叫CSS Grid Inspector， 它能显示出网格的线，它是目前唯一可以在浏览器中运行的此类工具。</p>
+<p>在 chrome的地址栏中输入<code>chrome://flags</code>, 找到 ‘实验性网络平台功能’ 并开启它. IE 和 Edge 实现的是一个比较老的网格标准，现在并不受支持。</p>
+<h3 id="网格布局不是将零散的块拼到一起"><a href="#网格布局不是将零散的块拼到一起" class="headerlink" title="网格布局不是将零散的块拼到一起"></a>网格布局不是将零散的块拼到一起</h3><p>相信我，很快你就能掌握它的.</p>
+<p><img src="http://p0.qhimg.com/t01a95fade93c573b5c.png" alt=""></p>
+<p>网格布局只能像左边那样，以矩形的单元块组合起来。并不能像右图那样，由一堆零散的多边形（跟俄罗斯方块那样的块）拼凑。</p>
+<h3 id="设计网格布局并不是为了取代弹性盒，相反，它是弹性盒的一种补充"><a href="#设计网格布局并不是为了取代弹性盒，相反，它是弹性盒的一种补充" class="headerlink" title="设计网格布局并不是为了取代弹性盒，相反，它是弹性盒的一种补充"></a>设计网格布局并不是为了取代弹性盒，相反，它是弹性盒的一种补充</h3><p>虽然网格布局和弹性盒在某些方面起到相似的作用，而且你可以发现，很多人用弹性盒来实现网格布局，但这并不是设计弹性盒的初衷。Jake Archibald的这篇博文值得一读_<a href="https://jakearchibald.com/2014/dont-use-flexbox-for-page-layout/" target="_blank" rel="external">Don’t use flexbox for overall page layout</a>。</p>
+<p>这篇博文大概的意思是:</p>
+<ul>
+<li><p>Flexbox（弹性盒）是为一维布局设计的（行或列）。</p>
+</li>
+<li><p>CSS网格是为二维设计的.</p>
+</li>
+</ul>
+<p>Rachel Andrews也 <a href="https://rachelandrew.co.uk/archives/2016/03/30/should-i-use-grid-or-flexbox/" target="_blank" rel="external">说过类似的话</a>:</p>
+<blockquote>
+<p>Flexbox（弹性盒）用于一维布局 – 也就是行或者列. 网格用于二维布局 – 也就是多行多列.</p>
+</blockquote>
+<p>它们可以很好的结合，你可以往弹性容器中放入网格，也可以在网格块中加入flex元素</p>
+<p>来看个例子吧。 我们想在一个网格元素（grid item）里垂直居中一段文字， 但我们想要让背景（图片，颜色或渐变）覆盖整个的网格区域。 我们可以使用<code>align-items</code>属性，并把它的值设为center，但是如果这样背景并不会填满整个网格元素的区域。<code>align-items</code> 默认的值是 <code>stretch</code>-你不改变它，始终会填满整个空间的。我们把网格元素设为<code>align-items:center</code>并把网格元素（grid item）设置为一个弹性容器（flex container）。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">align-items</span>: stretch;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.griditem</span> &#123;</div><div class="line">  <span class="attribute">display</span>: flex;</div><div class="line">  <span class="attribute">align-items</span>: center;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="给grid-column-end设置负值，意想不到的有用"><a href="#给grid-column-end设置负值，意想不到的有用" class="headerlink" title="给grid-column-end设置负值，意想不到的有用"></a>给grid-column-end设置负值，意想不到的有用</h3><p>在小屏幕下，写一个12列的网格，所有格子的跨度都12列。</p>
+<p>你可以用网格这样做：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* For small screens */</span></div><div class="line"><span class="selector-class">.span4</span>, <span class="selector-class">.span6</span>, <span class="selector-class">.spanAll</span> &#123;</div><div class="line">  <span class="attribute">grid-column-end</span>: span <span class="number">12</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* For large screens */</span></div><div class="line">@<span class="keyword">media</span> (min-width: <span class="number">650px</span>) &#123;</div><div class="line">  <span class="selector-class">.span4</span> &#123;</div><div class="line">    <span class="attribute">grid-column-end</span>: span <span class="number">4</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="selector-class">.span6</span> &#123;</div><div class="line">    <span class="attribute">grid-column-end</span>: span <span class="number">6</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样的显示效果是没什么错误的，当使用CSS网格，重新定义列数非常简单。并且你可以通过设置<code>grid-column-end: -1;</code>来让你的页面始终是从左到右贯穿的。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* For small screens */</span></div><div class="line"><span class="selector-class">.span4</span>, <span class="selector-class">.span6</span>, <span class="selector-class">.spanAll</span> &#123;</div><div class="line">  <span class="attribute">grid-column-end</span>: -<span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在大屏幕上，你想要尽可能的接近12列，但是在移动端，一行大概是1～4列。用media来改变<code>grid-template-columns</code>是非常容易的。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">1</span>fr <span class="number">1</span>fr;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@<span class="keyword">media</span> (min-width: <span class="number">700px</span>) &#123;</div><div class="line">  <span class="selector-class">.grid</span> &#123;</div><div class="line">    <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(12, 1fr);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>有一些元素，我们想让它贯穿整个视口，比如像 header, footer，和一些大图啥的。</p>
+<p>对于小屏幕，我们可以这样写:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.wide</span> &#123;</div><div class="line">  <span class="attribute">grid-column</span>: <span class="number">1</span> / <span class="number">3</span>; <span class="comment">/* start at 1, end at 3 */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>不幸的是，当我们换到大屏的时候，一行12列，这些元素将仅仅占满前两列，并不会占满12列，我们需要定义新的<code>grid-column-end</code>，并且把他的值设为 <code>13</code>. 这种方式比较麻烦，还有一种简单的方式，<code>grid-column: 1 / -1;</code>，这样不论在什么屏幕尺寸下，它们都是占满整行的了。就像下面这样：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.wide</span>, <span class="selector-class">.hero</span>, <span class="selector-class">.header</span>, <span class="selector-class">.footer</span> &#123;</div><div class="line">  <span class="attribute">grid-column</span>: <span class="number">1</span> / -<span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/wzgaRN/" target="_blank" rel="external">Easier media queries with -1</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<h3 id="网格区域可以命名，并使用一些隐含的名字"><a href="#网格区域可以命名，并使用一些隐含的名字" class="headerlink" title="网格区域可以命名，并使用一些隐含的名字"></a>网格区域可以命名，并使用一些隐含的名字</h3><p>使用<code>grid-template-areas</code>和<code>grid-line-numbers</code>是两种控制行数的属性，你也可以两个同时用。你可以使用那些隐含的行名去设置你的网格。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">grid-template-areas</span>: <span class="string">"main main sidebar sidebar"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码，我们能得到四个隐含名字，main-start, main-end, sidebar-start, 和 sidebar-end.</p>
+<p>这可能很有用，如果你想重叠内容，无论是在几个网格区域或在一个特定分段的网格区域。</p>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/JRyJyY/" target="_blank" rel="external">implicit line names with grid areas</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<h3 id="定义网格区域的另一种方式"><a href="#定义网格区域的另一种方式" class="headerlink" title="定义网格区域的另一种方式"></a>定义网格区域的另一种方式</h3><p>就像给网格的行命名，特殊的行名能用于设置网格区域，语法是这样的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">grid-template-areas</span>:</div><div class="line">    <span class="string">"header header header"</span></div><div class="line">    <span class="string">"main main sidebar"</span></div><div class="line">    <span class="string">"footer footer footer"</span>;</div><div class="line">&#125; 、</div></pre></td></tr></table></figure>
+<p>如果你的布局设计(太多列的布局！没列都要起名字，可能还需要空元素)中有很多空的区域，这种写法稍微有点麻烦。所以对于网格是有另一种写法的，在这种写法中，名字是什么无所谓，只要你合理利用到<code>[name-start]</code> 和 <code>[name-end]</code>，也能达到自己的布局目的。下面是一个例子：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">display</span>: grid;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">20px</span> <span class="number">100px</span> [main-start] <span class="number">1</span>fr [main-end] <span class="number">100px</span> <span class="number">20px</span>;</div><div class="line">  <span class="attribute">grid-template-rows</span>: <span class="number">100px</span> [main-start] <span class="number">100px</span> [main-end] <span class="number">100px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.griditem1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: red;</div><div class="line">  <span class="attribute">grid-area</span>: main;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/amyrVb/" target="_blank" rel="external">Another way of defining grid-areas</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<p>你可能并不想整个页面都用这种方式布局，但是如果你想要结合 <code>grid-area</code>来确定行数的话，它会非常适合。</p>
+<h3 id="相等尺寸网格（equal-sized-box-layout）使用vmin单位"><a href="#相等尺寸网格（equal-sized-box-layout）使用vmin单位" class="headerlink" title="相等尺寸网格（equal sized box layout）使用vmin单位"></a>相等尺寸网格（equal sized box layout）使用vmin单位</h3><p>虽然你可以在CSS网格中使用任意尺寸的行或列，但是如果想要相等大小的格子并是响应式的，你就需要使用vmin单位了。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(5, 20vw);</div><div class="line">  <span class="attribute">grid-template-rows</span>: <span class="built_in">repeat</span>(5, 20vh);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种布局在台式电脑和笔记本上基本都可以完美显示，但是在手机上，高度大于宽，内容将会溢出，产生出一个横向的滚动条。Dudley Storey写了篇blog说这件事<a href="http://thenewcode.com/1137/MinMaxing-Understanding-vMin-and-vMax-in-CSS" target="_blank" rel="external">the usefulness of a lesser-known css unit: vmin</a>。这种方法，通过调整容器视口的百分比和内容位置，做到适配各种尺寸的屏幕。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.gridcontainer</span> &#123;</div><div class="line">  <span class="attribute">display</span>: grid;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100vw</span>;</div><div class="line">  <span class="attribute">height</span>: <span class="number">100vh</span>;</div><div class="line">  <span class="attribute">justify-content</span>: center;</div><div class="line">  <span class="attribute">align-content</span>: center;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(5, 20vmin);</div><div class="line">  <span class="attribute">grid-template-rows</span>: <span class="built_in">repeat</span>(5, 20vmin);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/amkobw/" target="_blank" rel="external">Boxy Layout with CSS Grid and vmin</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<h3 id="绝对定位"><a href="#绝对定位" class="headerlink" title="绝对定位"></a>绝对定位</h3><p>当我们绝对定位一个网格元素的时候，这个元素会跑到它的容器中，我们可以用grid-column 和 grid-row来定位它。正常情况下，绝对定位使元素脱离文档流，它最适合的使用场景就是想要让元素重叠，并不打乱其他布局元素。除非你为每个元素声明<code>grid-column-start</code> 和 <code>grid-row-start</code>，要不然即使使用了绝对定位，元素也是不会重叠的。</p>
+<p>尝试删除这个例子中div的<code>position: absolute;</code>，思考grid-column 和 grid-row的值，也可以试试修改它们，你就明白是什么意思了。</p>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/NRayjx/" target="_blank" rel="external">preserving auto-placement with position: absolute</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<h3 id="改变网格元素（grid-item）的顺序"><a href="#改变网格元素（grid-item）的顺序" class="headerlink" title="改变网格元素（grid item）的顺序"></a>改变网格元素（grid item）的顺序</h3><p>如果你使用过弹性盒（flexbox）的<code>order</code> 属性，那你已经知道一些相关的知识了。所有的网格元素都有一个默认的order值0。所以如果给一个网格元素设置 <code>order: 1;</code>，这个元素将在所有元素的后面。<br>你可以给<code>order</code>属性设置负值，让它跑到所有item的前面。</p>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/QKeqKd/" target="_blank" rel="external">Order value</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<h3 id="grid中-minmax-的坑"><a href="#grid中-minmax-的坑" class="headerlink" title="grid中 minmax()的坑"></a>grid中 minmax()的坑</h3><p>想不想要整行随着内容的宽度而变宽，直到他们达到最大宽度，这种情况你可能想尝试使用 <code>minmax()</code> ：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">display</span>: grid;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(3, minmax(1fr, 300px));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>不幸的是，像上面这样看似简单，实际上是不行的。如果max小于min的话，css会被忽略。在<code>minmax()</code>中<code>fr</code>不能使用。实际上实现这个需求很容易，在<code>grid-template-columns</code> 或 <code>grid-template-rows</code>中使用<code>auto</code>，这样item就可以随着内容增大而变大了。<br>See the Pen <a href="http://codepen.io/cssgrid/pen/ALQjAj/" target="_blank" rel="external">The value of auto vs fr</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<p>我们可以设置一个 <code>max-width</code>:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">display</span>: grid;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(3, auto);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.item</span> &#123;</div><div class="line">  <span class="attribute">max-width</span>: <span class="number">300px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/jrGppp/" target="_blank" rel="external">The limits of minmax</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<p><code>minmax()</code>的运行方式和使用我还没有完全想出来，虽然如此，我还是写了一篇文章（译者注：Medium entitled是什么我没有理解清楚，原文：I wrote an entire post on Medium entitled） <a href="https://medium.com/csstuff/the-one-thing-i-hate-about-grid-cd2c4acdbb8a#.fyx2dobun" target="_blank" rel="external">The One Thing I Hate About Grid</a>.</p>
+<h3 id="如果你给每一个网格线命名了的话，写布局将容易的多"><a href="#如果你给每一个网格线命名了的话，写布局将容易的多" class="headerlink" title="如果你给每一个网格线命名了的话，写布局将容易的多"></a>如果你给每一个网格线命名了的话，写布局将容易的多</h3><p>有多种办法供你选择，如果你就想多写点，你可以给多行设置多个名字。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">grid-template-columns</span>: [col1-start] <span class="number">1</span>fr [col1-end col2-start] <span class="number">1</span>fr [col2-end];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最简单的命名约定使用网格自动编号。不是去写 [col2]，而是写为<code>col 2</code></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.griditem1</span> &#123;</div><div class="line">  <span class="attribute">grid-column-start</span>: col <span class="number">2</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>和<code>span</code>关键字组合使用，我们就不用去写column-start和column-end中的各种网格线数字了，这样能直观许多。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.grid</span> &#123;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(4, [col] 100px);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.griditem1</span> &#123;</div><div class="line">  <span class="attribute">grid-column</span>: col <span class="number">2</span> / span <span class="number">2</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="fr单位为什么那个的重要，让你摆脱麻烦的计算"><a href="#fr单位为什么那个的重要，让你摆脱麻烦的计算" class="headerlink" title="fr单位为什么那个的重要，让你摆脱麻烦的计算"></a>fr单位为什么那个的重要，让你摆脱麻烦的计算</h3><p>想象一下一行上四等列这种布局，使用百分比是多么的容易<code>grid-template-columns: 25% 25% 25% 25%</code>。</p>
+<p>但是当想用<code>grid-gap</code>属性的时候那？如果设置<code>grid-gap: 10px</code>，那么这一行上将有三个空隙，每个10px，整体的宽度就是100% + 30px，大于100%滚动条就出来了。虽然可以通过计算来解决，但是如果使用fr，这太容易了<code>grid-template-columns: 1fr 1fr 1fr 1fr</code></p>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/LRzgLJ/" target="_blank" rel="external">fr unit vs percentage</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+<h3 id="网格布局中第二个我较恶心的点"><a href="#网格布局中第二个我较恶心的点" class="headerlink" title="网格布局中第二个我较恶心的点"></a>网格布局中第二个我较恶心的点</h3><p>没有办法强制自动布局算法留下一些行和列是空的。</p>
+<p><code>grid-gap</code>可以让我们设置内容间的距离。<code>grid-row-gap</code>和<code>grid-column-gap</code>能设置行或列之间的间隙，可是如果我想让第一行和第二行相距10px，第二行和第三行相距50px，用现有的网格是没法实现的，除非建个空行占位。</p>
+<p>你可能见到过像下面这样写<code>grid-template-area</code>的：:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">grid-<span class="keyword">template</span>-rows:</div><div class="line">  <span class="string">"header header header"</span></div><div class="line">  <span class="string">"main    main   main"</span></div><div class="line">  <span class="string">"  .       .       ."</span></div><div class="line">  <span class="string">"secondary secondary secondary"</span></div><div class="line">  <span class="string">"footer footer footer"</span>;</div></pre></td></tr></table></figure>
+<p>应该提供一个比较聪明的办法，让布局算法去做这件事。不幸的是，这样写也没用。此语法简单地表示，我们不想将第三行变成一个命名的网格区域。可是grid-template-rows将仍然在那结束。</p>
+<h3 id="Some-design-advice-You-don’t-necessarily-need-12-columns-and-columns-need-not-be-uniform-in-size"><a href="#Some-design-advice-You-don’t-necessarily-need-12-columns-and-columns-need-not-be-uniform-in-size" class="headerlink" title="Some design advice: You don’t necessarily need 12 columns (and columns need not be uniform in size)"></a>Some design advice: You don’t necessarily need 12 columns (and columns need not be uniform in size)</h3><h3 id="一些设计上的建议-你不一点需要12列网格-每一列不一定大小一致"><a href="#一些设计上的建议-你不一点需要12列网格-每一列不一定大小一致" class="headerlink" title="一些设计上的建议: 你不一点需要12列网格 (每一列不一定大小一致)"></a>一些设计上的建议: 你不一点需要12列网格 (每一列不一定大小一致)</h3><p>12列网格算是web design的默认配置了。Bootstrap引导大家用12列网格，导致很多框架都是12列网格。12既能被3整除也能被4整除，能让我们有更多种布局摆放方式。1行12列，1行6列，1行4列，1行3列，1行2列</p>
+<p>虽然有些人喜欢每一个项目总是使用相同的网格，但是你应该去思考你真正需要的，有时候没有必要有更多的列，你应该建立一个网格，对针对你的内容去布局，而不是一个12列网格到处用。</p>
+<p>看看这个例子 <a href="https://gridsetapp.com/" target="_blank" rel="external">Gridset</a>. Gridset是一个制作网格非常有用的工具, 但是原生CSS的网格不需要你使用任何工具，但是可以看看它展示的一些良好的网格设计。</p>
+<p><img src="http://p0.qhimg.com/t01203c29a21801c24c.jpg" alt=""></p>
+<p>看看我写的例子，CSS原生网格是多么的自由啊:</p>
+<p>See the Pen <a href="http://codepen.io/cssgrid/pen/kkoZro/" target="_blank" rel="external">text layout with CSS Grid module</a> by CSS GRID (<a href="http://codepen.io/cssgrid" target="_blank" rel="external">@cssgrid</a>) on <a href="http://codepen.io" target="_blank" rel="external">CodePen</a>.</p>
+
+
+                <hr>
+
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="2016/11/30/css-grid-layout/"
+                    data-title="(译)原生CSS网格布局学习笔记"
+                    data-url="http://geoffzhu.cn/blog/blog/2016/11/30/css-grid-layout/"
+                    data-images=""
+                    data-content="原文地址
+
+译者注：此文适合有一定CSS原生网格布局使用经验的开发者（读前需要先去了解一下原生... | Geoff的博客 | Geoff&#39;s Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/blog/2016/11/26/vue-fetch封装/" data-toggle="tooltip" data-placement="top" title="在项目中正确使用fetch的姿势">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2016/11/30/css-grid-layout/"
+                        data-title="(译)原生CSS网格布局学习笔记"
+                        data-url="http://geoffzhu.cn/blog/blog/2016/11/30/css-grid-layout/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/blog/tags/#css" title="css">css</a>
+                        
+                          <a class="tag" href="/blog/tags/#布局" title="布局">布局</a>
+                        
+                          <a class="tag" href="/blog/tags/#grid" title="grid">grid</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
+                    
+                        <li><a href="https://smallpath.me/" target="_blank">Smallpath的小站</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'geoffzhu';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/geoffzhu">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/GeoffZhu">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 迷人的反派角色 2016 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/blog/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/blog/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/blog/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://geoffzhu.cn/blog/blog/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '14347cf1c49067927d95af6c107cfaab';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
