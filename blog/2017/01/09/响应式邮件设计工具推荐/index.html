@@ -13,11 +13,11 @@
 
     <title>
         
-          移动端浏览器检测 - Geoff的博客 | Geoff&#39;s Blog
+          响应式邮件设计工具推荐 - Geoff的博客 | Geoff&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2016/05/20/whichMobileBrowser/">
+    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2017/01/09/响应式邮件设计工具推荐/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
@@ -165,16 +165,18 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/blog/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                          <a class="tag" href="/blog/tags/#布局" title="布局">布局</a>
                         
-                          <a class="tag" href="/blog/tags/#浏览器识别" title="浏览器识别">浏览器识别</a>
+                          <a class="tag" href="/blog/tags/#响应式" title="响应式">响应式</a>
+                        
+                          <a class="tag" href="/blog/tags/#Email" title="Email">Email</a>
                         
                     </div>
-                    <h1>移动端浏览器检测</h1>
+                    <h1>响应式邮件设计工具推荐</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by Geoff on
-                        2016-05-20
+                        2017-01-09
                     </span>
                 </div>
             </div>
@@ -193,10 +195,15 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h3 id="需求来源"><a href="#需求来源" class="headerlink" title="需求来源"></a>需求来源</h3><blockquote>
-<p>现在移动端的站点,多数都有一个原生APP下载页,这个下载页多用于用户分享,传播. 由于国内主要分享平台就是微信和微博,手机主要是安<br>卓和IOS, 所以自然要识别它们,给出不同的下载地址. 这是一个很简单的例子, 随着需求的变化,可以自己继续扩充.微信浏览器只支持应用宝<br>跳转到App Store, 如果你想在微信中跳转到App Store下载应用,自然要申请上架应用宝了.</p>
+                <h1 id="响应式邮件设计工具推荐"><a href="#响应式邮件设计工具推荐" class="headerlink" title="响应式邮件设计工具推荐"></a>响应式邮件设计工具推荐</h1><blockquote>
+<p>最近工作上需要做一些HTML邮件模版，就是在平时邮箱里收到的那种推广邮件。深入研究之后，才知道这坑有多深。</p>
 </blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> geoffWhichBrowser = &#123;</div><div class="line">   		u: navigator.userAgent,</div><div class="line">   		app: navigator.appVersion,</div><div class="line">   		isAndroid: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   			<span class="keyword">return</span> <span class="keyword">this</span>.u.indexOf(<span class="string">'Android'</span>) &gt; <span class="number">-1</span> || <span class="keyword">this</span>.u.indexOf(<span class="string">'Linux'</span>) &gt; <span class="number">-1</span>;</div><div class="line">   		&#125;,</div><div class="line">   		isIOS: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   			<span class="keyword">return</span> !!<span class="keyword">this</span>.u.match(<span class="regexp">/\(i[^;]+;( U;)? CPU.+Mac OS X/</span>);</div><div class="line">   		&#125;,</div><div class="line">   		is_tencent: <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;    </div><div class="line">   		    <span class="keyword">var</span> ua = navigator.userAgent.toLowerCase();    </div><div class="line">   		    <span class="keyword">if</span>((ua.match(<span class="regexp">/MicroMessenger/i</span>)==<span class="string">"micromessenger"</span>) || (ua.match(<span class="regexp">/QQ\//i</span>) == <span class="string">"QQ/"</span>) || (ua.match(<span class="regexp">/Qzone\//i</span>)==<span class="string">"Qzone/"</span>)) &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">   		    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">false</span>;    </div><div class="line">   	    	&#125;</div><div class="line">   	    &#125;,</div><div class="line">   	    is_weixn: <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;    </div><div class="line">   		    <span class="keyword">var</span> ua = navigator.userAgent.toLowerCase();    </div><div class="line">   		    <span class="keyword">if</span>(ua.match(<span class="regexp">/MicroMessenger/i</span>)==<span class="string">"micromessenger"</span>) &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">true</span>;    </div><div class="line">   		    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">false</span>;    </div><div class="line">   	    	&#125;</div><div class="line">   	    &#125;,</div><div class="line">   	    is_QQ: <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;    </div><div class="line">   		    <span class="keyword">var</span> ua = navigator.userAgent.toLowerCase();    </div><div class="line">   		    <span class="keyword">if</span>(ua.match(<span class="regexp">/QQ\//i</span>) == <span class="string">"QQ/"</span>) &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">true</span>;    </div><div class="line">   		    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">false</span>;    </div><div class="line">   	    	&#125;</div><div class="line">   	    &#125;,</div><div class="line">   	    is_Qzone: <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;    </div><div class="line">   		    <span class="keyword">var</span> ua = navigator.userAgent.toLowerCase();    </div><div class="line">   		    <span class="keyword">if</span>(ua.match(<span class="regexp">/Qzone\//i</span>)==<span class="string">"Qzone/"</span>) &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">true</span>;    </div><div class="line">   		    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">false</span>;    </div><div class="line">   	    	&#125;</div><div class="line">   	    &#125;,</div><div class="line">   	    is_weibo: <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</div><div class="line">   		    <span class="keyword">var</span> ua = navigator.userAgent;    </div><div class="line">   		    <span class="keyword">if</span>(ua.indexOf(<span class="string">'Weibo'</span>) &gt; <span class="number">-1</span>) &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">true</span>;    </div><div class="line">   		    &#125; <span class="keyword">else</span> &#123;    </div><div class="line">   		        <span class="keyword">return</span> <span class="literal">false</span>;    </div><div class="line">   		    &#125;    </div><div class="line">   		&#125;,</div><div class="line">   		is_mobile: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   			<span class="keyword">return</span> !!<span class="keyword">this</span>.u.match(<span class="regexp">/AppleWebKit.*Mobile.*/</span>);</div><div class="line">   		&#125;</div><div class="line">   	&#125;</div></pre></td></tr></table></figure>
+<h2 id="回到蛮荒时代"><a href="#回到蛮荒时代" class="headerlink" title="回到蛮荒时代"></a>回到蛮荒时代</h2><p>最初我的理解是，既然是HTML，我大前端的看家本领！半小时搞定没啥问题。试了才知道，HTML邮件没有任何标准，而且不管是HTML和CSS全部都是被阉割了的（啥？你还想用JS？），并且不同邮件客户端之间差异也很大。对于div和float的处理也带有很多的不确定性，所以浮动布局，flexbox啥的一样也用不了，只能用90年代流行的表格布局，90年代啊！开发体验是奇差无比，更重要的是我并不想去学过时的table布局。</p>
+<p>我这次的要做的是出模版，服务端套，还需要考虑到收件人可能用的是手机客户端查看的邮件，所以需要响应式。对于我来说，可以拖拽的邮件工具肯定是不合适的，它并不能很好的实现设计和需求，况且作为一名开发者应以它为耻。</p>
+<h2 id="找工具"><a href="#找工具" class="headerlink" title="找工具"></a>找工具</h2><h3 id="1-foundation-emails"><a href="#1-foundation-emails" class="headerlink" title="1. foundation-emails"></a><a href="http://foundation.zurb.com/emails.html" target="_blank" rel="external">1. foundation-emails</a></h3><p>首先GitHub找到了<a href="http://foundation.zurb.com/emails.html" target="_blank" rel="external">foundation-emails</a>，扫了一下文档和DEMO，感觉非常好用，还能用sass，狂笑！！等模版做完了，按照文档<figure class="highlight plain"><figcaption><span>run build ``` 文档上说这是把所有样式插到行内（没看到会压缩啊），当我执行之后，我看到的是这样的画面。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">![](http://o80ronwlu.bkt.clouddn.com/E17CB90D-9059-4250-A541-CA930E06F68B.png)</div><div class="line">还是要在build的之前往里面插入服务端模版引擎的循环语句？只能手动去格式化html代码再加循环？我首先试了试第一个在模版里面想替换的地方加几个模版引擎常用的``` &#123;&#123; &#125;&#125;```，结果build之后，直接就编译没了，再去GitHub看看,找到了这条还没有修复的[issue](https://github.com/zurb/foundation-emails/issues/666)，看来大家都还没什么优雅的办法。</div><div class="line"></div><div class="line">对于只需要替换个用户名或者只有少部分内容需要动态的邮件，foundation-emails是非常不错的选择，在其中使用响应式非常非常简单，格栅布局，就像这样</div><div class="line"></div><div class="line">```HTML</div><div class="line">&lt;columns large=&quot;6&quot; small=&quot;12&quot;&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="2-mjml"><a href="#2-mjml" class="headerlink" title="2. mjml"></a><a href="https://mjml.io/" target="_blank" rel="external">2. mjml</a></h3><p>在社区里找到了这款工具，用它写的模版大概是这样的， 也很不错。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">mjml</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">mj-body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">mj-container</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">mj-section</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">mj-column</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">mj-image</span> <span class="attr">src</span>=<span class="string">"/assets/img/easy-and-quick.png"</span>  <span class="attr">width</span>=<span class="string">"112"</span>&gt;</span><span class="tag">&lt;/<span class="name">mj-image</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">mj-text</span> <span class="attr">font-size</span>=<span class="string">"20px"</span> <span class="attr">color</span>=<span class="string">"#595959"</span> <span class="attr">align</span>=<span class="string">"center"</span>&gt;</span>Easy and Quick<span class="tag">&lt;/<span class="name">mj-text</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">mj-column</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">mj-column</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">mj-image</span> <span class="attr">src</span>=<span class="string">"/assets/img/responsive.png"</span> <span class="attr">width</span>=<span class="string">"135"</span>&gt;</span><span class="tag">&lt;/<span class="name">mj-image</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">mj-text</span> <span class="attr">font-size</span>=<span class="string">"20px"</span> <span class="attr">color</span>=<span class="string">"#595959"</span> <span class="attr">align</span>=<span class="string">"center"</span>&gt;</span>Responsive<span class="tag">&lt;/<span class="name">mj-text</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">mj-column</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">mj-section</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">mj-section</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">mj-column</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">mj-button</span> <span class="attr">background-color</span>=<span class="string">"#F45E43"</span> <span class="attr">font-size</span>=<span class="string">"15px"</span>&gt;</span>Discover<span class="tag">&lt;/<span class="name">mj-button</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">mj-column</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">mj-section</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">mj-container</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">mj-body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">mjml</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>而且它还有客户端，客户端中可以导出html，导出的代码还算清新。动态替换的内容，我通过官方demo中发现用<code>[[ ]]</code>包裹就没什么事了。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>这篇就是推荐俩工具。如果需要，请留言留言，我可以出个小教程啥的，完！</p>
 
 
                 <hr>
@@ -206,12 +213,12 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="2016/05/20/whichMobileBrowser/"
-                    data-title="移动端浏览器检测"
-                    data-url="http://geoffzhu.cn/blog/blog/2016/05/20/whichMobileBrowser/"
+                    data-thread-key="2017/01/09/响应式邮件设计工具推荐/"
+                    data-title="响应式邮件设计工具推荐"
+                    data-url="http://geoffzhu.cn/blog/blog/2017/01/09/响应式邮件设计工具推荐/"
                     data-images=""
-                    data-content="需求来源
-现在移动端的站点,多数都有一个原生APP下载页,这个下载页多用于用户分享,传播. 由... | Geoff的博客 | Geoff&#39;s Blog " >
+                    data-content="响应式邮件设计工具推荐
+最近工作上需要做一些HTML邮件模版，就是在平时邮箱里收到的那种推广邮... | Geoff的博客 | Geoff&#39;s Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -229,13 +236,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/blog/2016/05/20/魔豆/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/blog/2016/05/15/flexbox/" data-toggle="tooltip" data-placement="top" title="Flexbox教程">Next Post &rarr;</a>
+                            <a href="/blog/2016/12/21/how-to-create-a-vue-plugin/" data-toggle="tooltip" data-placement="top" title="VueJs进阶-如何编写高质量的插件(1)">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -244,9 +247,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2016/05/20/whichMobileBrowser/"
-                        data-title="移动端浏览器检测"
-                        data-url="http://geoffzhu.cn/blog/blog/2016/05/20/whichMobileBrowser/" >
+                        data-thread-key="2017/01/09/响应式邮件设计工具推荐/"
+                        data-title="响应式邮件设计工具推荐"
+                        data-url="http://geoffzhu.cn/blog/blog/2017/01/09/响应式邮件设计工具推荐/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -272,9 +275,11 @@
                     <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/blog/tags/#JavaScript" title="JavaScript">JavaScript</a>
+                          <a class="tag" href="/blog/tags/#布局" title="布局">布局</a>
                         
-                          <a class="tag" href="/blog/tags/#浏览器识别" title="浏览器识别">浏览器识别</a>
+                          <a class="tag" href="/blog/tags/#响应式" title="响应式">响应式</a>
+                        
+                          <a class="tag" href="/blog/tags/#Email" title="Email">Email</a>
                         
                     </div>
                 </section>
