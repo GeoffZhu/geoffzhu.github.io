@@ -13,11 +13,11 @@
 
     <title>
         
-          Geoff的博客 | Geoff&#39;s Blog
+          小程序常用优化手段 - Geoff的博客 | Geoff&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/page/3/">
+    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2017/06/28/小程序常规优化手段/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
@@ -147,265 +147,143 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/blog/img/home-bg.jpg')">
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/blog/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>迷人的反派角色</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">为了防止世界被破坏，为了维护世界的和平</span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/blog/tags/#小程序" title="小程序">小程序</a>
+                        
+                    </div>
+                    <h1>小程序常用优化手段</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Geoff on
+                        2017-06-28
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        
-
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <!-- Main Content -->
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="小程序常见优化策略"><a href="#小程序常见优化策略" class="headerlink" title="小程序常见优化策略"></a>小程序常见优化策略</h1><blockquote>
+<p>最近也开发了两个小程序，在开发的过程中，总结一些优化心得</p>
+</blockquote>
+<ol>
+<li>理解wx:if和hidden，并合理利用，官方文档中并没有明确说出hidden如何使用，要不是wx:if文档中提到，经常切换显示和隐藏的节点建议使用hidden，我都不知道还有这个属性。wx:if每次在显示的时候会重绘，而hidden不会。在我开发的项目中，有一个自定义的TabBar，使用hidden和wx:if会有明显的差异。</li>
+<li>Input状态下隐藏input，应预留出键盘收起的时间，具体情况类似下图当点击页面中的取消按钮，页面输入框和mask会消失，因为输入框会消失，引起键盘收起。此时页面会有明显的抖动重绘。我的解决办法是点击取消后，先让键盘消失(大约500ms)，再去隐藏input，体验会好很多<br><img src="http://o80ronwlu.bkt.clouddn.com/blog-0702.jpeg" alt=""></li>
+<li>如页面图片过多<br>小程序对用户内存使用进行了限制，如果一个页面的图片过多，会导致内存不足的内部错误，导致应用直接崩溃。解决方法，懒加载</li>
+<li>图片预加载，在浏览器中常用的预加载方法，创建隐藏的image标签，在其他动态的image中如过同时使用此图片，微信会从缓存中读。</li>
+<li>安卓下，没有异步操作的情况下调用<br>wx.showLoading<br>同步代码<br>wx.hideLoading<br>遇到这个问题的原因是，我习惯在onLoad函数中处理当前页面的所有异步请求和数据，所以习惯性的在所有页面的onLoad函数中都写上了loading，但是有一个页面中，并没有请求，而且从storage中读的数据。在IOS下，没什么问题，但在安卓下，loading不会消失。</li>
+</ol>
+<p>有很多在Page对象生命周期上加预加载方法的，做接口预加载，但我认为这并不是一个好的优化点，可以在某几个高频页面尝试做，大范围的应用就实在不好了，随时可能被微信咔嚓</p>
+<p>常规的一些优化手段，比如压缩代码，合并雪碧图也都是可以使用的。但在有些情况下，比如特别常用的小图标(自定义tabbar上的图标)，建议用base64写在CSS中，虽然base64解析慢，但比网络加载图片要快的多。</p>
+<p>合理利用各种优化手段，提升小程序体验。你一定会问，什么是合理那？这个只有自己拿捏了，没有思考和实践，查来看去也只能学会一些常规优化套路。要想做深度优化，必然要对业务场景和逻辑有深入理解。</p>
 
 
-<div class="post-preview">
+                <hr>
 
-    <a href="/blog/2016/05/15/flexbox/">
-        <h2 class="post-title">
-            Flexbox教程
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            什么是Flexbox
-Flexbox是CSS3提出的新的布局方法， 相比于传统的float块布局，flexbox布局方式更容易适应不同的屏幕大小。Flexbox极其十分易用，学习它也是相当的容易。需要注意的是，flexbox并不是摒弃所有之前的布局方法，像常用的很多属性还是和css2.1中是一样的，比如margin，padding，width，height等，这个css的基石，变得是围绕布局......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Geoff on
-        2016-05-15
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/blog/2016/05/05/website-gulp/">
-        <h2 class="post-title">
-            前端构建工具gulp使用－－非SPA类
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            为什么是gulp，而非grunt？
-我用grunt大概也有一年了，在中小型项目来说，grunt和gulp在执行速度上差别是可以忽略不计的，但当项目越来越大的时候，gulp明显优于grunt。
+                
+                <!-- 多说 Share start -->
+                </style>
+                <div class="ds-share"
+                    style="text-align: right"
+                    data-thread-key="2017/06/28/小程序常规优化手段/"
+                    data-title="小程序常用优化手段"
+                    data-url="http://geoffzhu.cn/blog/blog/2017/06/28/小程序常规优化手段/"
+                    data-images=""
+                    data-content="小程序常见优化策略
+最近也开发了两个小程序，在开发的过程中，总结一些优化心得
 
 
-gulp的其它优点大致如下：
-gulp基于文件流的思想，配置起来简单到爆炸💥
-npm上 gulp插件已经极其丰富,可以很容易的得到需要的插件
+理解wx:i... | Geoff的博客 | Geoff&#39;s Blog " >
+                    <div class="ds-share-inline">
+                      <ul  class="ds-share-icons-16">
+                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
+                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
+                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- 多说 Share end-->
+                
 
-构建需求编写配置文件之前一定要先理顺思路
-开发过程中......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Geoff on
-        2016-05-05
-    </p>
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/blog/2017/03/04/Vue-cli带来的问题/" data-toggle="tooltip" data-placement="top" title="脚手架带来的问题">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
 
-</div>
-<hr>
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2017/06/28/小程序常规优化手段/"
+                        data-title="小程序常用优化手段"
+                        data-url="http://geoffzhu.cn/blog/blog/2017/06/28/小程序常规优化手段/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
 
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-        <li class="previous">
-            <a href="/blog/page/2/">&larr; Newer Posts</a>
-        </li>
-    
-    
-</ul>
-
-
-
-                <!-- 如果开启评论功能 -->
                 
 
             </div>
+    <!-- Side Catalog Container -->
+        
+
     <!-- Sidebar Container -->
+
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
                 <section>
                     <!-- no hr -->
                     <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#node" title="node" rel="2">node</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#css" title="css" rel="5">css</a>
-                            
-                        
-                            
-                            <a href="/blog/tags/#布局" title="布局" rel="4">布局</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#js" title="js" rel="3">js</a>
-                            
-                        
-                            
-                            <a href="/blog/tags/#vue" title="vue" rel="3">vue</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#JavaScript" title="JavaScript" rel="2">JavaScript</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
+                       
+                          <a class="tag" href="/blog/tags/#小程序" title="小程序">小程序</a>
                         
                     </div>
                 </section>
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/blog/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/blog//img/avatar.jpg" />
-                        
-
-                        
-                            <p>跳坑，爬坑，跳坑，爬坑，跳坑，爬坑...!</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank" href="http://weibo.com/geoffzhu">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/GeoffZhu">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
-                
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -420,9 +298,69 @@ npm上 gulp插件已经极其丰富,可以很容易的得到需要的插件
                 </ul>
                 
             </div>
-        
+
+        </div>
     </div>
-</div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'geoffzhu';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
