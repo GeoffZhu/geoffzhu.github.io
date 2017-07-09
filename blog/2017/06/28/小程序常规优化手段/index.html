@@ -201,12 +201,10 @@
 </li>
 <li><p>如页面图片过多<br>小程序对用户内存使用进行了限制，如果一个页面的图片过多，会导致内存不足的内部错误，导致应用直接崩溃。解决方法，懒加载</p>
 </li>
-</ul>
-<ol>
-<li>图片预加载，在浏览器中常用的预加载方法，创建隐藏的image标签，在其他动态的image中如过同时使用此图片，微信会从缓存中读。</li>
-</ol>
-<ul>
-<li>安卓下，没有异步操作，调用hideLoaing后，loading不会消失，猜测原因是showLoading还没有执行完，就调用hideLoading,导致hide失效</li>
+<li><p>图片预加载，在浏览器中常用的预加载方法，创建隐藏的image标签，在其他动态的image中如过同时使用此图片，微信会从缓存中读。</p>
+</li>
+<li><p>安卓下，没有异步操作，调用hideLoaing后，loading不会消失，猜测原因是showLoading还没有执行完，就调用hideLoading,导致hide失效</p>
+</li>
 </ul>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wx.showLoading</div><div class="line"><span class="comment">// 同步代码</span></div><div class="line">wx.hideLoading</div></pre></td></tr></table></figure>
 <p>遇到这个问题的原因是，我习惯在onLoad函数中处理当前页面的所有异步请求和数据，所以习惯性的在所有页面的onLoad函数中都写上了loading，但是有一个页面中，并没有请求，而且从storage中读的数据。在IOS下，没什么问题，但在安卓下，loading不会消失。</p>
