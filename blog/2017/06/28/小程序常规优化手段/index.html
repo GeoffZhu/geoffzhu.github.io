@@ -194,19 +194,21 @@
                 <h1 id="小程序常见优化策略"><a href="#小程序常见优化策略" class="headerlink" title="小程序常见优化策略"></a>小程序常见优化策略</h1><blockquote>
 <p>最近也开发了两个小程序，在开发的过程中，总结一些优化心得</p>
 </blockquote>
-<ol>
+<ul>
 <li><p>理解wx:if和hidden，并合理利用，官方文档中并没有明确说出hidden如何使用，要不是wx:if文档中提到，经常切换显示和隐藏的节点建议使用hidden，我都不知道还有这个属性。wx:if每次在显示的时候会重绘，而hidden不会。在我开发的项目中，有一个自定义的TabBar，使用hidden和wx:if会有明显的差异。</p>
 </li>
-<li><p>Input状态下隐藏input，应预留出键盘收起的时间，具体情况类似下图当点击页面中的取消按钮，页面输入框和mask会消失，因为输入框会消失，引起键盘收起。此时页面会有明显的抖动重绘。我的解决办法是点击取消后，先让键盘消失(大约500ms)，再去隐藏input，体验会好很多<br><img src="http://o80ronwlu.bkt.clouddn.com/blog-0702.jpeg" alt=""></p>
+<li><p>Input状态下隐藏input，应预留出键盘收起的时间，具体情况类似下图当点击页面中的取消按钮，页面输入框和mask会消失，因为输入框会消失，引起键盘收起。此时页面会有明显的抖动重绘。我的解决办法是点击取消后，先让键盘消失(大约500ms)，再去隐藏input，体验会好很多<br><img src="https://segmentfault.com/img/bVQv7f?w=200&amp;h=356" alt=""></p>
 </li>
 <li><p>如页面图片过多<br>小程序对用户内存使用进行了限制，如果一个页面的图片过多，会导致内存不足的内部错误，导致应用直接崩溃。解决方法，懒加载</p>
 </li>
-<li><p>图片预加载，在浏览器中常用的预加载方法，创建隐藏的image标签，在其他动态的image中如过同时使用此图片，微信会从缓存中读。</p>
-</li>
-<li><p>安卓下，没有异步操作，调用hideLoaing后，loading不会消失，猜测原因是showLoading还没有执行完，就调用hideLoading,导致hide失效</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wx.showLoading</div><div class="line">  同步代码</div><div class="line">wx.hideLoading</div></pre></td></tr></table></figure>
-</li>
+</ul>
+<ol>
+<li>图片预加载，在浏览器中常用的预加载方法，创建隐藏的image标签，在其他动态的image中如过同时使用此图片，微信会从缓存中读。</li>
 </ol>
+<ul>
+<li>安卓下，没有异步操作，调用hideLoaing后，loading不会消失，猜测原因是showLoading还没有执行完，就调用hideLoading,导致hide失效</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wx.showLoading</div><div class="line"><span class="comment">// 同步代码</span></div><div class="line">wx.hideLoading</div></pre></td></tr></table></figure>
 <p>遇到这个问题的原因是，我习惯在onLoad函数中处理当前页面的所有异步请求和数据，所以习惯性的在所有页面的onLoad函数中都写上了loading，但是有一个页面中，并没有请求，而且从storage中读的数据。在IOS下，没什么问题，但在安卓下，loading不会消失。</p>
 <p>有很多在Page对象生命周期上加预加载方法的，做接口预加载，但我认为这并不是一个好的优化点，可以在某几个高频页面尝试做，大范围的应用就实在不好了，随时可能被微信咔嚓</p>
 <p>常规的一些优化手段，比如压缩代码，合并雪碧图也都是可以使用的。但在有些情况下，比如特别常用的小图标(自定义tabbar上的图标)，建议用base64写在CSS中，虽然base64解析慢，但比网络加载图片要快的多。</p>
