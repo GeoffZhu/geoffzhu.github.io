@@ -4,7 +4,7 @@ window.onerror = function(msg, url, line, col, error) {
   console.log(window.event)
   // 方便在未打开控制台的时候，记录错误对象
   window.demoError = arguments
-
+  window.demoErrorIE = window.event
   // 打印参数 和 浏览器 agaent到body
   document.body.innerHTML = JSON.stringify(arguments) + '<br/>' + window.navigator.userAgent
 }
