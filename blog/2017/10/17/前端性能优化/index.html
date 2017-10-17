@@ -13,11 +13,11 @@
 
     <title>
         
-          为ESlint写的一篇 - Geoff的博客 | Geoff&#39;s Blog
+          现代浏览器性能优化-JS篇 - Geoff的博客 | Geoff&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2017/09/29/eslint/">
+    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2017/10/17/前端性能优化/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
@@ -167,16 +167,16 @@
                         
                           <a class="tag" href="/blog/tags/#javascript" title="javascript">javascript</a>
                         
-                          <a class="tag" href="/blog/tags/#lint" title="lint">lint</a>
+                          <a class="tag" href="/blog/tags/#性能优化" title="性能优化">性能优化</a>
                         
-                          <a class="tag" href="/blog/tags/#eslint" title="eslint">eslint</a>
+                          <a class="tag" href="/blog/tags/#html" title="html">html</a>
                         
                     </div>
-                    <h1>为ESlint写的一篇</h1>
+                    <h1>现代浏览器性能优化-JS篇</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by Geoff on
-                        2017-09-29
+                        2017-10-17
                     </span>
                 </div>
             </div>
@@ -195,27 +195,34 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="为ESlint写的一篇"><a href="#为ESlint写的一篇" class="headerlink" title="为ESlint写的一篇"></a>为ESlint写的一篇</h1><blockquote>
-<p>在多人协作的前端团队中，ESlint是非常有必要。同一项目组，互相代码review，多人协同开发同一需求等等，没有ESlint，项目组内必然会充满吐槽和质疑，“WTF，怎么能这样写那？”。</p>
+                <h1 id="现代浏览器性能优化-JS篇"><a href="#现代浏览器性能优化-JS篇" class="headerlink" title="现代浏览器性能优化-JS篇"></a>现代浏览器性能优化-JS篇</h1><blockquote>
+<p>众所周知，JS的加载和执行会阻塞浏览器渲染，所以目前业界普遍推荐把script放到<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## 理解渲染过程（HTML Parser）</div><div class="line"></div><div class="line">首先我们从浏览器的角度解释一下从输入URL到页面展示经历了些什么，以如下html文档举例</div></pre></td></tr></table></figure></p>
 </blockquote>
-<h2 id="先从心理上接受ESlint"><a href="#先从心理上接受ESlint" class="headerlink" title="先从心理上接受ESlint"></a>先从心理上接受ESlint</h2><p>进入项目组，接受项目组指定的规范，摒弃自己的习惯，这才是完美猿的作风。看过很多博客提到ESlint，作者总是有意无意透露出“限制太多，果断把它给关了”之类的意思，我理解，很多老FEer觉得用ESlint，就像是带了一身的枷锁，很难受，写的不舒服。如果项目是个人项目，那就关掉它吧，按照自己喜欢的方式来写，掺合进来的人也不会太多，符合自己代码风格，但多人项目，就要考虑，可能会有新人加入，毫无限制的写，最后的代码真的会让人哭的。</p>
-<h2 id="关于ESlint的配置"><a href="#关于ESlint的配置" class="headerlink" title="关于ESlint的配置"></a>关于ESlint的配置</h2><p>ESlint可以通过三种方式配置</p>
-<ol>
-<li>package.json中的eslintConfig字段</li>
-<li>项目根目录的.eslintrc.js文件</li>
-<li>命令行指定配置文件</li>
-</ol>
-<p>目前我们项目多数为Vue项目，脚手架中已经集成了eslint，并且采用项目根目录的.eslintrc.js这种配置方式，可以单独梳理出当前的规则，结合自身FE团队需求，整出一套配置，发布到npm供团队使用，共同维护。以下以eslint-config-suyun为例</p>
-<h3 id="如何使用配置"><a href="#如何使用配置" class="headerlink" title="如何使用配置"></a>如何使用配置</h3><p>使用时候也很方便，先安装eslint-config-suyun和babel-eslint（如果使用babel）</p>
-<p>在项目根目录.elsintrc.js中配置<code>extends: &#39;suyun&#39;</code>，这样就完成了</p>
-<h3 id="修改eslint-config-suyun配置"><a href="#修改eslint-config-suyun配置" class="headerlink" title="修改eslint-config-suyun配置"></a>修改eslint-config-suyun配置</h3><p>任何人都可以修改此配置，前提是得到团队中大多数人的支持，并遵从以下三条：</p>
-<ul>
-<li>能够帮助发现代码错误的规则，全部开启</li>
-<li>配置不应该依赖于某个具体项目，而应尽可能的合理</li>
-<li>帮助保持团队的代码风格统一，而不是限制开发体验</li>
+<p><html></html></p>
+<p><head><br>    <link rel="stylesheet" type="text/css" href="/style.css"><br>    <script type="text/javascript" src="/header.js"></script><br></head></p>
+<p><body><br>  <p>Text</p><br>  <script type="text/javascript" src="/main.js"></script><br></body><br><br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">浏览器自上而下读取html文档（此过程叫html parser），当发现style.css文件时，浏览器parser停下来去搞css，等style.css下载并解析完毕，浏览器继续parser。紧接着发现header.js， 于是html parser又停了，浏览器下载并执行完header.js，继续parser。此时屏幕上还什么都没有。...parser，发现`<span class="javascript"></span>``<span class="javascript">&lt;p&gt;</span>``<span class="javascript"></span>`，遂将p中文字展示了出来。紧接着又发现main.js，浏览器又停下parser，下载并执行完main.js才继续parser，直到页面渲染完毕。</div><div class="line"></div><div class="line">我们假设header.js中只有一行代码`<span class="javascript"></span>``<span class="javascript"><span class="built_in">console</span>.log(<span class="string">'header'</span>)</span>``<span class="javascript"></span>`， 但服务器响应很慢，要<span class="number">10</span>秒才能把它返回给浏览器，浏览器执行这段代码需要<span class="number">1</span>ms，那在这 <span class="number">10</span>s+<span class="number">1</span>ms 内，页面将一直空白。浏览器执行JS的时间取决于代码质量和硬件，并不是前端工程师随便可以优化的，所以优化的重点在JS的下载时间。</div><div class="line"></div><div class="line"><span class="comment">## 核心：减少JS下载时间</span></div><div class="line"></div><div class="line"><span class="comment">#### 预先解析DNS</span></div><div class="line">非常简单，效果立竿见影，加快页面加载时间，多用于预解析CDN的地址的DNS</div></pre></td></tr></table></figure></p>
+<!--在head标签中，越早越好-->
+<p><link rel="dns-prefetch" href="//example.com"><br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#### Preload</span></div><div class="line">浏览器会在遇到如下link标签时，立刻开始下载main.js(不阻塞parser)，并放在内存中，但不会执行其中的JS语句。</div><div class="line">只有当遇到<span class="keyword">script</span>标签加载的也是main.js的时候，浏览器才会直接将预先加载的JS执行掉。</div></pre></td></tr></table></figure></p>
+<p><link rel="preload" href="/main.js" as="script"><br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#### Prefetch</span></div><div class="line">浏览器会在空闲的时候，下载main.<span class="keyword">js, </span>并缓存到<span class="keyword">disk。当有页面使用的时候，直接从disk缓存中读取。其实就是把决定是否和什么时间加载这个资源的决定权交给浏览器。</span></div><div class="line"></div><div class="line">如果<span class="keyword">prefetch还没下载完之前，浏览器发现script标签也引用了同样的资源，浏览器会再次发起请求，这样会严重影响性能的，加载了两次，，所以不要在当前页面马上就要用的资源上用prefetch，要用preload。</span></div></pre></td></tr></table></figure></p>
+<p><link href="main.js" rel="prefetch"><br><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">## JS在什么时候执行的（defer和async）</span></div><div class="line">上面我们的例子中，script标签都是在没有多余属性的情况下执行的，只要下载过程结束，浏览器就会将JS执行掉。</div><div class="line">defer和<span class="keyword">async</span>是script标签的两个属性，用于在不阻塞页面文档解析的前提下，控制脚本的下载和执行。</div><div class="line"></div><div class="line">defer，<span class="keyword">async</span>与下载时机也有关，具体看这张图。</div><div class="line">![](http:<span class="comment">//segmentfault.com/img/bVcQV0)</span></div><div class="line"></div><div class="line">defer的执行时间是在所有元素解析完成之后，DOMContentLoaded 事件触发之前。</div><div class="line"></div><div class="line"><span class="keyword">async</span>的执行时间是在当前JS脚本下载完成后，所以多个<span class="keyword">async</span> script是执行顺序是不固定的。所以<span class="keyword">async</span>只能用于加载一些独立无依赖的代码，比如Google Analysis之类。</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">## 完美的结构</span></div><div class="line"></div><div class="line">前面两节帮我们弄懂了JS的下载和执行时机，那什么样的页面才是完美符合现代浏览器的那？其实关键在于的preload和prefetch！提前告知浏览器，我们的网站马上要用的是什么，以后可能要用的是什么，浏览器才能更快的渲染页面。下面是一段实例代码</div></pre></td></tr></table></figure></p>
+<p>&lt;!DOCTYPE html&gt;</p>
+<p><html></html></p>
+<p><head><br>  <meta charset="utf-8"><br>  <title>Faster</title><br>  <link rel="dns-prefetch" href="//cdn.com/"><br>  <link rel="preload" href="//js.cdn.com/currentPage-part1.js" as="script"><br>  <link rel="preload" href="//js.cdn.com/currentPage-part2.js" as="script"><br>  <link rel="preload" href="//js.cdn.com/currentPage-part3.js" as="script"></head></p>
+<p>  <link rel="prefetch" href="//js.cdn.com/prefetch.js"><br></p>
+<body>
+
+<p><script type="text/javascript" src="//js.cdn.com/currentPage-part1.js" defer></script></p>
+<p><script type="text/javascript" src="//js.cdn.com/currentPage-part2.js" defer></script></p>
+<p><script type="text/javascript" src="//js.cdn.com/currentPage-part3.js" defer></script><br></p></body><br><br>```<p></p>
+<p>首先，Parser在遇到head中preload时开始下载JS，读到script标签的时候，如果已经下载完了，直接按顺序执行之。如果没下载完，会等到下载完再执行，这样就刚进入页面就开始非阻塞的下载JS了。</p>
+<p>其次，页面会在空闲时，加载prefetch的JS，如果之后页面发生跳转，跳转的目标页面引入了prefetch.js，浏览器会直接从disk缓存中读取执行。</p>
+<p>将script标签依然放在<code>&lt;/body&gt;</code>之前，并增加defer标签，确保老浏览器兼容，并在所有DOM元素解析完成之后执行其中的代码。</p>
+<p>至此，完美的HTML结构出炉了。</p>
+<p>CSS的下载和解析一样会阻塞浏览器，造成白屏，CSS中的字体文件更是影响首屏渲染关键因素之一，下一篇幅我会结合preload和prefetch，带你一起优化CSS，告诉你什么是最适合现代浏览器的CSS加载策略，期待的话，点个赞吧！</p>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><ul>
+<li><a href="http://www.jianshu.com/p/24ffa6d45087" target="_blank" rel="external">关于Preload, 你应该知道些什么？</a></li>
+<li><a href="https://juejin.im/post/58e8acf10ce46300585a7a42" target="_blank" rel="external">Preload，Prefetch 和它们在 Chrome 之中的优先级</a></li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>代码上的自由，是经验的长期积累换来的，没有积累的新人真的会搬起石头砸自己的脚，团队中培养新人是很有必要的，如果不开lint的话，很容易加快项目代码重构的周期，花更多的时间去填之前的坑。</p>
-<p>所以，请使用ESlint吧！</p>
 
 
                 <hr>
@@ -225,12 +232,12 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="2017/09/29/eslint/"
-                    data-title="为ESlint写的一篇"
-                    data-url="http://geoffzhu.cn/blog/blog/2017/09/29/eslint/"
+                    data-thread-key="2017/10/17/前端性能优化/"
+                    data-title="现代浏览器性能优化-JS篇"
+                    data-url="http://geoffzhu.cn/blog/blog/2017/10/17/前端性能优化/"
                     data-images=""
-                    data-content="为ESlint写的一篇
-在多人协作的前端团队中，ESlint是非常有必要。同一项目组，互相代码... | Geoff的博客 | Geoff&#39;s Blog " >
+                    data-content="现代浏览器性能优化-JS篇
+众所周知，JS的加载和执行会阻塞浏览器渲染，所以目前业界普遍推荐把... | Geoff的博客 | Geoff&#39;s Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -248,13 +255,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/blog/2017/10/17/前端性能优化/" data-toggle="tooltip" data-placement="top" title="现代浏览器性能优化-JS篇">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/blog/2017/09/06/window-onerror/" data-toggle="tooltip" data-placement="top" title="window onerror 各浏览器中行为总结">Next Post &rarr;</a>
+                            <a href="/blog/2017/09/29/eslint/" data-toggle="tooltip" data-placement="top" title="为ESlint写的一篇">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -263,9 +266,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2017/09/29/eslint/"
-                        data-title="为ESlint写的一篇"
-                        data-url="http://geoffzhu.cn/blog/blog/2017/09/29/eslint/" >
+                        data-thread-key="2017/10/17/前端性能优化/"
+                        data-title="现代浏览器性能优化-JS篇"
+                        data-url="http://geoffzhu.cn/blog/blog/2017/10/17/前端性能优化/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
@@ -293,9 +296,9 @@
                        
                           <a class="tag" href="/blog/tags/#javascript" title="javascript">javascript</a>
                         
-                          <a class="tag" href="/blog/tags/#lint" title="lint">lint</a>
+                          <a class="tag" href="/blog/tags/#性能优化" title="性能优化">性能优化</a>
                         
-                          <a class="tag" href="/blog/tags/#eslint" title="eslint">eslint</a>
+                          <a class="tag" href="/blog/tags/#html" title="html">html</a>
                         
                     </div>
                 </section>
