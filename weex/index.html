@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>WEEX入门与实战-视频</title>
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?878feacc1ac336e2f3107b6e07c3c3f1";
+    var s = document.getElementsByTagName("script")[0]; 
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+  <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_570422_z0gak08x08f9wwmi.css">
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    body {
+      font-family: Helvetica Neue,Helvetica,PingFang SC,Microsoft Yahei,WenQuanYi Micro Hei,Arial,Verdana,sans-serif;
+      background-color: #f8f8f5;
+      line-height: 1.666;
+    }
+    .container {
+      height: 100vh;
+      width: 100vw;
+      background: url(./bg1.jpg) no-repeat;
+      background-size: cover;
+      position: relative;
+    }
+    .masking {
+      height: 100vh;
+      width: 100vw;
+      position: absolute;
+      background-color: #000;
+      top: 0;
+      left: 0;
+      opacity: .2;
+      z-index: 1;
+    }
+    .details {
+      position: absolute;
+      left: 10vw;
+      bottom: 9vh;
+      z-index: 2;
+      letter-spacing: 2px;
+    }
+    h1 {
+      color: #000;
+      font-size: 38px;
+      font-weight: 200;
+    }
+    h2 {
+      color: #682d2b;
+      font-size: 24px;
+      font-weight: 200;
+      text-align: right;
+    }
+    h2:after {
+      content: '';
+      display: block;
+      height: 2px;
+      width: 100%;
+      background-color: #682d2b;
+    }
+    .icon-wrapper {
+      color: #333333;
+      position: absolute;
+      right: 2vw;
+      top: 2vh;
+      z-index: 2;
+    }
+    .iconfont {
+      font-size: 28px;
+      display: block;
+      transition: color ease .5s;
+      cursor: pointer;
+    }
+    .iconfont:hover {
+      color: #000;
+    }
+    @media (max-width: 768px) {
+      .container {
+        background-position: 70%;
+      }
+      h1 {
+        font-size: 28px;
+      }
+      h2 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="container">
+    <div class="masking"></div>
+    <div class="details">
+      <h2> 带你玩转WEEX </h2>
+      <h1>WEEX入门与实战-视频</h1>
+    </div>
+    <div class="icon-wrapper">
+      <i class="iconfont icon-youku"></i>
+      <i class="iconfont icon-bilibili"></i>
+      <i class="iconfont icon-youtube"></i>
+      <a href="https://github.com/GeoffZhu" alt="github"><i class="iconfont icon-github"></i></a>
+    </div>
+  </section>
+</body>
+</html>
