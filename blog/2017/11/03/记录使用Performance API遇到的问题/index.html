@@ -24,15 +24,108 @@
 <p>我在开发中遇到Navigation Timing API中的connectStart等时间节点并不是标准时间戳，而是0或者一个很小的数值，导致指标数据计算出错，尤其是IOS设备。原因如下:</p>
 <p>IOS设备通过浏览器的前进后退按钮进入的页面，Navigation Timing API数据中connectStart，responseEnd等数据可能为0或者是一个比较小的数值，并不是对应时间点的时间戳。究其原因，IOS设备通过缓存读取页面时，Navigation Timing的计算与安卓实现不一致。</p>
 <p>如果你还想了解下Navigation Timing API，可以继续往下看</p>
-<h3 id="Navigation-Timing-API"><a href="#Navigation-Timing-API" class="headerlink" title="Navigation Timing API"></a>Navigation Timing API</h3><p>Navigation Timing API中包含全部的页面加载中关键节点的时间，例如navigationStart，connectEnd，responseEnd等时间。<br>具体的相关API可以去<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Navigation_timing_API" target="_blank" rel="noopener">MDN</a>查看，<br>浏览器支持程度也非常不错，移动端IOS9及以上，Android4及以上都支持，桌面端IE9也都支持。</p>
-<h4 id="一些常规的性能数据计算方法"><a href="#一些常规的性能数据计算方法" class="headerlink" title="一些常规的性能数据计算方法"></a>一些常规的性能数据计算方法</h4><p>DNS时间 = domainLookupEnd - domainLookupStart<br>TCP时间 = connectEnd - connectStart<br>后端时间 = responseEnd - connectEnd</p>
-<p>白屏时间 = domInteractive - navigationStart<br>整屏时间 = loadEventEnd - navigationStart</p>
-<p>解析dom树耗时 = domComplete - domInteractive<br>request请求耗时 = responseEnd - responseStart</p>
+<h3 id="Navigation-Timing-API"><a href="#Navigation-Timing-API" class="headerlink" title="Navigation Timing API"></a>Navigation Timing API</h3><p>Navigation Timing API中包含全部的页面加载中关键节点的时间，例如navigationStart，connectEnd，responseEnd等时间。
+具体的相关API可以去<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Navigation_timing_API" target="_blank" rel="noopener">MDN</a>查看，
+浏览器支持程度也非常不错，移动端IOS9及以上，Android4及以上都支持，桌面端IE9也都支持。</p>
+<h4 id="一些常规的性能数据计算方法"><a href="#一些常规的性能数据计算方法" class="headerlink" title="一些常规的性能数据计算方法"></a>一些常规的性能数据计算方法</h4><p>DNS时间 = domainLookupEnd - domainLookupStart
+TCP时间 = connectEnd - connectStart
+后端时间 = responseEnd - connectEnd</p>
+<p>白屏时间 = domInteractive - navigationStart
+整屏时间 = loadEventEnd - navigationStart</p>
+<p>解析dom树耗时 = domComplete - domInteractive
+request请求耗时 = responseEnd - responseStart</p>
 <p>我们团队就是按照如上指标来做的各个时间的统计，做了各种测试，线下数据都没什么问题。上线了以后拿到的首批数据中，后端时间计算出来竟然有负值，尤其在IOS设备下，苦苦寻找原因，终于发现问题所在。</p>
 <p>IOS设备通过浏览器的前进后退按钮进入的页面，Navigation Timing API数据中connectStart，responseEnd等数据可能为0或者是一个比较小的数值，并不是对应时间点的时间戳。</p>
 <h4 id="关于首屏时间的定义"><a href="#关于首屏时间的定义" class="headerlink" title="关于首屏时间的定义"></a>关于首屏时间的定义</h4><p>根据Navigation Timing API的时间，是没有办法计算首屏时间的，首屏时间也并没有严格的定义，我们团队采用的首屏时间如下</p>
 <p>首屏时间 = （dom解析完毕 &amp;&amp; 所有首屏图片加载完毕 ）- navigationStart</p>
-<h4 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h4><table><br>    <thead><br>        <tr><br>            <th>属性</th><br>            <th>含义</th><br>        </tr><br>    </thead><br>    <tbody><br>        <tr><br>            <td>navigationStart</td><br>            <td>准备加载新页面的起始时间</td><br>        </tr><br>        <tr><br>            <td>redirectStart</td><br>            <td>如果发生了HTTP重定向，并且从导航开始，中间的每次重定向，都和当前文档同域的话，就返回开始重定向的timing.fetchStart的值。其他情况，则返回0</td><br>        </tr><br>        <tr><br>            <td>redirectEnd</td><br>            <td>如果发生了HTTP重定向，并且从导航开始，中间的每次重定向，都和当前文档同域的话，就返回最后一次重定向，接收到最后一个字节数据后的那个时间.其他情况则返回0</td><br>        </tr><br>        <tr><br>            <td>fetchStart</td><br>            <td>如果一个新的资源获取被发起，则 fetchStart必须返回用户代理开始检查其相关缓存的那个时间，其他情况则返回开始获取该资源的时间</td><br>        </tr><br>        <tr><br>            <td>domainLookupStart</td><br>            <td>返回用户代理对当前文档所属域进行DNS查询开始的时间。如果此请求没有DNS查询过程，如长连接，资源cache,甚至是本地资源等。 那么就返回 fetchStart的值</td><br>        </tr><br>        <tr><br>            <td>domainLookupEnd</td><br>            <td>返回用户代理对结束对当前文档所属域进行DNS查询的时间。如果此请求没有DNS查询过程，如长连接，资源cache，甚至是本地资源等。那么就返回 fetchStart的值</td><br>        </tr><br>        <tr><br>            <td>connectStart</td><br>            <td>返回用户代理向服务器服务器请求文档，开始建立连接的那个时间，如果此连接是一个长连接，又或者直接从缓存中获取资源（即没有与服务器建立连接）。则返回domainLookupEnd的值</td><br>        </tr><br>        <tr><br>            <td>(secureConnectionStart)</td><br>            <td>可选特性。用户代理如果没有对应的东东，就要把这个设置为undefined。如果有这个东东，并且是HTTPS协议，那么就要返回开始SSL握手的那个时间。 如果不是HTTPS， 那么就返回0</td><br>        </tr><br>        <tr><br>            <td>connectEnd</td><br>            <td>返回用户代理向服务器服务器请求文档，建立连接成功后的那个时间，如果此连接是一个长连接，又或者直接从缓存中获取资源（即没有与服务器建立连接）。则返回domainLookupEnd的值</td><br>        </tr><br>        <tr><br>            <td>requestStart</td><br>            <td>返回从服务器、缓存、本地资源等，开始请求文档的时间</td><br>        </tr><br>        <tr><br>            <td>responseStart</td><br>            <td>返回用户代理从服务器、缓存、本地资源中，接收到第一个字节数据的时间</td><br>        </tr><br>        <tr><br>            <td>responseEnd</td><br>            <td>返回用户代理接收到最后一个字符的时间，和当前连接被关闭的时间中，更早的那个。同样，文档可能来自服务器、缓存、或本地资源</td><br>        </tr><br>        <tr><br>            <td>domLoading</td><br>            <td>返回用户代理把其文档的 “current document readiness” 设置为 “loading”的时候</td><br>        </tr><br>        <tr><br>            <td>domInteractive</td><br>            <td>返回用户代理把其文档的 “current document readiness” 设置为 “interactive”的时候.</td><br>        </tr><br>        <tr><br>            <td>domContentLoadedEventStart</td><br>            <td>返回文档发生 DOMContentLoaded事件的时间</td><br>        </tr><br>        <tr><br>            <td>domContentLoadedEventEnd</td><br>            <td>文档的DOMContentLoaded 事件的结束时间</td><br>        </tr><br>        <tr><br>            <td>domComplete</td><br>            <td>返回用户代理把其文档的 “current document readiness” 设置为 “complete”的时候</td><br>        </tr><br>        <tr><br>            <td>loadEventStart</td><br>            <td>文档触发load事件的时间。如果load事件没有触发，那么该接口就返回0</td><br>        </tr><br>        <tr><br>            <td>loadEventEnd</td><br>            <td>文档触发load事件结束后的时间。如果load事件没有触发，那么该接口就返回0</td><br>        </tr><br>    </tbody><br></table>
+<h4 id="标准"><a href="#标准" class="headerlink" title="标准"></a>标准</h4>
+<table>
+    <thead>
+        <tr>
+            <th>属性</th>
+            <th>含义</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>navigationStart</td>
+            <td>准备加载新页面的起始时间</td>
+        </tr>
+        <tr>
+            <td>redirectStart</td>
+            <td>如果发生了HTTP重定向，并且从导航开始，中间的每次重定向，都和当前文档同域的话，就返回开始重定向的timing.fetchStart的值。其他情况，则返回0</td>
+        </tr>
+        <tr>
+            <td>redirectEnd</td>
+            <td>如果发生了HTTP重定向，并且从导航开始，中间的每次重定向，都和当前文档同域的话，就返回最后一次重定向，接收到最后一个字节数据后的那个时间.其他情况则返回0</td>
+        </tr>
+        <tr>
+            <td>fetchStart</td>
+            <td>如果一个新的资源获取被发起，则 fetchStart必须返回用户代理开始检查其相关缓存的那个时间，其他情况则返回开始获取该资源的时间</td>
+        </tr>
+        <tr>
+            <td>domainLookupStart</td>
+            <td>返回用户代理对当前文档所属域进行DNS查询开始的时间。如果此请求没有DNS查询过程，如长连接，资源cache,甚至是本地资源等。 那么就返回 fetchStart的值</td>
+        </tr>
+        <tr>
+            <td>domainLookupEnd</td>
+            <td>返回用户代理对结束对当前文档所属域进行DNS查询的时间。如果此请求没有DNS查询过程，如长连接，资源cache，甚至是本地资源等。那么就返回 fetchStart的值</td>
+        </tr>
+        <tr>
+            <td>connectStart</td>
+            <td>返回用户代理向服务器服务器请求文档，开始建立连接的那个时间，如果此连接是一个长连接，又或者直接从缓存中获取资源（即没有与服务器建立连接）。则返回domainLookupEnd的值</td>
+        </tr>
+        <tr>
+            <td>(secureConnectionStart)</td>
+            <td>可选特性。用户代理如果没有对应的东东，就要把这个设置为undefined。如果有这个东东，并且是HTTPS协议，那么就要返回开始SSL握手的那个时间。 如果不是HTTPS， 那么就返回0</td>
+        </tr>
+        <tr>
+            <td>connectEnd</td>
+            <td>返回用户代理向服务器服务器请求文档，建立连接成功后的那个时间，如果此连接是一个长连接，又或者直接从缓存中获取资源（即没有与服务器建立连接）。则返回domainLookupEnd的值</td>
+        </tr>
+        <tr>
+            <td>requestStart</td>
+            <td>返回从服务器、缓存、本地资源等，开始请求文档的时间</td>
+        </tr>
+        <tr>
+            <td>responseStart</td>
+            <td>返回用户代理从服务器、缓存、本地资源中，接收到第一个字节数据的时间</td>
+        </tr>
+        <tr>
+            <td>responseEnd</td>
+            <td>返回用户代理接收到最后一个字符的时间，和当前连接被关闭的时间中，更早的那个。同样，文档可能来自服务器、缓存、或本地资源</td>
+        </tr>
+        <tr>
+            <td>domLoading</td>
+            <td>返回用户代理把其文档的 "current document readiness" 设置为 "loading"的时候</td>
+        </tr>
+        <tr>
+            <td>domInteractive</td>
+            <td>返回用户代理把其文档的 "current document readiness" 设置为 "interactive"的时候.</td>
+        </tr>
+        <tr>
+            <td>domContentLoadedEventStart</td>
+            <td>返回文档发生 DOMContentLoaded事件的时间</td>
+        </tr>
+        <tr>
+            <td>domContentLoadedEventEnd</td>
+            <td>文档的DOMContentLoaded 事件的结束时间</td>
+        </tr>
+        <tr>
+            <td>domComplete</td>
+            <td>返回用户代理把其文档的 "current document readiness" 设置为 "complete"的时候</td>
+        </tr>
+        <tr>
+            <td>loadEventStart</td>
+            <td>文档触发load事件的时间。如果load事件没有触发，那么该接口就返回0</td>
+        </tr>
+        <tr>
+            <td>loadEventEnd</td>
+            <td>文档触发load事件结束后的时间。如果load事件没有触发，那么该接口就返回0</td>
+        </tr>
+    </tbody>
+</table>
+
 </div>
 <div class="page-date">2017-11-03</div>
     </div>

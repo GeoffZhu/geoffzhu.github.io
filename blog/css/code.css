@@ -196,6 +196,7 @@
   display: block;
   width: 100%;
   overflow: auto;
+  border-collapse: collapse;
 }
 .content table th {
   font-weight: 600;
@@ -210,7 +211,7 @@
   border-top: 1px solid #c6cbd1;
 }
 .content table tr:nth-child(2n) {
-  background-color: #ffe5b5;
+  background-color: #f6f8fa;
 }
 .content table img {
   background-color: transparent;
@@ -348,6 +349,9 @@
   background-color: #f6f8fa;
   border-radius: 3px;
 }
+.content .highlight tr {
+  border: none;
+}
 .content pre code,
 .content pre tt {
   display: inline;
@@ -380,7 +384,7 @@
 }
 .content .csv-data th {
   font-weight: 600;
-  background: #ffe5b5;
+  background: #f6f8fa;
   border-top: 0;
 }
 .content .gutter {

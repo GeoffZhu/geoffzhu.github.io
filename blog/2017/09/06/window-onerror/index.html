@@ -22,8 +22,69 @@
 <p>做前端错误上报，必然离不开window onerror，但window onerror在不同设备上表现并不一致，浏览器为避免信息泄露，在一些情况下并不会给出详细的错误信息，本文的目的就是通过跑一些简单的小例子，验证onerror在不同浏览器下的具体表现。</p>
 </blockquote>
 <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>我会在Mac, Windows, Android和IOS平台下分别进行测试并记录。为了模拟真实线上环境，我利用<a href="http://geoffzhu.cn/error-report/">GitHub Page</a>模拟线上静态文件服务器，通过其他设备访问此地址即可。</p>
-<table><br><thead><br><tr><br><th></th><br><th>Mac</th><br><th>Windows</th><br><th>Android</th><br><th>IOS</th><br></tr><br></thead><br><br><tbody><br><tr><br><td>Chrome</td><br><td>✅</td><br><td>✅</td><br><td>✅</td><br><td>✅</td><br></tr><br><tr><br><td>FireFox</td><br><td>✅</td><br><td>✅</td><br><td>❌</td><br><td>❌</td><br></tr><br><tr><br><td>Safari</td><br><td>✅</td><br><td>❌</td><br><td>❌</td><br><td>✅</td><br></tr><br><tr><br><td>IE9</td><br><td>❌</td><br><td>✅</td><br><td>❌</td><br><td>❌</td><br></tr><br><tr><br><td>IE10</td><br><td>❌</td><br><td>✅</td><br><td>❌</td><br><td>❌</td><br></tr><br><tr><br><td>UC</td><br><td>❌</td><br><td>❌</td><br><td>✅</td><br><td>✅</td><br></tr><br><tr><br><td>微信webview</td><br><td>❌</td><br><td>❌</td><br><td>✅</td><br><td>✅</td><br></tr><br></tbody><br></table>
 
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Mac</th>
+                <th>Windows</th>
+                <th>Android</th>
+                <th>IOS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Chrome</td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>✅</td>
+            </tr>
+            <tr>
+                <td>FireFox</td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+            </tr>
+            <tr>
+                <td>Safari</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+            </tr>
+            <tr>
+                <td>IE9</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+            </tr>
+            <tr>
+                <td>IE10</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+            </tr>
+            <tr>
+                <td>UC</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>✅</td>
+            </tr>
+            <tr>
+                <td>微信webview</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>✅</td>
+            </tr>
+        </tbody>
+    </table>
 
 <h2 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h2><p>预期得到错误<figure class="highlight plain"><figcaption><span>ReferenceError: Name is not defined```，并打印onerror中的所有参数，其中包括行列号，Error对象中存在错误的堆栈信息等。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">``` javascript</span><br><span class="line">window.onerror = function(msg, url, line, col, error) &#123;</span><br><span class="line">  // 直接将错误打印到控制台</span><br><span class="line">  console.log(arguments)</span><br><span class="line"></span><br><span class="line">  // 方便在未打开控制台的时候，记录错误对象</span><br><span class="line">  window.demoError = arguments</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function makeError () &#123;</span><br><span class="line">  var name = &quot;geoff&quot;</span><br><span class="line">  var msg = &quot;Hi, &quot; + Name</span><br><span class="line">  console.log(msg)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">makeError()</span><br></pre></td></tr></table></figure></p>
 <p>—————–测试结果在最后，，，各个浏览器下执行的截图—————–</p>
@@ -36,25 +97,30 @@
 <p>总之，浏览器关于onerror这件事，是这样的一个演化过程，最早因为页面中的js并不会很复杂，所以定位错误只需要一个行号就很容易找到，后面加上了列号，最后又加上了堆栈信息。</p>
 <h2 id="测试数据"><a href="#测试数据" class="headerlink" title="测试数据"></a>测试数据</h2><h4 id="Mac-10-12-1"><a href="#Mac-10-12-1" class="headerlink" title="Mac (10.12.1)"></a>Mac (10.12.1)</h4><ol>
 <li><p>Chrome 60.0.3112.90</p>
-<p> <img src="./img/mac-chrome.jpg" alt=""></p>
+<p> <img src="/blog/img/window-onerror/mac-chrome.jpg" alt=""></p>
 </li>
 <li><p>Safari 10.0.1 (12602.2.14.0.7)</p>
-<p> <img src="./img/mac-safari.jpg" alt=""></p>
+<p> <img src="/blog/img/window-onerror/mac-safari.jpg" alt=""></p>
 </li>
-<li><p>FireFox 47.0<br> <img src="./img/mac-firefox.jpg" alt=""></p>
+<li><p>FireFox 47.0
+ <img src="/blog/img/window-onerror/mac-firefox.jpg" alt=""></p>
 </li>
-<li><p>QQ浏览器 （内核Chromium 48.0.2564.82）<br> <img src="./img/mac-qq.jpg" alt=""></p>
+<li><p>QQ浏览器 （内核Chromium 48.0.2564.82）
+ <img src="/blog/img/window-onerror/mac-qq.jpg" alt=""></p>
 </li>
 </ol>
 <h4 id="Windows-win7"><a href="#Windows-win7" class="headerlink" title="Windows (win7)"></a>Windows (win7)</h4><ol>
 <li><p>Chrome 51.0.2704.106</p>
-<p> <img src="./img/windows-chrome.png" alt=""></p>
+<p> <img src="/blog/img/window-onerror/windows-chrome.png" alt=""></p>
 </li>
-<li><p>FireFox 55.0<br> <img src="./img/windows-firefox.png" alt=""></p>
+<li><p>FireFox 55.0
+ <img src="/blog/img/window-onerror/windows-firefox.png" alt=""></p>
 </li>
-<li><p>IE9<br> <img src="./img/windows-ie9.jpg" alt=""></p>
+<li><p>IE9
+ <img src="/blog/img/window-onerror/windows-ie9.jpg" alt=""></p>
 </li>
-<li><p>IE10<br> <img src="./img/windows-ie10.png" alt=""></p>
+<li><p>IE10
+ <img src="/blog/img/window-onerror/windows-ie10.png" alt=""></p>
 </li>
 </ol>
 <h4 id="Android-5-1"><a href="#Android-5-1" class="headerlink" title="Android (5.1)"></a>Android (5.1)</h4><ol>
