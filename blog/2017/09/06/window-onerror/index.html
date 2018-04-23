@@ -1,206 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keyword"  content="前端 js">
-    <link rel="shortcut icon" href="/blog/img/favicon.ico">
-
-    <title>
-        
-          window onerror 各浏览器中行为总结 - Geoff的博客 | Geoff&#39;s Blog
-        
-    </title>
-
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2017/09/06/window-onerror/">
-
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/blog/css/hux-blog.min.css">
-
-    <!-- Pygments Highlight CSS -->
-    <link rel="stylesheet" href="/blog/css/highlight.css">
-
-    <!-- Custom Fonts -->
-    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-    <!-- Hux change font-awesome CDN to qiniu -->
-    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-
-    <!-- Hux Delete, sad but pending in China
-    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
-    css'>
-    -->
-
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- ga & ba script hoook -->
-    <script></script>
+  <meta charset="utf-8">
+  <title>Geoff的博客 | Geoff&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/blog/css/style.css">
 </head>
 
-
-<!-- hack iOS CSS :active style -->
-<body ontouchstart="">
-
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/blog/">迷人的反派角色</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
-            <nav>'s height woule be hold on by its content.
-            so, when navbar scale out, the <nav> will cover tags.
-            also mask any touch event of tags, unfortunately.
-        -->
-        <div id="huxblog_navbar">
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/blog/">Home</a>
-                    </li>
-
-                    
-
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/about/">About</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/archives/">Archives</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/tags/">Tags</a>
-                        </li>
-                        
-                    
-                    
-                </ul>
-            </div>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-<script>
-    // Drop Bootstarp low-performance Navbar
-    // Use customize navbar with high-quality material design animation
-    // in high-perf jank-free CSS3 implementation
-    var $body   = document.body;
-    var $toggle = document.querySelector('.navbar-toggle');
-    var $navbar = document.querySelector('#huxblog_navbar');
-    var $collapse = document.querySelector('.navbar-collapse');
-
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
-        if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
-            // wait until animation end.
-            setTimeout(function(){
-                // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
-                }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
-        }
-    }
-</script>
-
-
-    <!-- Main Content -->
-    
-<!-- Image to hack wechat -->
-<!-- <img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
-
-<!-- Post Header -->
-<style type="text/css">
-    header.intro-header{
-        background-image: url('/blog/img/home-bg.jpg')
-    }
-</style>
-<header class="intro-header" >
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <div class="tags">
-                        
-                          <a class="tag" href="/blog/tags/#JavaScript" title="JavaScript">JavaScript</a>
-                        
-                          <a class="tag" href="/blog/tags/#错误上报" title="错误上报">错误上报</a>
-                        
-                    </div>
-                    <h1>window onerror 各浏览器中行为总结</h1>
-                    <h2 class="subheading"></h2>
-                    <span class="meta">
-                        Posted by Geoff on
-                        2017-09-06
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-    <!-- Post Container -->
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                post-container">
-
-                <h1 id="window-onerror-多平台调研"><a href="#window-onerror-多平台调研" class="headerlink" title="window onerror 多平台调研"></a>window onerror 多平台调研</h1><blockquote>
+<body>
+  <div class="container">
+    <div class="content">
+      <div><h1 id="window-onerror-多平台调研"><a href="#window-onerror-多平台调研" class="headerlink" title="window onerror 多平台调研"></a>window onerror 多平台调研</h1><blockquote>
 <p>做前端错误上报，必然离不开window onerror，但window onerror在不同设备上表现并不一致，浏览器为避免信息泄露，在一些情况下并不会给出详细的错误信息，本文的目的就是通过跑一些简单的小例子，验证onerror在不同浏览器下的具体表现。</p>
 </blockquote>
 <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>我会在Mac, Windows, Android和IOS平台下分别进行测试并记录。为了模拟真实线上环境，我利用<a href="http://geoffzhu.cn/error-report/">GitHub Page</a>模拟线上静态文件服务器，通过其他设备访问此地址即可。</p>
 <table><br><thead><br><tr><br><th></th><br><th>Mac</th><br><th>Windows</th><br><th>Android</th><br><th>IOS</th><br></tr><br></thead><br><br><tbody><br><tr><br><td>Chrome</td><br><td>✅</td><br><td>✅</td><br><td>✅</td><br><td>✅</td><br></tr><br><tr><br><td>FireFox</td><br><td>✅</td><br><td>✅</td><br><td>❌</td><br><td>❌</td><br></tr><br><tr><br><td>Safari</td><br><td>✅</td><br><td>❌</td><br><td>❌</td><br><td>✅</td><br></tr><br><tr><br><td>IE9</td><br><td>❌</td><br><td>✅</td><br><td>❌</td><br><td>❌</td><br></tr><br><tr><br><td>IE10</td><br><td>❌</td><br><td>✅</td><br><td>❌</td><br><td>❌</td><br></tr><br><tr><br><td>UC</td><br><td>❌</td><br><td>❌</td><br><td>✅</td><br><td>✅</td><br></tr><br><tr><br><td>微信webview</td><br><td>❌</td><br><td>❌</td><br><td>✅</td><br><td>✅</td><br></tr><br></tbody><br></table>
 
 
-<h2 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h2><p>预期得到错误<figure class="highlight plain"><figcaption><span>ReferenceError: Name is not defined```，并打印onerror中的所有参数，其中包括行列号，Error对象中存在错误的堆栈信息等。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">``` javascript</div><div class="line">window.onerror = function(msg, url, line, col, error) &#123;</div><div class="line">  // 直接将错误打印到控制台</div><div class="line">  console.log(arguments)</div><div class="line"></div><div class="line">  // 方便在未打开控制台的时候，记录错误对象</div><div class="line">  window.demoError = arguments</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">function makeError () &#123;</div><div class="line">  var name = &quot;geoff&quot;</div><div class="line">  var msg = &quot;Hi, &quot; + Name</div><div class="line">  console.log(msg)</div><div class="line">&#125;</div><div class="line"></div><div class="line">makeError()</div></pre></td></tr></table></figure></p>
+<h2 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h2><p>预期得到错误<figure class="highlight plain"><figcaption><span>ReferenceError: Name is not defined```，并打印onerror中的所有参数，其中包括行列号，Error对象中存在错误的堆栈信息等。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">``` javascript</span><br><span class="line">window.onerror = function(msg, url, line, col, error) &#123;</span><br><span class="line">  // 直接将错误打印到控制台</span><br><span class="line">  console.log(arguments)</span><br><span class="line"></span><br><span class="line">  // 方便在未打开控制台的时候，记录错误对象</span><br><span class="line">  window.demoError = arguments</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function makeError () &#123;</span><br><span class="line">  var name = &quot;geoff&quot;</span><br><span class="line">  var msg = &quot;Hi, &quot; + Name</span><br><span class="line">  console.log(msg)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">makeError()</span><br></pre></td></tr></table></figure></p>
 <p>—————–测试结果在最后，，，各个浏览器下执行的截图—————–</p>
 <h2 id="先看结论"><a href="#先看结论" class="headerlink" title="先看结论"></a>先看结论</h2><p>大多数现代浏览器对window onerror都支持良好。需要注意的点如下：</p>
 <ol>
@@ -234,351 +51,52 @@
 </ol>
 <h4 id="Android-5-1"><a href="#Android-5-1" class="headerlink" title="Android (5.1)"></a>Android (5.1)</h4><ol>
 <li><p>Chrome (59.0.3071.92)</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"><span class="attr">"0"</span>: <span class="string">"Uncaught ReferenceError: Name is not defined"</span>,</div><div class="line">   <span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</div><div class="line">   <span class="attr">"2"</span>: <span class="number">14</span>,</div><div class="line">   <span class="attr">"3"</span>: <span class="number">22</span>,</div><div class="line">   <span class="attr">"4"</span>: &#123;&#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"0"</span>: <span class="string">"Uncaught ReferenceError: Name is not defined"</span>,</span><br><span class="line">   <span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</span><br><span class="line">   <span class="attr">"2"</span>: <span class="number">14</span>,</span><br><span class="line">   <span class="attr">"3"</span>: <span class="number">22</span>,</span><br><span class="line">   <span class="attr">"4"</span>: &#123;&#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>UC</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="attr">"0"</span>: <span class="string">"Uncaught ReferenceError: Name is not defined"</span>,</div><div class="line">   <span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</div><div class="line">   <span class="attr">"2"</span>: <span class="number">14</span>,</div><div class="line">   <span class="attr">"3"</span>: <span class="number">22</span>,</div><div class="line">   <span class="attr">"4"</span>: &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   <span class="attr">"0"</span>: <span class="string">"Uncaught ReferenceError: Name is not defined"</span>,</span><br><span class="line">   <span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</span><br><span class="line">   <span class="attr">"2"</span>: <span class="number">14</span>,</span><br><span class="line">   <span class="attr">"3"</span>: <span class="number">22</span>,</span><br><span class="line">   <span class="attr">"4"</span>: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>微信webview</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="attr">"0"</span>: <span class="string">"Uncaught ReferenceError: Name is not defined"</span>,</div><div class="line">   <span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</div><div class="line">   <span class="attr">"2"</span>: <span class="number">14</span>,</div><div class="line">   <span class="attr">"3"</span>: <span class="number">22</span>,</div><div class="line">   <span class="attr">"4"</span>: &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   <span class="attr">"0"</span>: <span class="string">"Uncaught ReferenceError: Name is not defined"</span>,</span><br><span class="line">   <span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</span><br><span class="line">   <span class="attr">"2"</span>: <span class="number">14</span>,</span><br><span class="line">   <span class="attr">"3"</span>: <span class="number">22</span>,</span><br><span class="line">   <span class="attr">"4"</span>: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h4 id="IOS-10-3-2"><a href="#IOS-10-3-2" class="headerlink" title="IOS (10.3.2)"></a>IOS (10.3.2)</h4><ol>
 <li><p>Chrome</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"><span class="attr">"0"</span>: <span class="string">"ReferenceError: Can't find variable: Name"</span>,</div><div class="line"><span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</div><div class="line"><span class="attr">"2"</span>: <span class="number">14</span>,</div><div class="line"><span class="attr">"3"</span>: <span class="number">26</span>,</div><div class="line"><span class="attr">"4"</span>: &#123;</div><div class="line">    <span class="attr">"line"</span>: <span class="number">14</span>,</div><div class="line">    <span class="attr">"column"</span>: <span class="number">26</span>,</div><div class="line">    <span class="attr">"sourceURL"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span></div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"0"</span>: <span class="string">"ReferenceError: Can't find variable: Name"</span>,</span><br><span class="line"><span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</span><br><span class="line"><span class="attr">"2"</span>: <span class="number">14</span>,</span><br><span class="line"><span class="attr">"3"</span>: <span class="number">26</span>,</span><br><span class="line"><span class="attr">"4"</span>: &#123;</span><br><span class="line">    <span class="attr">"line"</span>: <span class="number">14</span>,</span><br><span class="line">    <span class="attr">"column"</span>: <span class="number">26</span>,</span><br><span class="line">    <span class="attr">"sourceURL"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span></span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>UC</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"><span class="attr">"0"</span>: <span class="string">"ReferenceError: Can't find variable: Name"</span>,</div><div class="line"><span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</div><div class="line"><span class="attr">"2"</span>: <span class="number">14</span>,</div><div class="line"><span class="attr">"3"</span>: <span class="number">26</span>,</div><div class="line"><span class="attr">"4"</span>: &#123;</div><div class="line">    <span class="attr">"line"</span>: <span class="number">14</span>,</div><div class="line">    <span class="attr">"column"</span>: <span class="number">26</span>,</div><div class="line">    <span class="attr">"sourceURL"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span></div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"0"</span>: <span class="string">"ReferenceError: Can't find variable: Name"</span>,</span><br><span class="line"><span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</span><br><span class="line"><span class="attr">"2"</span>: <span class="number">14</span>,</span><br><span class="line"><span class="attr">"3"</span>: <span class="number">26</span>,</span><br><span class="line"><span class="attr">"4"</span>: &#123;</span><br><span class="line">    <span class="attr">"line"</span>: <span class="number">14</span>,</span><br><span class="line">    <span class="attr">"column"</span>: <span class="number">26</span>,</span><br><span class="line">    <span class="attr">"sourceURL"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span></span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>微信webview</p>
- <figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"><span class="attr">"0"</span>: <span class="string">"ReferenceError: Can't find variable: Name"</span>,</div><div class="line"><span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</div><div class="line"><span class="attr">"2"</span>: <span class="number">14</span>,</div><div class="line"><span class="attr">"3"</span>: <span class="number">26</span>,</div><div class="line"><span class="attr">"4"</span>: &#123;</div><div class="line">    <span class="attr">"line"</span>: <span class="number">14</span>,</div><div class="line">    <span class="attr">"column"</span>: <span class="number">26</span>,</div><div class="line">    <span class="attr">"sourceURL"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span></div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"0"</span>: <span class="string">"ReferenceError: Can't find variable: Name"</span>,</span><br><span class="line"><span class="attr">"1"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span>,</span><br><span class="line"><span class="attr">"2"</span>: <span class="number">14</span>,</span><br><span class="line"><span class="attr">"3"</span>: <span class="number">26</span>,</span><br><span class="line"><span class="attr">"4"</span>: &#123;</span><br><span class="line">    <span class="attr">"line"</span>: <span class="number">14</span>,</span><br><span class="line">    <span class="attr">"column"</span>: <span class="number">26</span>,</span><br><span class="line">    <span class="attr">"sourceURL"</span>: <span class="string">"http://geoffzhu.cn/error-report/index.js"</span></span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="关于代码压缩和source-map"><a href="#关于代码压缩和source-map" class="headerlink" title="关于代码压缩和source-map"></a>关于代码压缩和source-map</h2><p>我通过uglifyJs模拟webpack压缩的配置将上文中的index.js压缩，得到source-map，通过<a href="https://github.com/mozilla/source-map" target="_blank" rel="external">mozilla/source-map</a>的SourceMapConsumer接口，可以通过将转换后的行号列号传入Consumer得到原始错误位置信息。相应的node代码如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"><span class="keyword">var</span> sourceMap = <span class="built_in">require</span>(<span class="string">'source-map'</span>)</div><div class="line"></div><div class="line"><span class="comment">// map文件</span></div><div class="line"><span class="keyword">var</span> rawSourceMapJsonData = fs.readFileSync(<span class="string">'./dist/index.min.js.map'</span>, <span class="string">'utf-8'</span>)</div><div class="line">rawSourceMapJsonData = <span class="built_in">JSON</span>.parse(rawSourceMapJsonData)</div><div class="line"></div><div class="line"><span class="keyword">var</span> consumer = <span class="keyword">new</span> sourceMap.SourceMapConsumer(rawSourceMapJsonData);</div><div class="line"></div><div class="line"><span class="comment">// 打印出真实错误位置</span></div><div class="line"><span class="built_in">console</span>.log(consumer.originalPositionFor(&#123;line: <span class="number">1</span>, column: <span class="number">220</span>&#125;))</div></pre></td></tr></table></figure>
-
-                <hr>
-
-                
-                <!-- 多说 Share start -->
-                </style>
-                <div class="ds-share"
-                    style="text-align: right"
-                    data-thread-key="2017/09/06/window-onerror/"
-                    data-title="window onerror 各浏览器中行为总结"
-                    data-url="http://geoffzhu.cn/blog/blog/2017/09/06/window-onerror/"
-                    data-images=""
-                    data-content="window onerror 多平台调研
-做前端错误上报，必然离不开window onerro... | Geoff的博客 | Geoff&#39;s Blog " >
-                    <div class="ds-share-inline">
-                      <ul  class="ds-share-icons-16">
-                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
-                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
-                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
-                      </ul>
-                      <div class="ds-share-icons-more">
-                      </div>
-                    </div>
-                <hr>
-                </div>
-                <!-- 多说 Share end-->
-                
-
-                <ul class="pager">
-                    
-                        <li class="previous">
-                            <a href="/blog/2017/09/29/eslint/" data-toggle="tooltip" data-placement="top" title="为ESlint写的一篇">&larr; Previous Post</a>
-                        </li>
-                    
-                    
-                        <li class="next">
-                            <a href="/blog/2017/07/09/Vue transition源码详解/" data-toggle="tooltip" data-placement="top" title="Vue2 transition源码分析">Next Post &rarr;</a>
-                        </li>
-                    
-                </ul>
-
-                
-                <!-- 多说评论框 start -->
-                <div class="comment">
-                    <div class="ds-thread"
-                        data-thread-key="2017/09/06/window-onerror/"
-                        data-title="window onerror 各浏览器中行为总结"
-                        data-url="http://geoffzhu.cn/blog/blog/2017/09/06/window-onerror/" >
-                    </div>
-                </div>
-                <!-- 多说评论框 end -->
-                
-
-                
-
-            </div>
-    <!-- Side Catalog Container -->
-        
-
-    <!-- Sidebar Container -->
-
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                sidebar-container">
-
-                <!-- Featured Tags -->
-                
-                <section>
-                    <!-- no hr -->
-                    <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
-                    <div class="tags">
-                       
-                          <a class="tag" href="/blog/tags/#JavaScript" title="JavaScript">JavaScript</a>
-                        
-                          <a class="tag" href="/blog/tags/#错误上报" title="错误上报">错误上报</a>
-                        
-                    </div>
-                </section>
-                
-
-                <!-- Friends Blog -->
-                
-                <hr>
-                <h5>FRIENDS</h5>
-                <ul class="list-inline">
-
-                    
-                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
-                    
-                        <li><a href="https://smallpath.me/" target="_blank">Smallpath的小站</a></li>
-                    
-                </ul>
-                
-            </div>
-
-        </div>
+<h2 id="关于代码压缩和source-map"><a href="#关于代码压缩和source-map" class="headerlink" title="关于代码压缩和source-map"></a>关于代码压缩和source-map</h2><p>我通过uglifyJs模拟webpack压缩的配置将上文中的index.js压缩，得到source-map，通过<a href="https://github.com/mozilla/source-map" target="_blank" rel="noopener">mozilla/source-map</a>的SourceMapConsumer接口，可以通过将转换后的行号列号传入Consumer得到原始错误位置信息。相应的node代码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">var</span> sourceMap = <span class="built_in">require</span>(<span class="string">'source-map'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// map文件</span></span><br><span class="line"><span class="keyword">var</span> rawSourceMapJsonData = fs.readFileSync(<span class="string">'./dist/index.min.js.map'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line">rawSourceMapJsonData = <span class="built_in">JSON</span>.parse(rawSourceMapJsonData)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> consumer = <span class="keyword">new</span> sourceMap.SourceMapConsumer(rawSourceMapJsonData);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印出真实错误位置</span></span><br><span class="line"><span class="built_in">console</span>.log(consumer.originalPositionFor(&#123;<span class="attr">line</span>: <span class="number">1</span>, <span class="attr">column</span>: <span class="number">220</span>&#125;))</span><br></pre></td></tr></table></figure></div>
+<div class="page-date">2017-09-06</div>
     </div>
-</article>
-
-
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-    // dynamic User by Hux
-    var _user = 'geoffzhu';
-
-    // duoshuo comment query.
-    var duoshuoQuery = {short_name: _user };
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0]
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-<!-- 多说公共JS代码 end -->
-
-
-
-
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
-<script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
-        anchors.options = {
-          visible: 'always',
-          placement: 'right',
-          icon: '#'
-        };
-        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
-    })
-</script>
-<style>
-    /* place left on bigger screen */
-    @media all and (min-width: 800px) {
-        .anchorjs-link{
-            position: absolute;
-            left: -0.75em;
-            font-size: 1.1em;
-            margin-top : -0.1em;
-        }
-    }
-</style>
-
-
-
-    <!-- Footer -->
-    <!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                
-                
-                
-                    <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa  fa-stack-1x fa-inverse">知</i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-                    <li>
-                        <a target="_blank" href="http://weibo.com/geoffzhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                
-                    <li>
-                        <a target="_blank"  href="https://github.com/GeoffZhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                </ul>
-                <p class="copyright text-muted">
-                    Copyright &copy; 迷人的反派角色 2017 
-                    <br>
-                    Theme by <a href="http://huangxuan.me">Hux</a> 
-                    <span style="display: inline-block; margin: 0 5px;">
-                        <i class="fa fa-heart"></i>
-                    </span> 
-                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
-                    <iframe
-                        style="margin-left: 2px; margin-bottom:-5px;"
-                        frameborder="0" scrolling="0" width="91px" height="20px"
-                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
-                    </iframe>
-                </p>
-            </div>
-        </div>
-    </div>
+    <footer class="footer">
+  <div>&copy; 2018 Geoff Zhu</div>
+  <div>
+    
+      
+        <a href="/blog//about" target="">About</a>
+      
+    
+      
+        <a href="https://github.com/GeoffZhu" target="_blank">Github</a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/geoffzhu/activities" target="_blank">Zhihu</a>
+      
+    
+      
+        <a href="https://weibo.com/geoffzhu" target="_blank">Weibo</a>
+      
+    
+  </div>
 </footer>
-
-<!-- jQuery -->
-<script src="/blog/js/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="/blog/js/bootstrap.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="/blog/js/hux-blog.min.js"></script>
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-
-<!-- 
-     Because of the native support for backtick-style fenced code blocks 
-     right within the Markdown is landed in Github Pages, 
-     From V1.6, There is no need for Highlight.js, 
-     so Huxblog drops it officially.
-
-     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
-     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
--->
-<!--
-    <script>
-        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
-            hljs.initHighlightingOnLoad();
-        })
-    </script>
-    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
--->
-
-
-<!-- jquery.tagcloud.js -->
-<script>
-    // only load tagcloud.js in tag.html
-    if($('#tag_cloud').length !== 0){
-        async("http://geoffzhu.cn/blog/blog/js/jquery.tagcloud.js",function(){
-            $.fn.tagcloud.defaults = {
-                //size: {start: 1, end: 1, unit: 'em'},
-                color: {start: '#bbbbee', end: '#0085a1'},
-            };
-            $('#tag_cloud a').tagcloud();
-        })
-    }
-</script>
-
-<!--fastClick.js -->
-<script>
-    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
-        var $nav = document.querySelector("nav");
-        if($nav) FastClick.attach($nav);
-    })
-</script>
-
-
-<!-- Google Analytics -->
-
-
-
-
-<!-- Baidu Tongji -->
-
-<script>
-    // dynamic User by Hux
-    var _baId = '14347cf1c49067927d95af6c107cfaab';
-
-    // Originial
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?" + _baId;
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-
-
-<!-- Side Catalog -->
-
-
-
-
-
-<!-- Image to hack wechat -->
-<img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
-
+  </div>
 </body>
-
 </html>

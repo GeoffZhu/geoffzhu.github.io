@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Geoff的博客 | Geoff&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/blog/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+      <div><h1 id="前端工程师应该知道的Linux知识"><a href="#前端工程师应该知道的Linux知识" class="headerlink" title="前端工程师应该知道的Linux知识"></a>前端工程师应该知道的Linux知识</h1><blockquote>
+<p>随着业务架构演进，服务端和客户端的渲染层均交由FEer处理，越来越多的前端开始接触Linux，做一些安装部署NodeJS项目之类的工作，本篇的主要内容就是介绍Linux下的基础知识和常用命令，帮助前端工程师在服务器中自由自在的傲游。</p>
+</blockquote>
+<h2 id="发行版"><a href="#发行版" class="headerlink" title="发行版"></a>发行版</h2><p>目前国内使用的发行版主要是如下三个</p>
+<ul>
+<li>CentOS (6.x &amp; 7.x)</li>
+<li>Debian (8.x)</li>
+<li>Ubuntu (16.x)</li>
+</ul>
+<p>想知道一台机器是什么系统？想知道一台机器的基本信息（内核版本等）？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsb_release -a</span><br><span class="line">uname -a</span><br></pre></td></tr></table></figure>
+<h2 id="包管理工具"><a href="#包管理工具" class="headerlink" title="包管理工具"></a>包管理工具</h2><p>每个平台下有自己的包管理工具，作为一个常用Mac的前端工程师，你一定知道Homebrew，自己也常常<code>brew install</code>，安完就能在命令行中使用了，很湿方便。Homebrew默认的源是在海外的，很慢很慢，所以大家一般会<a href="https://lug.ustc.edu.cn/wiki/mirrors/help/brew.git" target="_blank" rel="noopener">替换为国内的源</a>，就跟npm切成淘宝源一个意思。</p>
+<p>为什么扯这么多Mac上的东西那？原因在于，这套和Linux各个发行版是一致的。各个发行版包推荐使用的包管理工具如下</p>
+<ul>
+<li>CentOS -&gt; yum</li>
+<li>Debian -&gt; apt-get</li>
+<li>Ubuntu -&gt; apt-get</li>
+</ul>
+<p>你都可以一个命令安装相应的包，直接就可以在命令行中使用了。</p>
+<p>其他还有一些相应格式安装包对应的安装工具，比如用于安装.deb文件的<code>dpkg</code>，还有用于安装.rpm文件的<code>rpm</code>。</p>
+<p>包的本质是什么？其实就是一个二进制文件而已，比如我们执行<code>node</code>命令，实际上就是执行了一个可执行的二进制文件。</p>
+<p>我们可以使用<code>which</code>命令看看这个可执行文件在哪里？</p>
+<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><h3 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h3><h4 id="help"><a href="#help" class="headerlink" title="help"></a>help</h4><p>help命令可以查看SHELL内部命令的帮助<br>大多数外部命令都可以用 —help / -h 来查看使用帮助</p>
+<h4 id="man"><a href="#man" class="headerlink" title="man"></a>man</h4><p>绝大部分的软件安装都为执行程序提供了帮助手册<br>编译安装的软件，可以配置/etc/man.config<br>指定man手册路径</p>
+<h4 id="info"><a href="#info" class="headerlink" title="info"></a>info</h4><p>是另一种在线帮助，功能与man手册相似</p>
+<h3 id="目录-amp-文件命令"><a href="#目录-amp-文件命令" class="headerlink" title="目录&amp;文件命令"></a>目录&amp;文件命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>简介</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cp</td>
+<td>复制文件/目录</td>
+<td><code>cp a.js b.js</code></td>
+</tr>
+<tr>
+<td>rm</td>
+<td>删除文件/目录</td>
+<td><code>rm a.js</code></td>
+</tr>
+<tr>
+<td>mv</td>
+<td>移动文件/目录</td>
+<td><code>mv a.js b.js</code></td>
+</tr>
+<tr>
+<td>which</td>
+<td>查找命了文件所在位置</td>
+<td><code>which node</code></td>
+</tr>
+<tr>
+<td>find</td>
+<td>查找文件或目录</td>
+<td></td>
+</tr>
+<tr>
+<td>ln</td>
+<td>创建文件/目录的链接</td>
+<td><code>ln node-v6.2 node</code></td>
+</tr>
+<tr>
+<td>touch</td>
+<td>新建空文件</td>
+<td><code>touch a.js</code></td>
+</tr>
+<tr>
+<td>file</td>
+<td>查看文件类型</td>
+<td><code>file a.js</code></td>
+</tr>
+<tr>
+<td>pwd</td>
+<td>查看当前工作目录</td>
+<td><code>pwd</code></td>
+</tr>
+<tr>
+<td>cd</td>
+<td>切换工作目录</td>
+<td><code>cd /usr</code></td>
+</tr>
+<tr>
+<td>ls</td>
+<td>显示目录内容</td>
+<td><code>ls -lh</code></td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>创建新的目录</td>
+<td><code>mkdir –p /opt/aa/bb</code></td>
+</tr>
+<tr>
+<td>du</td>
+<td>统计目录及文件的空间占用情况</td>
+<td><code>du -sh</code></td>
+</tr>
+</tbody>
+</table>
+<p>几个常见的命令行参数参数<br>-h -human-readable 以人能看懂的方式展示<br>-r 递归文件夹<br>-d -depth 展示深度<br>-f -force 强制</p>
+<h3 id="内容查看命令"><a href="#内容查看命令" class="headerlink" title="内容查看命令"></a>内容查看命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>简介</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cat</td>
+<td>查看显示文件内容</td>
+<td><code>cat a.js</code></td>
+</tr>
+<tr>
+<td>more/less</td>
+<td>分页查看文件内容</td>
+<td><code>cat a.js</code></td>
+</tr>
+<tr>
+<td>head/tail</td>
+<td>查看文件开头/末尾的部分内容</td>
+<td><code>tail -f web.log</code></td>
+</tr>
+<tr>
+<td>wc</td>
+<td>统计文件内容的单词数量等信息</td>
+<td></td>
+</tr>
+<tr>
+<td>grep</td>
+<td>检索过滤文件内容</td>
+<td><code>`</code>cat package.json</td>
+<td>grep ‘vue’<code>`</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>简介</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cat</td>
+<td>查看显示文件内容</td>
+<td><code>cat a.js</code></td>
+</tr>
+<tr>
+<td>more/less</td>
+<td>分页查看文件内容</td>
+<td><code>cat a.js</code></td>
+</tr>
+<tr>
+<td>head/tail</td>
+<td>查看文件开头/末尾的部分内容</td>
+<td><code>tail -f web.log</code></td>
+</tr>
+<tr>
+<td>wc</td>
+<td>统计文件内容的单词数量等信息</td>
+<td></td>
+</tr>
+<tr>
+<td>grep</td>
+<td>检索过滤文件内容</td>
+<td><code>`</code>cat package.json</td>
+<td>grep ‘vue’<code>`</code></td>
+</tr>
+</tbody>
+</table>
+<h1 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h1></div>
+<div class="page-date">2017-12-14</div>
+    </div>
+    <footer class="footer">
+  <div>&copy; 2018 Geoff Zhu</div>
+  <div>
+    
+      
+        <a href="/blog//about" target="">About</a>
+      
+    
+      
+        <a href="https://github.com/GeoffZhu" target="_blank">Github</a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/geoffzhu/activities" target="_blank">Zhihu</a>
+      
+    
+      
+        <a href="https://weibo.com/geoffzhu" target="_blank">Weibo</a>
+      
+    
+  </div>
+</footer>
+  </div>
+</body>
+</html>

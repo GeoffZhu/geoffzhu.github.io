@@ -1,204 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keyword"  content="前端 js">
-    <link rel="shortcut icon" href="/blog/img/favicon.ico">
-
-    <title>
-        
-          Redux - Geoff的博客 | Geoff&#39;s Blog
-        
-    </title>
-
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2016/09/20/react-redux-introduction/">
-
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/blog/css/hux-blog.min.css">
-
-    <!-- Pygments Highlight CSS -->
-    <link rel="stylesheet" href="/blog/css/highlight.css">
-
-    <!-- Custom Fonts -->
-    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-    <!-- Hux change font-awesome CDN to qiniu -->
-    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-
-    <!-- Hux Delete, sad but pending in China
-    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
-    css'>
-    -->
-
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- ga & ba script hoook -->
-    <script></script>
+  <meta charset="utf-8">
+  <title>Geoff的博客 | Geoff&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/blog/css/style.css">
 </head>
 
-
-<!-- hack iOS CSS :active style -->
-<body ontouchstart="">
-
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/blog/">迷人的反派角色</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
-            <nav>'s height woule be hold on by its content.
-            so, when navbar scale out, the <nav> will cover tags.
-            also mask any touch event of tags, unfortunately.
-        -->
-        <div id="huxblog_navbar">
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/blog/">Home</a>
-                    </li>
-
-                    
-
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/about/">About</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/archives/">Archives</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/tags/">Tags</a>
-                        </li>
-                        
-                    
-                    
-                </ul>
-            </div>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-<script>
-    // Drop Bootstarp low-performance Navbar
-    // Use customize navbar with high-quality material design animation
-    // in high-perf jank-free CSS3 implementation
-    var $body   = document.body;
-    var $toggle = document.querySelector('.navbar-toggle');
-    var $navbar = document.querySelector('#huxblog_navbar');
-    var $collapse = document.querySelector('.navbar-collapse');
-
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
-        if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
-            // wait until animation end.
-            setTimeout(function(){
-                // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
-                }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
-        }
-    }
-</script>
-
-
-    <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/blog/img/bg-1.jpg')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Redux</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading">Redux基本概念教学</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        
-
-<!-- USE SIDEBAR -->
-    <!-- Post Container -->
-            <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <h1 id="Redux-基礎概念"><a href="#Redux-基礎概念" class="headerlink" title="Redux 基礎概念"></a>Redux 基礎概念</h1><p><img src="./images/redux-logo.png" alt="React Redux" title="React Redux"></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面一個章節我們講解了 Flux 的功能和用法，但在實務上許多開發者較偏好的是同為 Flux-like 但較為簡潔且文件豐富清楚的 <a href="http://redux.js.org/index.html" target="_blank" rel="external">Redux</a> 當作狀態資料管理的架構。Redux 是由 Dan Abramov 所發起的一個開源的 library，其主要功能如官方首頁寫著：<code>Redux is a predictable state container for JavaScript apps.</code>，亦即 Redux 希望能提供一個可以預測的 state 管理容器，讓開發者可以可以更容易開發複雜的 JavaScript 應用程式（注意 Redux 和 React 並無相依性，只是和 React 可以有很好的整合）。</p>
+<body>
+  <div class="container">
+    <div class="content">
+      <div><h1 id="Redux-基本概念"><a href="#Redux-基本概念" class="headerlink" title="Redux 基本概念"></a>Redux 基本概念</h1><p><img src="./images/redux-logo.png" alt="React Redux" title="React Redux"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面一個章節我們講解了 Flux 的功能和用法，但在實務上許多開發者較偏好的是同為 Flux-like 但較為簡潔且文件豐富清楚的 <a href="http://redux.js.org/index.html" target="_blank" rel="noopener">Redux</a> 當作狀態資料管理的架構。Redux 是由 Dan Abramov 所發起的一個開源的 library，其主要功能如官方首頁寫著：<code>Redux is a predictable state container for JavaScript apps.</code>，亦即 Redux 希望能提供一個可以預測的 state 管理容器，讓開發者可以可以更容易開發複雜的 JavaScript 應用程式（注意 Redux 和 React 並無相依性，只是和 React 可以有很好的整合）。</p>
 <h2 id="Flux-Redux-超級比一比"><a href="#Flux-Redux-超級比一比" class="headerlink" title="Flux/Redux 超級比一比"></a>Flux/Redux 超級比一比</h2><p>從簡單 Flux/Redux 比較圖可以看出兩者之間有些差異：</p>
 <p><img src="./images/using-redux-compare.jpg" alt="React Redux" title="React Redux"></p>
 <p>在開始實作 Redux App 之前我們先來了解一下 Redux 和 Flux 的一些差異：</p>
 <ol>
 <li><p>只使用一個 store 將整個應用程式的狀態 (state) 用物件樹 (object tree) 的方式儲存起來：</p>
 <p> 原生的 Flux 會有許多分散的 store 儲存各個不同的狀態，但在 redux 中，只會有唯一一個 store 將所有的資料用物件的方式包起來。</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//原生 Flux 的 store</span></div><div class="line"><span class="keyword">const</span> userStore = &#123;</div><div class="line">    name: <span class="string">''</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> todoStore = &#123;</div><div class="line">    text: <span class="string">''</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Redux 的單一 store</span></div><div class="line"><span class="keyword">const</span> state = &#123;</div><div class="line">    userState: &#123;</div><div class="line">        name: <span class="string">''</span></div><div class="line">    &#125;,</div><div class="line">    todoState: &#123;</div><div class="line">        text: <span class="string">''</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//原生 Flux 的 store</span></span><br><span class="line"><span class="keyword">const</span> userStore = &#123;</span><br><span class="line">    name: <span class="string">''</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> todoStore = &#123;</span><br><span class="line">    text: <span class="string">''</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Redux 的單一 store</span></span><br><span class="line"><span class="keyword">const</span> state = &#123;</span><br><span class="line">    userState: &#123;</span><br><span class="line">        name: <span class="string">''</span></span><br><span class="line">    &#125;,</span><br><span class="line">    todoState: &#123;</span><br><span class="line">        text: <span class="string">''</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>唯一可以改變 state 的方法就是發送 action，這部份和 Flux 類似，但 Redux 並沒有像 Flux 設計有 Dispatcher。Redux 的 action 和 Flux 的 action 都是一個包含 <code>type</code> 和 <code>payload</code> 的物件。</p>
 </li>
 <li><p>Redux 擁有 Flux 所沒有的 Reducer。Reducer 根據 action 的 type 去執行對應的 state 做變化的函式叫做 Reducer。你可以使用 switch 或是使用函式 mapping 的方式去對應處理的方式。 </p>
 </li>
-<li><p>Redux 擁有許多方便好用的輔助測試工具（例如：<a href="https://github.com/gaearon/redux-devtools" target="_blank" rel="external">redux-devtools</a>、<a href="https://github.com/gaearon/react-transform-boilerplate" target="_blank" rel="external">react-transform-boilerplate</a>），方便測試和使用 <code>Hot Module Reload</code>。</p>
+<li><p>Redux 擁有許多方便好用的輔助測試工具（例如：<a href="https://github.com/gaearon/redux-devtools" target="_blank" rel="noopener">redux-devtools</a>、<a href="https://github.com/gaearon/react-transform-boilerplate" target="_blank" rel="noopener">react-transform-boilerplate</a>），方便測試和使用 <code>Hot Module Reload</code>。</p>
 </li>
 </ol>
 <h2 id="Redux-核心概念介紹"><a href="#Redux-核心概念介紹" class="headerlink" title="Redux 核心概念介紹"></a>Redux 核心概念介紹</h2><p><img src="./images/redux-flowchart.png" alt="React Redux" title="React Redux"></p>
 <p>從上述的圖中我們可以看到 Redux 資料流的模型大致上可以簡化成： <code>View -&gt; Action -&gt; (Middleware) -&gt; Reducer</code>。當使用者和 View 互動時會觸發事件發出 Action，若有使用 Middleware 的話會在進入 Reducer 進行一些處理，當 Action 進到 Reducer 時，Reducer 會根據，action type 去 mapping 對應處理的動作，然後回傳回新的 state。View 則因為偵測到 state 更新而重繪頁面。在這個章節我們討論的是 synchronous（同步）的情形，asynchronous（非同步）的狀況會在接下來的章節進行討論。以下就用官方網站上的簡單範例來讓大家感受一下 Redux 的整個使用流程：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</div><div class="line"></div><div class="line"><span class="comment">/** </span></div><div class="line">  下面是一個簡單的 reducers ，主要功能是針對傳進來的 action type 判斷並回傳新的 state</div><div class="line">  reducer 規格：(state, action) =&gt; newState </div><div class="line">  一般而言 state 可以是 primitive、array 或 object 甚至是 ImmutableJS Data。但要留意的是不能修改到原來的 state ，</div><div class="line">  回傳的是新的 state。由於使用在 Redux 中使用 ImmutableJS 有許多好處，所以我們的範例 App 也會使用 ImmutableJS </div><div class="line">*/</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state = 0, action</span>) </span>&#123;</div><div class="line">  <span class="keyword">switch</span> (action.type) &#123;</div><div class="line">  <span class="keyword">case</span> <span class="string">'INCREMENT'</span>:</div><div class="line">    <span class="keyword">return</span> state + <span class="number">1</span>;</div><div class="line">  <span class="keyword">case</span> <span class="string">'DECREMENT'</span>:</div><div class="line">    <span class="keyword">return</span> state - <span class="number">1</span>;</div><div class="line">  <span class="keyword">default</span>:</div><div class="line">    <span class="keyword">return</span> state;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 創建 Redux store 去存放 App 的所有 state</span></div><div class="line"><span class="comment">// store 的可用 API &#123; subscribe, dispatch, getState &#125; </span></div><div class="line"><span class="keyword">let</span> store = createStore(counter);</div><div class="line"></div><div class="line"><span class="comment">// 可以使用 subscribe() 來訂閱 state 是否更新。但實務通常會使用 react-redux 來串連 React 和 Redux</span></div><div class="line">store.subscribe(() =&gt;</div><div class="line">  <span class="built_in">console</span>.log(store.getState());</div><div class="line">);</div><div class="line"></div><div class="line"><span class="comment">// 若想改變 state ，一律發 action</span></div><div class="line">store.dispatch(&#123; type: <span class="string">'INCREMENT'</span> &#125;);</div><div class="line"><span class="comment">// 1</span></div><div class="line">store.dispatch(&#123; type: <span class="string">'INCREMENT'</span> &#125;);</div><div class="line"><span class="comment">// 2</span></div><div class="line">store.dispatch(&#123; type: <span class="string">'DECREMENT'</span> &#125;);</div><div class="line"><span class="comment">// 1</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment">  下面是一個簡單的 reducers ，主要功能是針對傳進來的 action type 判斷並回傳新的 state</span></span><br><span class="line"><span class="comment">  reducer 規格：(state, action) =&gt; newState </span></span><br><span class="line"><span class="comment">  一般而言 state 可以是 primitive、array 或 object 甚至是 ImmutableJS Data。但要留意的是不能修改到原來的 state ，</span></span><br><span class="line"><span class="comment">  回傳的是新的 state。由於使用在 Redux 中使用 ImmutableJS 有許多好處，所以我們的範例 App 也會使用 ImmutableJS </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state = <span class="number">0</span>, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'INCREMENT'</span>:</span><br><span class="line">    <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">'DECREMENT'</span>:</span><br><span class="line">    <span class="keyword">return</span> state - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 創建 Redux store 去存放 App 的所有 state</span></span><br><span class="line"><span class="comment">// store 的可用 API &#123; subscribe, dispatch, getState &#125; </span></span><br><span class="line"><span class="keyword">let</span> store = createStore(counter);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以使用 subscribe() 來訂閱 state 是否更新。但實務通常會使用 react-redux 來串連 React 和 Redux</span></span><br><span class="line">store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span></span><br><span class="line">  <span class="built_in">console</span>.log(store.getState());</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 若想改變 state ，一律發 action</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">'INCREMENT'</span> &#125;);</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">'INCREMENT'</span> &#125;);</span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">'DECREMENT'</span> &#125;);</span><br><span class="line"><span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
 <h2 id="Redux-API-入門"><a href="#Redux-API-入門" class="headerlink" title="Redux API 入門"></a>Redux API 入門</h2><ol>
 <li><p>createStore：<code>createStore(reducer, [preloadedState], [enhancer])</code></p>
 <p> 我們知道在 Redux 中只會有一個 store。在產生 store 時我們會使用 <code>createStore</code> 這個 API 來創建 store。第一個參數放入我們的 <code>reducer</code> 或是有多個 <code>reducers</code> combine（使用 <code>combineReducers</code>）在一起的 <code>rootRuducers</code>。第二個參數我們會放入希望預先載入的 <code>state</code> 例如：user session 等。第三個參數通常會放入我們想要使用用來增強 Redux 功能的 <code>middlewares</code>，若有多個 <code>middlewares</code> 的話，通常會使用 <code>applyMiddleware</code> 來整合。</p>
@@ -223,7 +54,7 @@
 <p>It provides a third-party extension point between dispatching an<br> action, and the moment it reaches the reducer.</p>
 </blockquote>
 <p> 若有 NodeJS 的經驗的讀者，對於 middleware 概念應該不陌生，讓開發者可以在 req 和 res 之間進行一些操作。在 Redux 中 Middleware 則是扮演 action 到達 reducer 前的第三方擴充。而 applyMiddleware 可以將多個 <code>middlewares</code> 整合並回傳一個 Function，便於使用。</p>
-<p> 若是你要使用 asynchronous（非同步）的行為的話需要使用其中一種 middleware： <a href="https://github.com/gaearon/redux-thunk" target="_blank" rel="external">redux-thunk</a>、<a href="https://github.com/acdlite/redux-promise" target="_blank" rel="external">redux-promise</a> 或 <a href="https://github.com/pburtchaell/redux-promise-middleware" target="_blank" rel="external">redux-promise-middleware</a> ，這樣可以讓你在 actions 中 dispatch Promises 而非 function。asynchronous（非同步）運作方式就如同下圖所示：</p>
+<p> 若是你要使用 asynchronous（非同步）的行為的話需要使用其中一種 middleware： <a href="https://github.com/gaearon/redux-thunk" target="_blank" rel="noopener">redux-thunk</a>、<a href="https://github.com/acdlite/redux-promise" target="_blank" rel="noopener">redux-promise</a> 或 <a href="https://github.com/pburtchaell/redux-promise-middleware" target="_blank" rel="noopener">redux-promise-middleware</a> ，這樣可以讓你在 actions 中 dispatch Promises 而非 function。asynchronous（非同步）運作方式就如同下圖所示：</p>
 <p> <img src="./images/react-redux-diagram.png" alt="React Redux" title="React Redux"></p>
 </li>
 <li><p>bindActionCreators：<code>bindActionCreators(actionCreators, dispatch)</code></p>
@@ -231,416 +62,43 @@
 </li>
 <li><p>compose：<code>compose(...functions)</code></p>
 <p> compose 可以將 function 由右到左合併並回傳一個 Function，如官網範例所示：</p>
- <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; createStore, combineReducers, applyMiddleware, compose &#125; <span class="keyword">from</span> <span class="string">'redux'</span></div><div class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">'redux-thunk'</span></div><div class="line"><span class="keyword">import</span> DevTools <span class="keyword">from</span> <span class="string">'./containers/DevTools'</span></div><div class="line"><span class="keyword">import</span> reducer <span class="keyword">from</span> <span class="string">'../reducers/index'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> store = createStore(</div><div class="line">  reducer,</div><div class="line">  compose(</div><div class="line">    applyMiddleware(thunk),</div><div class="line">    DevTools.instrument()</div><div class="line">  )</div><div class="line">)</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import &#123; createStore, combineReducers, applyMiddleware, compose &#125; from &apos;redux&apos;</span><br><span class="line">import thunk from &apos;redux-thunk&apos;</span><br><span class="line">import DevTools from &apos;./containers/DevTools&apos;</span><br><span class="line">import reducer from &apos;../reducers/index&apos;</span><br><span class="line"></span><br><span class="line">const store = createStore(</span><br><span class="line">  reducer,</span><br><span class="line">  compose(</span><br><span class="line">    applyMiddleware(thunk),</span><br><span class="line">    DevTools.instrument()</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>以上介紹了 Redux 的基礎概念，若是讀者覺得還是有點抽象的話也沒關係，在下一個章節我們將實際帶大家開發一個整合 <code>React</code>、<code>Redux</code> 和 <code>ImmutableJS</code> 的 TodoApp。</p>
 <h2 id="延伸閱讀"><a href="#延伸閱讀" class="headerlink" title="延伸閱讀"></a>延伸閱讀</h2><ol>
-<li><a href="http://redux.js.org/index.html" target="_blank" rel="external">Redux 官方網站</a></li>
-<li><a href="http://react-china.org/t/redux-single-source-of-truth/5564" target="_blank" rel="external">Redux架构实践——Single Source of Truth</a></li>
-<li><a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0" target="_blank" rel="external">Presentational and Container Components</a></li>
-<li><a href="https://github.com/matthew-sun/blog/issues/18" target="_blank" rel="external">使用Redux管理你的React应用</a></li>
-<li><a href="http://www.slideshare.net/JonasOhlsson/using-redux" target="_blank" rel="external">Using redux</a></li>
+<li><a href="http://redux.js.org/index.html" target="_blank" rel="noopener">Redux 官方網站</a></li>
+<li><a href="http://react-china.org/t/redux-single-source-of-truth/5564" target="_blank" rel="noopener">Redux架构实践——Single Source of Truth</a></li>
+<li><a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0" target="_blank" rel="noopener">Presentational and Container Components</a></li>
+<li><a href="https://github.com/matthew-sun/blog/issues/18" target="_blank" rel="noopener">使用Redux管理你的React应用</a></li>
+<li><a href="http://www.slideshare.net/JonasOhlsson/using-redux" target="_blank" rel="noopener">Using redux</a></li>
 </ol>
-<p>（image via <a href="https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-dark.png" target="_blank" rel="external">githubusercontent</a>、<a href="http://makeitopen.com/static/images/redux_flowchart.png" target="_blank" rel="external">makeitopen</a>、<a href="https://css-tricks.com/wp-content/uploads/2016/03/redux-article-3-03.svg" target="_blank" rel="external">css-tricks</a>、<a href="https://blog.tighten.co/assets/img/react-redux-diagram.png" target="_blank" rel="external">tighten</a>、<a href="http://blog.tryolabs.com/wp-content/uploads/2016/04/redux-simple-f8-diagram.png" target="_blank" rel="external">tryolabs</a>、<a href="https://facebook.github.io/flux/img/flux-simple-f8-diagram-with-client-action-1300w.png" target="_blank" rel="external">facebook</a>、<a href="http://www.slideshare.net/JonasOhlsson/using-redux" target="_blank" rel="external">JonasOhlsson</a>）</p>
-
-
-                <!-- 如果开启评论功能 -->
-                
-                    <hr>
-
-                    
-                    <!-- 多说评论框 start -->
-                    <div class="comment">
-                        <div class="ds-thread"
-                            data-thread-key="2016/09/20/react-redux-introduction/"
-                            data-title="Redux"
-                            data-url="http://geoffzhu.cn/blog/blog/2016/09/20/react-redux-introduction/" >
-                        </div>
-                    </div>
-                    <!-- 多说评论框 end -->
-                    
-
-                    
-
-
-                    
-                    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-                    <script type="text/javascript">
-                        // dynamic User by Hux
-                        var _user = 'geoffzhu';
-
-                        // duoshuo comment query.
-                        var duoshuoQuery = {short_name: _user };
-                        (function() {
-                            var ds = document.createElement('script');
-                            ds.type = 'text/javascript';ds.async = true;
-                            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-                            ds.charset = 'UTF-8';
-                            (document.getElementsByTagName('head')[0]
-                             || document.getElementsByTagName('body')[0]).appendChild(ds);
-                        })();
-                    </script>
-                    <!-- 多说公共JS代码 end -->
-                    
-
-                    
-
-
-
-                
-
-            </div>
-    <!-- Sidebar Container -->
-            <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
-                <!-- Featured Tags -->
-                
-                <section>
-                    <!-- no hr -->
-                    <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
-                    <div class="tags">
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#node" title="node" rel="2">node</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#css" title="css" rel="5">css</a>
-                            
-                        
-                            
-                            <a href="/blog/tags/#布局" title="布局" rel="4">布局</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#js" title="js" rel="3">js</a>
-                            
-                        
-                            
-                            <a href="/blog/tags/#vue" title="vue" rel="3">vue</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#JavaScript" title="JavaScript" rel="3">JavaScript</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                            <a href="/blog/tags/#javascript" title="javascript" rel="2">javascript</a>
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                            
-                        
-                    </div>
-                </section>
-                
-
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/blog/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/blog//img/avatar.jpg" />
-                        
-
-                        
-                            <p>跳坑，爬坑，跳坑，爬坑，跳坑，爬坑...!</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            
-                                <li>
-                                    <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-                                <li>
-                                    <a target="_blank" href="http://weibo.com/geoffzhu">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/GeoffZhu">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
-                
-                <!-- Friends Blog -->
-                
-                <hr>
-                <h5>FRIENDS</h5>
-                <ul class="list-inline">
-
-                    
-                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
-                    
-                        <li><a href="https://smallpath.me/" target="_blank">Smallpath的小站</a></li>
-                    
-                </ul>
-                
-            </div>
-        
-    </div>
+<p>（image via <a href="https://raw.githubusercontent.com/reactjs/redux/master/logo/logo-title-dark.png" target="_blank" rel="noopener">githubusercontent</a>、<a href="http://makeitopen.com/static/images/redux_flowchart.png" target="_blank" rel="noopener">makeitopen</a>、<a href="https://css-tricks.com/wp-content/uploads/2016/03/redux-article-3-03.svg" target="_blank" rel="noopener">css-tricks</a>、<a href="https://blog.tighten.co/assets/img/react-redux-diagram.png" target="_blank" rel="noopener">tighten</a>、<a href="http://blog.tryolabs.com/wp-content/uploads/2016/04/redux-simple-f8-diagram.png" target="_blank" rel="noopener">tryolabs</a>、<a href="https://facebook.github.io/flux/img/flux-simple-f8-diagram-with-client-action-1300w.png" target="_blank" rel="noopener">facebook</a>、<a href="http://www.slideshare.net/JonasOhlsson/using-redux" target="_blank" rel="noopener">JonasOhlsson</a>）</p>
 </div>
-
-
-    <!-- Footer -->
-    <!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                
-                
-                
-                    <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa  fa-stack-1x fa-inverse">知</i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-                    <li>
-                        <a target="_blank" href="http://weibo.com/geoffzhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                
-                    <li>
-                        <a target="_blank"  href="https://github.com/GeoffZhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                </ul>
-                <p class="copyright text-muted">
-                    Copyright &copy; 迷人的反派角色 2017 
-                    <br>
-                    Theme by <a href="http://huangxuan.me">Hux</a> 
-                    <span style="display: inline-block; margin: 0 5px;">
-                        <i class="fa fa-heart"></i>
-                    </span> 
-                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
-                    <iframe
-                        style="margin-left: 2px; margin-bottom:-5px;"
-                        frameborder="0" scrolling="0" width="91px" height="20px"
-                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
-                    </iframe>
-                </p>
-            </div>
-        </div>
+<div class="page-date">2016-09-20</div>
     </div>
+    <footer class="footer">
+  <div>&copy; 2018 Geoff Zhu</div>
+  <div>
+    
+      
+        <a href="/blog//about" target="">About</a>
+      
+    
+      
+        <a href="https://github.com/GeoffZhu" target="_blank">Github</a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/geoffzhu/activities" target="_blank">Zhihu</a>
+      
+    
+      
+        <a href="https://weibo.com/geoffzhu" target="_blank">Weibo</a>
+      
+    
+  </div>
 </footer>
-
-<!-- jQuery -->
-<script src="/blog/js/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="/blog/js/bootstrap.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="/blog/js/hux-blog.min.js"></script>
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-
-<!-- 
-     Because of the native support for backtick-style fenced code blocks 
-     right within the Markdown is landed in Github Pages, 
-     From V1.6, There is no need for Highlight.js, 
-     so Huxblog drops it officially.
-
-     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
-     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
--->
-<!--
-    <script>
-        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
-            hljs.initHighlightingOnLoad();
-        })
-    </script>
-    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
--->
-
-
-<!-- jquery.tagcloud.js -->
-<script>
-    // only load tagcloud.js in tag.html
-    if($('#tag_cloud').length !== 0){
-        async("http://geoffzhu.cn/blog/blog/js/jquery.tagcloud.js",function(){
-            $.fn.tagcloud.defaults = {
-                //size: {start: 1, end: 1, unit: 'em'},
-                color: {start: '#bbbbee', end: '#0085a1'},
-            };
-            $('#tag_cloud a').tagcloud();
-        })
-    }
-</script>
-
-<!--fastClick.js -->
-<script>
-    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
-        var $nav = document.querySelector("nav");
-        if($nav) FastClick.attach($nav);
-    })
-</script>
-
-
-<!-- Google Analytics -->
-
-
-
-
-<!-- Baidu Tongji -->
-
-<script>
-    // dynamic User by Hux
-    var _baId = '14347cf1c49067927d95af6c107cfaab';
-
-    // Originial
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?" + _baId;
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-
-
-<!-- Side Catalog -->
-
-
-
-
-
-<!-- Image to hack wechat -->
-<img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
-
+  </div>
 </body>
-
 </html>

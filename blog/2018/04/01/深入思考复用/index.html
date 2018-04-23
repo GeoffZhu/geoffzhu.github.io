@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Geoff的博客 | Geoff&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/blog/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+      <div><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">  name: <span class="string">'lily'</span>,</span><br><span class="line">  arr: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> proxyedA = <span class="keyword">new</span> <span class="built_in">Proxy</span>(a, &#123;</span><br><span class="line">  set (object, prop, value, ...args) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(object, prop, value)</span><br><span class="line">    <span class="keyword">debugger</span></span><br><span class="line">    object[prop] = value</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1111</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></div>
+<div class="page-date">2018-04-01</div>
+    </div>
+    <footer class="footer">
+  <div>&copy; 2018 Geoff Zhu</div>
+  <div>
+    
+      
+        <a href="/blog//about" target="">About</a>
+      
+    
+      
+        <a href="https://github.com/GeoffZhu" target="_blank">Github</a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/geoffzhu/activities" target="_blank">Zhihu</a>
+      
+    
+      
+        <a href="https://weibo.com/geoffzhu" target="_blank">Weibo</a>
+      
+    
+  </div>
+</footer>
+  </div>
+</body>
+</html>

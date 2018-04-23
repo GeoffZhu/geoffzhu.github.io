@@ -1,559 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keyword"  content="前端 js">
-    <link rel="shortcut icon" href="/blog/img/favicon.ico">
-
-    <title>
-        
-          PostCSS-modules - Geoff的博客 | Geoff&#39;s Blog
-        
-    </title>
-
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2017/01/21/PostCSS模块化/">
-
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/blog/css/hux-blog.min.css">
-
-    <!-- Pygments Highlight CSS -->
-    <link rel="stylesheet" href="/blog/css/highlight.css">
-
-    <!-- Custom Fonts -->
-    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-    <!-- Hux change font-awesome CDN to qiniu -->
-    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-
-    <!-- Hux Delete, sad but pending in China
-    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
-    css'>
-    -->
-
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- ga & ba script hoook -->
-    <script></script>
+  <meta charset="utf-8">
+  <title>Geoff的博客 | Geoff&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/blog/css/style.css">
 </head>
 
-
-<!-- hack iOS CSS :active style -->
-<body ontouchstart="">
-
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/blog/">迷人的反派角色</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
-            <nav>'s height woule be hold on by its content.
-            so, when navbar scale out, the <nav> will cover tags.
-            also mask any touch event of tags, unfortunately.
-        -->
-        <div id="huxblog_navbar">
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/blog/">Home</a>
-                    </li>
-
-                    
-
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/about/">About</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/archives/">Archives</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/tags/">Tags</a>
-                        </li>
-                        
-                    
-                    
-                </ul>
-            </div>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-<script>
-    // Drop Bootstarp low-performance Navbar
-    // Use customize navbar with high-quality material design animation
-    // in high-perf jank-free CSS3 implementation
-    var $body   = document.body;
-    var $toggle = document.querySelector('.navbar-toggle');
-    var $navbar = document.querySelector('#huxblog_navbar');
-    var $collapse = document.querySelector('.navbar-collapse');
-
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
-        if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
-            // wait until animation end.
-            setTimeout(function(){
-                // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
-                }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
-        }
-    }
-</script>
-
-
-    <!-- Main Content -->
-    
-<!-- Image to hack wechat -->
-<!-- <img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
-
-<!-- Post Header -->
-<style type="text/css">
-    header.intro-header{
-        background-image: url('/blog/img/home-bg.jpg')
-    }
-</style>
-<header class="intro-header" >
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <div class="tags">
-                        
-                          <a class="tag" href="/blog/tags/#css" title="css">css</a>
-                        
-                          <a class="tag" href="/blog/tags/#postcss" title="postcss">postcss</a>
-                        
-                    </div>
-                    <h1>PostCSS-modules</h1>
-                    <h2 class="subheading"></h2>
-                    <span class="meta">
-                        Posted by Geoff on
-                        2017-01-21
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-    <!-- Post Container -->
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                post-container">
-
-                <blockquote>
+<body>
+  <div class="container">
+    <div class="content">
+      <div><blockquote>
 <p>译者注（<a href="http://geoffzhu.cn/blog/">GeoffZhu</a>）: 这篇适合一些使用过预处理CSS的开发者，比如less，sass或stylus，如果你都没用过，那你一定不是个好司机。在PostCSS中早就可以使用CSS Modules了，该篇作者贡献了一个新工具，可以让更多开发者方便的使用最新的CSS Modules。</p>
 </blockquote>
-<p>我们和全局作用域的css斗争了多年，现在终于是时候结束它了。不管你用的是什么语言还是框架，CSS命名冲突将不再是个问题。我将给你展示一下<a href="http://postcss.org/" target="_blank" rel="external">PostCSS</a>和<a href="https://github.com/outpunk/postcss-modules" target="_blank" rel="external">PostCSS-modules</a>如何使用，并且可以在服务端使用它们。<br>CSS起初只是一个美化文档的工具，但是事情到1996年发生了变化。浏览器中不再单单只有文档了，即时通讯，各种软件，游戏，没什么是浏览器不能承载的。</p>
+<p>我们和全局作用域的css斗争了多年，现在终于是时候结束它了。不管你用的是什么语言还是框架，CSS命名冲突将不再是个问题。我将给你展示一下<a href="http://postcss.org/" target="_blank" rel="noopener">PostCSS</a>和<a href="https://github.com/outpunk/postcss-modules" target="_blank" rel="noopener">PostCSS-modules</a>如何使用，并且可以在服务端使用它们。<br>CSS起初只是一个美化文档的工具，但是事情到1996年发生了变化。浏览器中不再单单只有文档了，即时通讯，各种软件，游戏，没什么是浏览器不能承载的。</p>
 <blockquote>
 <p>当今，我们在HTML和CSS方面已经走了很远很远，开发者们激发出了CSS所有的潜力，甚至创造出了一些CSS本身都快驾驭不了的东西。</p>
 </blockquote>
 <p>每一个有经验的开发者都知道 — 每次使用全局命名空间都是留下了一个产生bug的隐患，因为很快就可能出现类似命名冲突之类的问题，再加上其他方面(项目越来越大等)的影响，代码越来越不易维护。</p>
-<p>对于CSS来说，这意味着有问题的布局。<a href="https://www.smashingmagazine.com/2007/07/css-specificity-things-you-should-know/" target="_blank" rel="external">CSS特异性</a>和CSS宽泛性之间，一直存在着如史诗般的对决。仅仅是因为每个选择器都可能会影响到那些不想被影响的元素，使之产生了冲突。</p>
+<p>对于CSS来说，这意味着有问题的布局。<a href="https://www.smashingmagazine.com/2007/07/css-specificity-things-you-should-know/" target="_blank" rel="noopener">CSS特异性</a>和CSS宽泛性之间，一直存在着如史诗般的对决。仅仅是因为每个选择器都可能会影响到那些不想被影响的元素，使之产生了冲突。</p>
 <p>基本所有编程语言都支持局部作用域。和CSS朝夕相伴的JavaScript有AMD, CommonJS和最终确定的ES6 modules。但是我们并没有一个可以模块化CSS的方法。</p>
 <p>对于一个高质量项目来说，独立的UI组件（也就是组件化）非常重要的 — 每个组件小巧独立，可以拼合成复杂的页面，这让我们节省了很多的工作。但是我们始终有一个疑问，如何防止全局命名冲突那？</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>因为有前人的探寻，现在我们有<a href="http://oocss.org/" target="_blank" rel="external">Object-Oriented CSS</a>, <a href="http://getbem.com/" target="_blank" rel="external">BEM</a>, <a href="https://smacss.com/" target="_blank" rel="external">SMACSS</a>等等，这些都是非常棒并且非常有用的方法。他们通过增加前缀的办法，解决了命名冲突的问题。</p>
-<p>通过增加前缀的办法解决命名冲突是个体力活（<a href="https://en.wikipedia.org/wiki/Name_mangling" target="_blank" rel="external">manual mangling</a>）。我们手动的去编写长长的选择器。你也可以使用<a href="http://htmlmag.com/article/an-introduction-to-css-preprocessors-sass-less-stylus" target="_blank" rel="external">预编译</a>的css语言，但是它们并没有从根本上解决问题（还是体力活）。下面是我们用BEM规范书写的一个独立组件（对于现有的除BEM之外的方法，思想上基本也是这样）：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 普通 CSS */</span></div><div class="line"><span class="selector-class">.article</span> &#123;</div><div class="line">  <span class="attribute">font-size</span>: <span class="number">16px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.article__title</span> &#123;</div><div class="line">  <span class="attribute">font-size</span>: <span class="number">24px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* 使用css预处理语言 */</span></div><div class="line"><span class="selector-class">.article</span> &#123;</div><div class="line">  <span class="attribute">font-size</span>: <span class="number">16px</span>;</div><div class="line"></div><div class="line">  &amp;__title &#123;</div><div class="line">    <span class="attribute">font-size</span>: <span class="number">24px</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="CSS模块（CSS-Modules）"><a href="#CSS模块（CSS-Modules）" class="headerlink" title="CSS模块（CSS Modules）"></a>CSS模块（CSS Modules）</h2><p>2015年出现了另外两种方法的实现。分别是<a href="https://speakerdeck.com/vjeux/react-css-in-js-react-france-meetup" target="_blank" rel="external">CSS-in-JS</a> 和 <a href="http://glenmaddern.com/articles/css-modules" target="_blank" rel="external">CSS Modules</a>。我们将主要谈论后者。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>因为有前人的探寻，现在我们有<a href="http://oocss.org/" target="_blank" rel="noopener">Object-Oriented CSS</a>, <a href="http://getbem.com/" target="_blank" rel="noopener">BEM</a>, <a href="https://smacss.com/" target="_blank" rel="noopener">SMACSS</a>等等，这些都是非常棒并且非常有用的方法。他们通过增加前缀的办法，解决了命名冲突的问题。</p>
+<p>通过增加前缀的办法解决命名冲突是个体力活（<a href="https://en.wikipedia.org/wiki/Name_mangling" target="_blank" rel="noopener">manual mangling</a>）。我们手动的去编写长长的选择器。你也可以使用<a href="http://htmlmag.com/article/an-introduction-to-css-preprocessors-sass-less-stylus" target="_blank" rel="noopener">预编译</a>的css语言，但是它们并没有从根本上解决问题（还是体力活）。下面是我们用BEM规范书写的一个独立组件（对于现有的除BEM之外的方法，思想上基本也是这样）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/* 普通 CSS */</span><br><span class="line">.article &#123;</span><br><span class="line">  font-size: 16px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.article__title &#123;</span><br><span class="line">  font-size: 24px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/* 使用css预处理语言 */</span><br><span class="line">.article &#123;</span><br><span class="line">  font-size: 16px;</span><br><span class="line"></span><br><span class="line">  &amp;__title &#123;</span><br><span class="line">    font-size: 24px;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="CSS模块（CSS-Modules）"><a href="#CSS模块（CSS-Modules）" class="headerlink" title="CSS模块（CSS Modules）"></a>CSS模块（CSS Modules）</h2><p>2015年出现了另外两种方法的实现。分别是<a href="https://speakerdeck.com/vjeux/react-css-in-js-react-france-meetup" target="_blank" rel="noopener">CSS-in-JS</a> 和 <a href="http://glenmaddern.com/articles/css-modules" target="_blank" rel="noopener">CSS Modules</a>。我们将主要谈论后者。</p>
 <p>CSS模块允许你将所有css class自动打碎，这是CSS模块（CSS Modules）的默认设置。然后生成一个JSON文件（sources map）和原本的class关联：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* post.css */</span></div><div class="line"><span class="selector-class">.article</span> &#123;</div><div class="line">  <span class="attribute">font-size</span>: <span class="number">16px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.title</span> &#123;</div><div class="line">  <span class="attribute">font-weight</span>: <span class="number">24px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* post.css */</span><br><span class="line">.article &#123;</span><br><span class="line">  font-size: 16px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.title &#123;</span><br><span class="line">  font-weight: 24px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面的post.css将会被转换成类似下面这样：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.xkpka</span> &#123;</div><div class="line">  <span class="attribute">font-size</span>: <span class="number">16px</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.xkpkb</span> &#123;</div><div class="line">  <span class="attribute">font-size</span>: <span class="number">24px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.xkpka &#123;</span><br><span class="line">  font-size: 16px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.xkpkb &#123;</span><br><span class="line">  font-size: 24px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>被打碎替换的classes将被保存在一个JSON对象中：</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`&#123;  <span class="string">"article"</span>:  <span class="string">"xkpka"</span>,  <span class="string">"title"</span>:  <span class="string">"xkpkb"</span>  &#125;  `</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`&#123;  &quot;article&quot;:  &quot;xkpka&quot;,  &quot;title&quot;:  &quot;xkpkb&quot;  &#125;  `</span><br></pre></td></tr></table></figure>
 <p>在转换完成后，你可以直接引用这个JSON对象到项目中，这样就可以用之前写过的class名来直接使用它了。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> styles <span class="keyword">from</span> <span class="string">'./post.json'</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&#123;</span> <span class="attr">styles.article</span> &#125;&gt;</span></span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&#123;</span> <span class="attr">styles.title</span> &#125;&gt;</span>…<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        …</div><div class="line">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import styles from &apos;./post.json&apos;;</span><br><span class="line"></span><br><span class="line">class Post extends React.Component &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div className=&#123; styles.article &#125;&gt;</span><br><span class="line">        &lt;div className=&#123; styles.title &#125;&gt;…&lt;/div&gt;</span><br><span class="line">        …</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>更多给力的功能, 可以看看 <a href="http://glenmaddern.com/articles/css-modules" target="_blank" rel="external">这篇非常好的文章</a>.</p>
+<p>更多给力的功能, 可以看看 <a href="http://glenmaddern.com/articles/css-modules" target="_blank" rel="noopener">这篇非常好的文章</a>.</p>
 </blockquote>
 <p>不光是保留了之前提到的几种方法的优点，还自动解决了组件css分离的问题。这就是CSS模块（CSS Modules），听起来非常不错吧！</p>
-<p>到这里，我们有遇到了另一个问题： 我们现在的<a href="https://github.com/css-modules" target="_blank" rel="external">CSS Modules相关工具</a>，只能在客户端（浏览器）使用，把它放到一个非Node.js的服务端环境中是十分十分困难的。</p>
-<h2 id="PostCSS-modules"><a href="#PostCSS-modules" class="headerlink" title="PostCSS-modules"></a>PostCSS-modules</h2><p>为了在服务端和客户端都能使用CSS Modules，我写了个<a href="https://github.com/outpunk/postcss-modules" target="_blank" rel="external">PostCSS-modules</a>，它是一个PostCSS插件，让你可以在服务端使用模块化的CSS，并且服务端语言可以是Ruby, PHP, Python 或者其他语言。</p>
-<p><a href="http://postcss.org/" target="_blank" rel="external">PostCSS</a>是一个CSS预处理器，它是用JS实现的。它支持静态检查CSS，支持变量和混入（mixins），能让你使用现在还未被浏览器支持的未来CSS语法，内联图像等等。例如使用最为广泛的<a href="https://github.com/postcss/autoprefixer" target="_blank" rel="external">Autoprefixer</a>，它只是PostCSS的一个插件。</p>
-<p>如果你使用Autoprefixer， 其实你早就在用PostCSS了。所以，添加<a href="https://github.com/outpunk/postcss-modules" target="_blank" rel="external">PostCSS-modules</a>到你的项目依赖列表，并不是一件难事。我先给你打个样（实例），用<a href="http://gulpjs.com/" target="_blank" rel="external">Gulp</a> and <a href="http://www.embeddedjs.com/" target="_blank" rel="external">EJS</a>，其实你可以用任何语言做类似的事情。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Gulpfile.js</span></div><div class="line"><span class="keyword">var</span> gulp         = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</div><div class="line"><span class="keyword">var</span> postcss      = <span class="built_in">require</span>(<span class="string">'gulp-postcss'</span>);</div><div class="line"><span class="keyword">var</span> cssModules   = <span class="built_in">require</span>(<span class="string">'postcss-modules'</span>);</div><div class="line"><span class="keyword">var</span> ejs          = <span class="built_in">require</span>(<span class="string">'gulp-ejs'</span>);</div><div class="line"><span class="keyword">var</span> path         = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="keyword">var</span> fs           = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getJSONFromCssModules</span>(<span class="params">cssFileName, json</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> cssName       = path.basename(cssFileName, <span class="string">'.css'</span>);</div><div class="line">  <span class="keyword">var</span> jsonFileName  = path.resolve(<span class="string">'./build'</span>, cssName + <span class="string">'.json'</span>);</div><div class="line">  fs.writeFileSync(jsonFileName, <span class="built_in">JSON</span>.stringify(json));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getClass</span>(<span class="params">module, className</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> moduleFileName  = path.resolve(<span class="string">'./build'</span>, <span class="built_in">module</span> + <span class="string">'.json'</span>);</div><div class="line">  <span class="keyword">var</span> classNames      = fs.readFileSync(moduleFileName).toString();</div><div class="line">  <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(classNames)[className];</div><div class="line">&#125;</div><div class="line"></div><div class="line">gulp.task(<span class="string">'css'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> gulp.src(<span class="string">'./css/post.css'</span>)</div><div class="line">    .pipe(postcss([</div><div class="line">      cssModules(&#123; getJSON: getJSONFromCssModules &#125;),</div><div class="line">    ]))</div><div class="line">    .pipe(gulp.dest(<span class="string">'./build'</span>));</div><div class="line">&#125;);</div><div class="line"></div><div class="line">gulp.task(<span class="string">'html'</span>, [<span class="string">'css'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> gulp.src(<span class="string">'./html/index.ejs'</span>)</div><div class="line">    .pipe(ejs(&#123; className: getClass &#125;, &#123; ext: <span class="string">'.html'</span> &#125;))</div><div class="line">    .pipe(gulp.dest(<span class="string">'./build'</span>));</div><div class="line">&#125;);</div><div class="line"></div><div class="line">gulp.task(<span class="string">'default'</span>, [<span class="string">'html'</span>]);</div></pre></td></tr></table></figure>
+<p>到这里，我们有遇到了另一个问题： 我们现在的<a href="https://github.com/css-modules" target="_blank" rel="noopener">CSS Modules相关工具</a>，只能在客户端（浏览器）使用，把它放到一个非Node.js的服务端环境中是十分十分困难的。</p>
+<h2 id="PostCSS-modules"><a href="#PostCSS-modules" class="headerlink" title="PostCSS-modules"></a>PostCSS-modules</h2><p>为了在服务端和客户端都能使用CSS Modules，我写了个<a href="https://github.com/outpunk/postcss-modules" target="_blank" rel="noopener">PostCSS-modules</a>，它是一个PostCSS插件，让你可以在服务端使用模块化的CSS，并且服务端语言可以是Ruby, PHP, Python 或者其他语言。</p>
+<p><a href="http://postcss.org/" target="_blank" rel="noopener">PostCSS</a>是一个CSS预处理器，它是用JS实现的。它支持静态检查CSS，支持变量和混入（mixins），能让你使用现在还未被浏览器支持的未来CSS语法，内联图像等等。例如使用最为广泛的<a href="https://github.com/postcss/autoprefixer" target="_blank" rel="noopener">Autoprefixer</a>，它只是PostCSS的一个插件。</p>
+<p>如果你使用Autoprefixer， 其实你早就在用PostCSS了。所以，添加<a href="https://github.com/outpunk/postcss-modules" target="_blank" rel="noopener">PostCSS-modules</a>到你的项目依赖列表，并不是一件难事。我先给你打个样（实例），用<a href="http://gulpjs.com/" target="_blank" rel="noopener">Gulp</a> and <a href="http://www.embeddedjs.com/" target="_blank" rel="noopener">EJS</a>，其实你可以用任何语言做类似的事情。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// Gulpfile.js</span><br><span class="line">var gulp         = require(&apos;gulp&apos;);</span><br><span class="line">var postcss      = require(&apos;gulp-postcss&apos;);</span><br><span class="line">var cssModules   = require(&apos;postcss-modules&apos;);</span><br><span class="line">var ejs          = require(&apos;gulp-ejs&apos;);</span><br><span class="line">var path         = require(&apos;path&apos;);</span><br><span class="line">var fs           = require(&apos;fs&apos;);</span><br><span class="line"></span><br><span class="line">function getJSONFromCssModules(cssFileName, json) &#123;</span><br><span class="line">  var cssName       = path.basename(cssFileName, &apos;.css&apos;);</span><br><span class="line">  var jsonFileName  = path.resolve(&apos;./build&apos;, cssName + &apos;.json&apos;);</span><br><span class="line">  fs.writeFileSync(jsonFileName, JSON.stringify(json));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function getClass(module, className) &#123;</span><br><span class="line">  var moduleFileName  = path.resolve(&apos;./build&apos;, module + &apos;.json&apos;);</span><br><span class="line">  var classNames      = fs.readFileSync(moduleFileName).toString();</span><br><span class="line">  return JSON.parse(classNames)[className];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;css&apos;, function() &#123;</span><br><span class="line">  return gulp.src(&apos;./css/post.css&apos;)</span><br><span class="line">    .pipe(postcss([</span><br><span class="line">      cssModules(&#123; getJSON: getJSONFromCssModules &#125;),</span><br><span class="line">    ]))</span><br><span class="line">    .pipe(gulp.dest(&apos;./build&apos;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;html&apos;, [&apos;css&apos;], function() &#123;</span><br><span class="line">  return gulp.src(&apos;./html/index.ejs&apos;)</span><br><span class="line">    .pipe(ejs(&#123; className: getClass &#125;, &#123; ext: &apos;.html&apos; &#125;))</span><br><span class="line">    .pipe(gulp.dest(&apos;./build&apos;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(&apos;default&apos;, [&apos;html&apos;]);</span><br></pre></td></tr></table></figure>
 <p>我们只需要执行gulp任务，就能得到转换后的CSS文件和JSON文件，然后就可以在EJS模版里面用了：</p>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">article</span> <span class="attr">class</span>=<span class="string">"&lt;%=</span></span></span><span class="ruby"> className(<span class="string">'post'</span>, <span class="string">'article'</span>) </span><span class="xml"><span class="tag"><span class="string">%&gt;"</span>&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"&lt;%=</span></span><span class="ruby"> className(<span class="string">'post'</span>, <span class="string">'title'</span>) </span><span class="xml"><span class="tag"><span class="string">%&gt;"</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></div><div class="line">  ...</div><div class="line"><span class="tag">&lt;/<span class="name">article</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>如果你想看看实际的代码，我在GitHub给你准备了个<a href="https://github.com/outpunk/postcss-modules-example" target="_blank" rel="external">example</a>。更多的例子可以看<a href="https://github.com/outpunk/postcss-modules" target="_blank" rel="external">PostCSS-modules</a>和<a href="http://glenmaddern.com/articles/css-modules" target="_blank" rel="external">CSS Modules</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;article class=&quot;&lt;%= className(&apos;post&apos;, &apos;article&apos;) %&gt;&quot;&gt;</span><br><span class="line">  &lt;h1 class=&quot;&lt;%= className(&apos;post&apos;, &apos;title&apos;) %&gt;&quot;&gt;Title&lt;/h1&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;/article&gt;</span><br></pre></td></tr></table></figure>
+<p>如果你想看看实际的代码，我在GitHub给你准备了个<a href="https://github.com/outpunk/postcss-modules-example" target="_blank" rel="noopener">example</a>。更多的例子可以看<a href="https://github.com/outpunk/postcss-modules" target="_blank" rel="noopener">PostCSS-modules</a>和<a href="http://glenmaddern.com/articles/css-modules" target="_blank" rel="noopener">CSS Modules</a></p>
 <hr>
 <p>轻松编写可维护的CSS，没有臃肿的mixins。长长的前缀将成为历史，欢迎来到未来的CSS世界。</p>
-
-
-                <hr>
-
-                
-                <!-- 多说 Share start -->
-                </style>
-                <div class="ds-share"
-                    style="text-align: right"
-                    data-thread-key="2017/01/21/PostCSS模块化/"
-                    data-title="PostCSS-modules"
-                    data-url="http://geoffzhu.cn/blog/blog/2017/01/21/PostCSS模块化/"
-                    data-images=""
-                    data-content="
-译者注（GeoffZhu）: 这篇适合一些使用过预处理CSS的开发者，比如less，sass... | Geoff的博客 | Geoff&#39;s Blog " >
-                    <div class="ds-share-inline">
-                      <ul  class="ds-share-icons-16">
-                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
-                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
-                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
-                      </ul>
-                      <div class="ds-share-icons-more">
-                      </div>
-                    </div>
-                <hr>
-                </div>
-                <!-- 多说 Share end-->
-                
-
-                <ul class="pager">
-                    
-                        <li class="previous">
-                            <a href="/blog/2017/02/16/基础background/" data-toggle="tooltip" data-placement="top" title="Background-size">&larr; Previous Post</a>
-                        </li>
-                    
-                    
-                        <li class="next">
-                            <a href="/blog/2017/01/14/一张图让你看懂Exress & Koa/" data-toggle="tooltip" data-placement="top" title="一张图让你看懂Exress & Koa">Next Post &rarr;</a>
-                        </li>
-                    
-                </ul>
-
-                
-                <!-- 多说评论框 start -->
-                <div class="comment">
-                    <div class="ds-thread"
-                        data-thread-key="2017/01/21/PostCSS模块化/"
-                        data-title="PostCSS-modules"
-                        data-url="http://geoffzhu.cn/blog/blog/2017/01/21/PostCSS模块化/" >
-                    </div>
-                </div>
-                <!-- 多说评论框 end -->
-                
-
-                
-
-            </div>
-    <!-- Side Catalog Container -->
-        
-
-    <!-- Sidebar Container -->
-
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                sidebar-container">
-
-                <!-- Featured Tags -->
-                
-                <section>
-                    <!-- no hr -->
-                    <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
-                    <div class="tags">
-                       
-                          <a class="tag" href="/blog/tags/#css" title="css">css</a>
-                        
-                          <a class="tag" href="/blog/tags/#postcss" title="postcss">postcss</a>
-                        
-                    </div>
-                </section>
-                
-
-                <!-- Friends Blog -->
-                
-                <hr>
-                <h5>FRIENDS</h5>
-                <ul class="list-inline">
-
-                    
-                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
-                    
-                        <li><a href="https://smallpath.me/" target="_blank">Smallpath的小站</a></li>
-                    
-                </ul>
-                
-            </div>
-
-        </div>
+</div>
+<div class="page-date">2017-01-21</div>
     </div>
-</article>
-
-
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-    // dynamic User by Hux
-    var _user = 'geoffzhu';
-
-    // duoshuo comment query.
-    var duoshuoQuery = {short_name: _user };
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0]
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-<!-- 多说公共JS代码 end -->
-
-
-
-
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
-<script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
-        anchors.options = {
-          visible: 'always',
-          placement: 'right',
-          icon: '#'
-        };
-        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
-    })
-</script>
-<style>
-    /* place left on bigger screen */
-    @media all and (min-width: 800px) {
-        .anchorjs-link{
-            position: absolute;
-            left: -0.75em;
-            font-size: 1.1em;
-            margin-top : -0.1em;
-        }
-    }
-</style>
-
-
-
-    <!-- Footer -->
-    <!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                
-                
-                
-                    <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa  fa-stack-1x fa-inverse">知</i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-                    <li>
-                        <a target="_blank" href="http://weibo.com/geoffzhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                
-                    <li>
-                        <a target="_blank"  href="https://github.com/GeoffZhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                </ul>
-                <p class="copyright text-muted">
-                    Copyright &copy; 迷人的反派角色 2017 
-                    <br>
-                    Theme by <a href="http://huangxuan.me">Hux</a> 
-                    <span style="display: inline-block; margin: 0 5px;">
-                        <i class="fa fa-heart"></i>
-                    </span> 
-                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
-                    <iframe
-                        style="margin-left: 2px; margin-bottom:-5px;"
-                        frameborder="0" scrolling="0" width="91px" height="20px"
-                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
-                    </iframe>
-                </p>
-            </div>
-        </div>
-    </div>
+    <footer class="footer">
+  <div>&copy; 2018 Geoff Zhu</div>
+  <div>
+    
+      
+        <a href="/blog//about" target="">About</a>
+      
+    
+      
+        <a href="https://github.com/GeoffZhu" target="_blank">Github</a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/geoffzhu/activities" target="_blank">Zhihu</a>
+      
+    
+      
+        <a href="https://weibo.com/geoffzhu" target="_blank">Weibo</a>
+      
+    
+  </div>
 </footer>
-
-<!-- jQuery -->
-<script src="/blog/js/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="/blog/js/bootstrap.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="/blog/js/hux-blog.min.js"></script>
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-
-<!-- 
-     Because of the native support for backtick-style fenced code blocks 
-     right within the Markdown is landed in Github Pages, 
-     From V1.6, There is no need for Highlight.js, 
-     so Huxblog drops it officially.
-
-     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
-     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
--->
-<!--
-    <script>
-        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
-            hljs.initHighlightingOnLoad();
-        })
-    </script>
-    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
--->
-
-
-<!-- jquery.tagcloud.js -->
-<script>
-    // only load tagcloud.js in tag.html
-    if($('#tag_cloud').length !== 0){
-        async("http://geoffzhu.cn/blog/blog/js/jquery.tagcloud.js",function(){
-            $.fn.tagcloud.defaults = {
-                //size: {start: 1, end: 1, unit: 'em'},
-                color: {start: '#bbbbee', end: '#0085a1'},
-            };
-            $('#tag_cloud a').tagcloud();
-        })
-    }
-</script>
-
-<!--fastClick.js -->
-<script>
-    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
-        var $nav = document.querySelector("nav");
-        if($nav) FastClick.attach($nav);
-    })
-</script>
-
-
-<!-- Google Analytics -->
-
-
-
-
-<!-- Baidu Tongji -->
-
-<script>
-    // dynamic User by Hux
-    var _baId = '14347cf1c49067927d95af6c107cfaab';
-
-    // Originial
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?" + _baId;
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-
-
-<!-- Side Catalog -->
-
-
-
-
-
-<!-- Image to hack wechat -->
-<img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
-
+  </div>
 </body>
-
 </html>

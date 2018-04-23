@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Geoff的博客 | Geoff&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/blog/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+      <div><h1 id="现代浏览器性能优化-CSS篇"><a href="#现代浏览器性能优化-CSS篇" class="headerlink" title="现代浏览器性能优化-CSS篇"></a>现代浏览器性能优化-CSS篇</h1><p>我来填坑了，CSS篇终于写出来了，如果你没看过前面的JS篇，可以<a href="https://github.com/GeoffZhu/geoffzhu.github.io/issues/2" target="_blank" rel="noopener">在这里观看</a>。</p>
+<blockquote>
+<p>众所周知，CSS的加载会阻塞浏览器渲染或是引起浏览器重绘，目前业界普遍推荐把CSS放到<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">你是不是经常在第一次打开某个网站的时候看到这种情况，本来的页面是这样的</span><br><span class="line">![](http://o80ronwlu.bkt.clouddn.com/icon-right.jpeg)</span><br><span class="line"></span><br><span class="line">实际上刚加载出来的是这样的</span><br><span class="line">![](http://o80ronwlu.bkt.clouddn.com/icon-wrong.jpeg)</span><br><span class="line"></span><br><span class="line">字体文件没加载出来，或者加载的太慢了</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 理解CSS解析过程</span><br><span class="line"></span><br><span class="line">以下面这段HTML为例，解释一遍CSS加载解析的过程。</span><br><span class="line"></span><br><span class="line">``` html</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;!-- headStyle.css中存在字体文件webfont.woff2 --&gt;</span><br><span class="line">  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/headStyle.css&quot;&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;p&gt;Text&lt;/p&gt;</span><br><span class="line">  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/bodyEndStyle.css&quot;&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>浏览器自上而下读取HTML文档，当发现headStyle.css的时候，停止Parser HTML，开始下载headStyle.css，解析headStyle.css的过程中发现字体文件webfont.woff2，开始下载webfont.woff2，并继续解析css生成CSSStyleSheet。解析完毕后，继续Parser HTML，当发现p标签时，会将p标签结合当前的CSSStyleSheet展示出来，此时用户屏幕中已经有p标签的内容了。当浏览器发现bodyEndStyle.css时，就会下载headStyle.css，解析CSS，然后更新CSSStyleSheet，这时会引起一次重绘。当字体下载完毕的时候也会引起一次重绘。</p>
+<p>这个过程中，有两个非常严重的问题。一、如果headStyle.css文件很大，浏览器需要解析很多行CSS后才能还有个字体文件需要下载，其实此时已经很晚了，字体下载时间稍长一点，就会出现我前面截图提到的问题。二、bodyEndStyle.css中如果存在p标签对应的样式，那p标签的样式会在bodyEndStyle.css解析完成后，改变一次样式，很影响体验。</p>
+<p>如何解决这些问题那？其中也会用到一些JS篇中提到的点，如果没看过，建议先看看。</p>
+<h2 id="优化核心依旧是减少下载时间"><a href="#优化核心依旧是减少下载时间" class="headerlink" title="优化核心依旧是减少下载时间"></a>优化核心依旧是减少下载时间</h2><p>JS篇中的预先解析DNS（dns-prefetch）依旧适用，提前解析CSS文件所在域名的DNS。</p>
+<h4 id="Preload"><a href="#Preload" class="headerlink" title="Preload"></a>Preload</h4><p>因为CSS已经在head中，我们不需要为css加preload属性了，但是css中用到的字体文件，一定要在所有css之前proload上。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"preload"</span> <span class="attr">href</span>=<span class="string">"/webfont.woff2"</span> <span class="attr">as</span>=<span class="string">"font"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="首页CSS内联，非必要CSS异步加载"><a href="#首页CSS内联，非必要CSS异步加载" class="headerlink" title="首页CSS内联，非必要CSS异步加载"></a>首页CSS内联，非必要CSS异步加载</h4><p>首页用到的CSS内联写在<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```javascript</span><br><span class="line">function LoadStyle(url) &#123;</span><br><span class="line">  try &#123;</span><br><span class="line">    document.createStyleSheet(url)</span><br><span class="line">  &#125; catch(e) &#123;</span><br><span class="line">    var cssLink = document.createElement(&apos;link&apos;);</span><br><span class="line">    cssLink.rel = &apos;stylesheet&apos;;</span><br><span class="line">    cssLink.type = &apos;text/css&apos;;</span><br><span class="line">    cssLink.href = url;</span><br><span class="line">    var head = document.getElementsByTagName(&apos;head&apos;)[0];</span><br><span class="line">    head.appendChild(cssLink)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果你使用webpack，那就更轻松了，使用import函数，大致如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在a.js模块中直接引入css</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">'style.css'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在需要a.js模块的地方</span></span><br><span class="line">improt(<span class="string">'path-of-a.js'</span>).then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;&#125;)</span><br></pre></td></tr></table></figure>
+<p>webpack打包后，其实是把style.css打包进了a.js，在异步加载a.js的时候，会将style.css中的代码插入<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 终极完美结构</span><br><span class="line"></span><br><span class="line">``` html</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">  &lt;title&gt;Faster&lt;/title&gt;</span><br><span class="line">  &lt;link rel=&quot;dns-prefetch&quot; href=&quot;//cdn.cn/&quot;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;link rel=&quot;preload&quot; href=&quot;//cdn.cn/webfont.woff2&quot; as=&quot;font&quot;&gt;</span><br><span class="line">  &lt;link rel=&quot;preload&quot; href=&quot;//cdn.cn/Page1-A.js&quot; as=&quot;script&quot;&gt;</span><br><span class="line">  &lt;link rel=&quot;preload&quot; href=&quot;//cdn.cn/Page1-B.js&quot; as=&quot;script&quot;&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;link rel=&quot;prefetch&quot; href=&quot;//cdn.cn/Page2.js&quot;&gt;</span><br><span class="line">  &lt;link rel=&quot;prefetch&quot; href=&quot;//cdn.cn/Page3.js&quot;&gt;</span><br><span class="line">  &lt;link rel=&quot;prefetch&quot; href=&quot;//cdn.cn/Page4.js&quot;&gt;</span><br><span class="line"></span><br><span class="line">  &lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">    /* 首页用到的CSS内联 */</span><br><span class="line">  &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;//cdn.cn/Page1-A.js&quot; defer&gt;&lt;/script&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;//cdn.cn/Page1-B.js&quot; defer&gt;&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在<a href="(https://github.com/GeoffZhu/geoffzhu.github.io/issues/2">JS篇</a>)中，我已经解释过这套结构中JS的执行顺序了，本篇只是加入了CSS和字体。至此，我心中终极完美的页面HTML结构就是这样了。</p>
+<p>如果你对异步加载CSS的方案感兴趣，欢迎留言与我讨论！</p>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><ul>
+<li><a href="https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/#Webkit_CSS_parser" target="_blank" rel="noopener">浏览器的工作原理</a></li>
+<li><a href="http://www.jianshu.com/p/24ffa6d45087" target="_blank" rel="noopener">关于Preload, 你应该知道些什么？</a></li>
+<li><a href="https://juejin.im/post/58e8acf10ce46300585a7a42" target="_blank" rel="noopener">Preload，Prefetch 和它们在 Chrome 之中的优先级</a></li>
+</ul>
+</div>
+<div class="page-date">2017-12-29</div>
+    </div>
+    <footer class="footer">
+  <div>&copy; 2018 Geoff Zhu</div>
+  <div>
+    
+      
+        <a href="/blog//about" target="">About</a>
+      
+    
+      
+        <a href="https://github.com/GeoffZhu" target="_blank">Github</a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/geoffzhu/activities" target="_blank">Zhihu</a>
+      
+    
+      
+        <a href="https://weibo.com/geoffzhu" target="_blank">Weibo</a>
+      
+    
+  </div>
+</footer>
+  </div>
+</body>
+</html>

@@ -1,549 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<!-- Head tag -->
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keyword"  content="前端 js">
-    <link rel="shortcut icon" href="/blog/img/favicon.ico">
-
-    <title>
-        
-          Vue2 transition源码分析 - Geoff的博客 | Geoff&#39;s Blog
-        
-    </title>
-
-    <link rel="canonical" href="http://geoffzhu.cn/blog/blog/2017/07/09/Vue transition源码详解/">
-
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/blog/css/hux-blog.min.css">
-
-    <!-- Pygments Highlight CSS -->
-    <link rel="stylesheet" href="/blog/css/highlight.css">
-
-    <!-- Custom Fonts -->
-    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
-    <!-- Hux change font-awesome CDN to qiniu -->
-    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-
-    <!-- Hux Delete, sad but pending in China
-    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
-    css'>
-    -->
-
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- ga & ba script hoook -->
-    <script></script>
+  <meta charset="utf-8">
+  <title>Geoff的博客 | Geoff&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/blog/css/style.css">
 </head>
 
-
-<!-- hack iOS CSS :active style -->
-<body ontouchstart="">
-
-    <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/blog/">迷人的反派角色</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
-            <nav>'s height woule be hold on by its content.
-            so, when navbar scale out, the <nav> will cover tags.
-            also mask any touch event of tags, unfortunately.
-        -->
-        <div id="huxblog_navbar">
-            <div class="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/blog/">Home</a>
-                    </li>
-
-                    
-
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/about/">About</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/archives/">Archives</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/blog/tags/">Tags</a>
-                        </li>
-                        
-                    
-                    
-                </ul>
-            </div>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-<script>
-    // Drop Bootstarp low-performance Navbar
-    // Use customize navbar with high-quality material design animation
-    // in high-perf jank-free CSS3 implementation
-    var $body   = document.body;
-    var $toggle = document.querySelector('.navbar-toggle');
-    var $navbar = document.querySelector('#huxblog_navbar');
-    var $collapse = document.querySelector('.navbar-collapse');
-
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
-        if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
-            // wait until animation end.
-            setTimeout(function(){
-                // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
-                }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
-        }
-    }
-</script>
-
-
-    <!-- Main Content -->
-    
-<!-- Image to hack wechat -->
-<!-- <img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
-
-<!-- Post Header -->
-<style type="text/css">
-    header.intro-header{
-        background-image: url('/blog/img/home-bg.jpg')
-    }
-</style>
-<header class="intro-header" >
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="post-heading">
-                    <div class="tags">
-                        
-                          <a class="tag" href="/blog/tags/#Vue" title="Vue">Vue</a>
-                        
-                    </div>
-                    <h1>Vue2 transition源码分析</h1>
-                    <h2 class="subheading"></h2>
-                    <span class="meta">
-                        Posted by Geoff on
-                        2017-07-09
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-
-    <!-- Post Container -->
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                post-container">
-
-                <h1 id="Vue-transition源码分析"><a href="#Vue-transition源码分析" class="headerlink" title="Vue transition源码分析"></a>Vue transition源码分析</h1><blockquote>
+<body>
+  <div class="container">
+    <div class="content">
+      <div><h1 id="Vue-transition源码分析"><a href="#Vue-transition源码分析" class="headerlink" title="Vue transition源码分析"></a>Vue transition源码分析</h1><blockquote>
 <p>本来打算自己造一个transition的轮子，所以决定先看看源码，理清思路。Vue的transition组件提供了一系列钩子函数，并且具有良好可扩展性。</p>
 </blockquote>
-<h2 id="了解构建过程"><a href="#了解构建过程" class="headerlink" title="了解构建过程"></a>了解构建过程</h2><p>既然要看源码，就先让Vue在开发环境跑起来，首先从GitHub clone下来整个项目，在文件<figure class="highlight plain"><figcaption><span>run dev构建的是runtime + compiler版本的Vue。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">``` sh</div><div class="line"># watch and auto re-build dist/vue.js</div><div class="line">$ npm run dev</div></pre></td></tr></table></figure></p>
+<h2 id="了解构建过程"><a href="#了解构建过程" class="headerlink" title="了解构建过程"></a>了解构建过程</h2><p>既然要看源码，就先让Vue在开发环境跑起来，首先从GitHub clone下来整个项目，在文件<figure class="highlight plain"><figcaption><span>run dev构建的是runtime + compiler版本的Vue。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">``` sh</span><br><span class="line"># watch and auto re-build dist/vue.js</span><br><span class="line">$ npm run dev</span><br></pre></td></tr></table></figure></p>
 <p>紧接着在package.json中找到dev对应的shell语句，就是下面这句</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">"scripts": &#123;</div><div class="line">    "dev": "rollup -w -c build/config.js --environment TARGET:web-full-dev",</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">"scripts": &#123;</span><br><span class="line">    "dev": "rollup -w -c build/config.js --environment TARGET:web-full-dev",</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Vue2使用rollup打包，-c 后面跟的是打包的配置文件（build/config.js），执行的同时传入了一个TARGET参数，web-full-dev。打开配置文件继续往里找。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">const builds = &#123;</div><div class="line">  ...</div><div class="line">  <span class="string">'web-full-dev'</span>: &#123;</div><div class="line">      entry: resolve(<span class="string">'web/entry-runtime-with-compiler.js'</span>),</div><div class="line">      dest: resolve(<span class="string">'dist/vue.js'</span>),</div><div class="line">      format: <span class="string">'umd'</span>,</div><div class="line">      env: <span class="string">'development'</span>,</div><div class="line">      alias: &#123; he: <span class="string">'./entity-decoder'</span> &#125;,</div><div class="line">      banner</div><div class="line">  &#125;,</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">const</span> builds = &#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="string">'web-full-dev'</span>: &#123;</span><br><span class="line">      entry: resolve(<span class="string">'web/entry-runtime-with-compiler.js'</span>),</span><br><span class="line">      dest: resolve(<span class="string">'dist/vue.js'</span>),</span><br><span class="line">      format: <span class="string">'umd'</span>,</span><br><span class="line">      env: <span class="string">'development'</span>,</span><br><span class="line">      alias: &#123; <span class="attr">he</span>: <span class="string">'./entity-decoder'</span> &#125;,</span><br><span class="line">      banner</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>从上面的构建配置中，找到构建入口为web/entry-runtime-with-compiler.js，它也就是umd版本vue的入口了。<br>我们发现在Vue的根目录下并没有web这个文件夹，实际上是因为Vue给path.resolve这个方法加了个alias, alias的配置在/build/alias.js中</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  vue: path.resolve(__dirname, <span class="string">'../src/platforms/web/entry-runtime-with-compiler'</span>),</div><div class="line">  compiler: path.resolve(__dirname, <span class="string">'../src/compiler'</span>),</div><div class="line">  core: path.resolve(__dirname, <span class="string">'../src/core'</span>),</div><div class="line">  shared: path.resolve(__dirname, <span class="string">'../src/shared'</span>),</div><div class="line">  web: path.resolve(__dirname, <span class="string">'../src/platforms/web'</span>),</div><div class="line">  weex: path.resolve(__dirname, <span class="string">'../src/platforms/weex'</span>),</div><div class="line">  server: path.resolve(__dirname, <span class="string">'../src/server'</span>),</div><div class="line">  entries: path.resolve(__dirname, <span class="string">'../src/entries'</span>),</div><div class="line">  sfc: path.resolve(__dirname, <span class="string">'../src/sfc'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  vue: path.resolve(__dirname, <span class="string">'../src/platforms/web/entry-runtime-with-compiler'</span>),</span><br><span class="line">  compiler: path.resolve(__dirname, <span class="string">'../src/compiler'</span>),</span><br><span class="line">  core: path.resolve(__dirname, <span class="string">'../src/core'</span>),</span><br><span class="line">  shared: path.resolve(__dirname, <span class="string">'../src/shared'</span>),</span><br><span class="line">  web: path.resolve(__dirname, <span class="string">'../src/platforms/web'</span>),</span><br><span class="line">  weex: path.resolve(__dirname, <span class="string">'../src/platforms/weex'</span>),</span><br><span class="line">  server: path.resolve(__dirname, <span class="string">'../src/server'</span>),</span><br><span class="line">  entries: path.resolve(__dirname, <span class="string">'../src/entries'</span>),</span><br><span class="line">  sfc: path.resolve(__dirname, <span class="string">'../src/sfc'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>web对应的目录为’../src/platforms/web’，也就是src/platforms/web，顺着这个文件继续往下找。查看src/platforms/web/entry-runtime-with-compiler.js的代码，这里主要是处理将Vue实例挂载到真实dom时的一些异常操作提示，<br>，比如不要把vue实例挂载在body或html标签上等。但是对于要找的transition，这些都不重要，重要的是</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'./runtime/index'</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'./runtime/index'</span></span><br></pre></td></tr></table></figure>
 <p>Vue对象是从当前目录的runtime文件夹引入的。打开./runtime/index.js，先查看引入了哪些模块， 发现Vue是从src/core/index引入的，并看到platformDirectives和platformComponents，官方的指令和组件八九不离十就在这了。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'core/index'</span></div><div class="line">...</div><div class="line">...</div><div class="line">import platformDirectives <span class="keyword">from</span> <span class="string">'./directives/index'</span></div><div class="line"><span class="keyword">import</span> platformComponents <span class="keyword">from</span> <span class="string">'./components/index'</span></div><div class="line"></div><div class="line">...</div><div class="line"><span class="comment">// install platform runtime directives &amp; components</span></div><div class="line">extend(Vue.options.directives, platformDirectives)</div><div class="line">extend(Vue.options.components, platformComponents)</div><div class="line"></div><div class="line"><span class="comment">// install platform patch function</span></div><div class="line">Vue.prototype.__patch__ = inBrowser ? patch : noop</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'core/index'</span></span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"><span class="keyword">import</span> platformDirectives <span class="keyword">from</span> <span class="string">'./directives/index'</span></span><br><span class="line"><span class="keyword">import</span> platformComponents <span class="keyword">from</span> <span class="string">'./components/index'</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"><span class="comment">// install platform runtime directives &amp; components</span></span><br><span class="line">extend(Vue.options.directives, platformDirectives)</span><br><span class="line">extend(Vue.options.components, platformComponents)</span><br><span class="line"></span><br><span class="line"><span class="comment">// install platform patch function</span></span><br><span class="line">Vue.prototype.__patch__ = inBrowser ? patch : noop</span><br></pre></td></tr></table></figure>
 <p>在platformComponents中发现transtion.js，它export了一个对象，这个对象有name，props和rander方法，一个标准的Vue组件。至此算是找到了源码位置。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">  name: <span class="string">'transition'</span>,</div><div class="line">  props: transitionProps,</div><div class="line">  abstract: <span class="literal">true</span>,</div><div class="line"></div><div class="line">  render (h: <span class="built_in">Function</span>) &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'transition'</span>,</span><br><span class="line">  props: transitionProps,</span><br><span class="line">  abstract: <span class="literal">true</span>,</span><br><span class="line"></span><br><span class="line">  render (h: <span class="built_in">Function</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="transition实现分析"><a href="#transition实现分析" class="headerlink" title="transition实现分析"></a>transition实现分析</h2><p>从上一节的代码中，可以看到directives和components是保存在Vue.options里面的， 还需要注意一下后面的Vue.prototype.<strong>patch</strong>，因为transtion并不单单是以一个组件来实现的，还需要在Vue构造函数上打一些patch。</p>
 <p>rander当中的参数h方法，就是Vue用来创建虚拟DOM的createElement方法，但在此组件中，并没有发现处理过度动画相关的逻辑，主要是集中处理props和虚拟DOM参数。因为transtion并不单单是以一个组件来实现的，它需要操作真实dom（未插入文档流）和虚拟dom，所以只能在Vue的构造函数上打一些patch了。</p>
-<p>往回看了下代码，之前有一句<figure class="highlight plain"><figcaption><span>= inBrowser ? patch : noop```，在patch相关的代码中找到了transition相关的实现。modules/transtion.js</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">这就是过渡动画效果相关的patch的源码位置。</div><div class="line"></div><div class="line">``` javascript</div><div class="line">export function enter (vnode: VNodeWithData, toggleDisplay: ?() =&gt; void) &#123;</div><div class="line">  ...</div><div class="line">&#125;</div><div class="line">export function leave (vnode: VNodeWithData, rm: Function) &#123;</div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default inBrowser ? &#123;</div><div class="line">  create: _enter,</div><div class="line">  activate: _enter,</div><div class="line">  remove (vnode: VNode, rm: Function) &#123;</div><div class="line">    /* istanbul ignore else */</div><div class="line">    if (vnode.data.show !== true) &#123;</div><div class="line">      leave(vnode, rm)</div><div class="line">    &#125; else &#123;</div><div class="line">      rm()</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125; : &#123;&#125;</div></pre></td></tr></table></figure></p>
+<p>往回看了下代码，之前有一句<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这就是过渡动画效果相关的patch的源码位置。</span><br><span class="line"></span><br><span class="line">``` javascript</span><br><span class="line">export function enter (vnode: VNodeWithData, toggleDisplay: ?() =&gt; void) &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">export function leave (vnode: VNodeWithData, rm: Function) &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default inBrowser ? &#123;</span><br><span class="line">  create: _enter,</span><br><span class="line">  activate: _enter,</span><br><span class="line">  remove (vnode: VNode, rm: Function) &#123;</span><br><span class="line">    /* istanbul ignore else */</span><br><span class="line">    if (vnode.data.show !== true) &#123;</span><br><span class="line">      leave(vnode, rm)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      rm()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; : &#123;&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这个模块默认export的对象包括了三个生命周期函数create，activate，remove，这应该是Vue没有对外暴露的生命周期函数，create和activate直接运行的就是上面的enter方法，而remove执行了leave方法。</p>
 <p>继续看最重要的是两个方法，enter和leave。通过在这两个方法上打断点得知，执行这两个方法的之前，vnode已经创建了真实dom, 并挂载到了vnode.elm上。其中这段代码比较关键</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// el就是真实dom节点</span></div><div class="line">beforeEnterHook &amp;&amp; beforeEnterHook(el)</div><div class="line"><span class="keyword">if</span> (expectsCSS) &#123;</div><div class="line">  addTransitionClass(el, startClass)</div><div class="line">  addTransitionClass(el, activeClass)</div><div class="line">  nextFrame(() =&gt; &#123;</div><div class="line">    addTransitionClass(el, toClass)</div><div class="line">    removeTransitionClass(el, startClass)</div><div class="line">    <span class="keyword">if</span> (!cb.cancelled &amp;&amp; !userWantsControl) &#123;</div><div class="line">      <span class="keyword">if</span> (isValidDuration(explicitEnterDuration)) &#123;</div><div class="line">        setTimeout(cb, explicitEnterDuration)</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        whenTransitionEnds(el, type, cb)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// el就是真实dom节点</span></span><br><span class="line">beforeEnterHook &amp;&amp; beforeEnterHook(el)</span><br><span class="line"><span class="keyword">if</span> (expectsCSS) &#123;</span><br><span class="line">  addTransitionClass(el, startClass)</span><br><span class="line">  addTransitionClass(el, activeClass)</span><br><span class="line">  nextFrame(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    addTransitionClass(el, toClass)</span><br><span class="line">    removeTransitionClass(el, startClass)</span><br><span class="line">    <span class="keyword">if</span> (!cb.cancelled &amp;&amp; !userWantsControl) &#123;</span><br><span class="line">      <span class="keyword">if</span> (isValidDuration(explicitEnterDuration)) &#123;</span><br><span class="line">        setTimeout(cb, explicitEnterDuration)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        whenTransitionEnds(el, type, cb)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>首先给el添加了startClass和activeClass, 此时dom节点还未插入到文档流，推测应该是在create或activate勾子执行完以后，该节点被插入文档流的。nextFrame方法的实现如下, 如requestAnimationFrame不存在，用setTimeout代替</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> raf = inBrowser &amp;&amp; <span class="built_in">window</span>.requestAnimationFrame</div><div class="line">  ? <span class="built_in">window</span>.requestAnimationFrame.bind(<span class="built_in">window</span>)</div><div class="line">  : setTimeout</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">nextFrame</span> (<span class="params">fn: Function</span>) </span>&#123;</div><div class="line">  raf(() =&gt; &#123;</div><div class="line">    raf(fn)</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> raf = inBrowser &amp;&amp; <span class="built_in">window</span>.requestAnimationFrame</span><br><span class="line">  ? <span class="built_in">window</span>.requestAnimationFrame.bind(<span class="built_in">window</span>)</span><br><span class="line">  : setTimeout</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">nextFrame</span> (<span class="params">fn: Function</span>) </span>&#123;</span><br><span class="line">  raf(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    raf(fn)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这种方式的nextFrame实现，正如官方文档中所说的在下一帧添加了toClass，并remove掉startClass，最后在过渡效果结束以后，remove掉了所有的过渡相关class。至此‘进入过渡’的部分完毕。</p>
 <p>再来看‘离开过渡’的方法leave，在leave方法中打断点，发现html标签的状态如下</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>xxx<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="comment">&lt;!----&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>xxx<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!----&gt;</span></span><br></pre></td></tr></table></figure>
 <p><!----> 为vue的占位符，当元素通过v-if隐藏后，会在原来位置留下占位符。那就说明，当leave方法被触发时，原本的真实dom元素已经隐藏掉了(从vnode中被移除)，而正在显示的元素，只是一个真实dom的副本。</p>
 <p>leave方法关键代码其实和enter基本一致，只不过是将startClass换为了leaveClass等，还有处理一些动画生命周期的勾子函数。在动画结束后，调用了由组件生命周期remove传入的rm方法，把这个dom元素的副本移出了文档流。</p>
 <p>如有错误，欢迎指正。</p>
-<p>这篇并没有去分析Vue core相关的内容，推荐一篇讲Vue core非常不错的文章，对Vue构造函数如何来的感兴趣的同学可以看<a href="http://hcysun.me/2017/03/03/Vue%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/" target="_blank" rel="external">这里</a></p>
-
-
-                <hr>
-
-                
-                <!-- 多说 Share start -->
-                </style>
-                <div class="ds-share"
-                    style="text-align: right"
-                    data-thread-key="2017/07/09/Vue transition源码详解/"
-                    data-title="Vue2 transition源码分析"
-                    data-url="http://geoffzhu.cn/blog/blog/2017/07/09/Vue transition源码详解/"
-                    data-images=""
-                    data-content="Vue transition源码分析
-本来打算自己造一个transition的轮子，所以决定先... | Geoff的博客 | Geoff&#39;s Blog " >
-                    <div class="ds-share-inline">
-                      <ul  class="ds-share-icons-16">
-                        <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
-                        <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>
-                        <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li>
-                        <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li>
-                      </ul>
-                      <div class="ds-share-icons-more">
-                      </div>
-                    </div>
-                <hr>
-                </div>
-                <!-- 多说 Share end-->
-                
-
-                <ul class="pager">
-                    
-                        <li class="previous">
-                            <a href="/blog/2017/09/06/window-onerror/" data-toggle="tooltip" data-placement="top" title="window onerror 各浏览器中行为总结">&larr; Previous Post</a>
-                        </li>
-                    
-                    
-                        <li class="next">
-                            <a href="/blog/2017/06/28/小程序常规优化手段/" data-toggle="tooltip" data-placement="top" title="小程序常用优化手段">Next Post &rarr;</a>
-                        </li>
-                    
-                </ul>
-
-                
-                <!-- 多说评论框 start -->
-                <div class="comment">
-                    <div class="ds-thread"
-                        data-thread-key="2017/07/09/Vue transition源码详解/"
-                        data-title="Vue2 transition源码分析"
-                        data-url="http://geoffzhu.cn/blog/blog/2017/07/09/Vue transition源码详解/" >
-                    </div>
-                </div>
-                <!-- 多说评论框 end -->
-                
-
-                
-
-            </div>
-    <!-- Side Catalog Container -->
-        
-
-    <!-- Sidebar Container -->
-
-            <div class="
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                sidebar-container">
-
-                <!-- Featured Tags -->
-                
-                <section>
-                    <!-- no hr -->
-                    <h5><a href="/blog/tags/">FEATURED TAGS</a></h5>
-                    <div class="tags">
-                       
-                          <a class="tag" href="/blog/tags/#Vue" title="Vue">Vue</a>
-                        
-                    </div>
-                </section>
-                
-
-                <!-- Friends Blog -->
-                
-                <hr>
-                <h5>FRIENDS</h5>
-                <ul class="list-inline">
-
-                    
-                        <li><a href="http://blog.kaijun.rocks" target="_blank">Kaijun&#39;s Blog</a></li>
-                    
-                        <li><a href="https://smallpath.me/" target="_blank">Smallpath的小站</a></li>
-                    
-                </ul>
-                
-            </div>
-
-        </div>
+<p>这篇并没有去分析Vue core相关的内容，推荐一篇讲Vue core非常不错的文章，对Vue构造函数如何来的感兴趣的同学可以看<a href="http://hcysun.me/2017/03/03/Vue%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/" target="_blank" rel="noopener">这里</a></p>
+</div>
+<div class="page-date">2017-07-09</div>
     </div>
-</article>
-
-
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-    // dynamic User by Hux
-    var _user = 'geoffzhu';
-
-    // duoshuo comment query.
-    var duoshuoQuery = {short_name: _user };
-    (function() {
-        var ds = document.createElement('script');
-        ds.type = 'text/javascript';ds.async = true;
-        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-        ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0]
-         || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-</script>
-<!-- 多说公共JS代码 end -->
-
-
-
-
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
-<script>
-    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
-        anchors.options = {
-          visible: 'always',
-          placement: 'right',
-          icon: '#'
-        };
-        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
-    })
-</script>
-<style>
-    /* place left on bigger screen */
-    @media all and (min-width: 800px) {
-        .anchorjs-link{
-            position: absolute;
-            left: -0.75em;
-            font-size: 1.1em;
-            margin-top : -0.1em;
-        }
-    }
-</style>
-
-
-
-    <!-- Footer -->
-    <!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                
-                
-                
-                    <li>
-                        <a target="_blank" href="https://www.zhihu.com/people/geoffzhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa  fa-stack-1x fa-inverse">知</i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-                    <li>
-                        <a target="_blank" href="http://weibo.com/geoffzhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                
-                    <li>
-                        <a target="_blank"  href="https://github.com/GeoffZhu">
-                            <span class="fa-stack fa-lg">
-                                <i class="fa fa-circle fa-stack-2x"></i>
-                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                            </span>
-                        </a>
-                    </li>
-                
-
-                
-
-                </ul>
-                <p class="copyright text-muted">
-                    Copyright &copy; 迷人的反派角色 2017 
-                    <br>
-                    Theme by <a href="http://huangxuan.me">Hux</a> 
-                    <span style="display: inline-block; margin: 0 5px;">
-                        <i class="fa fa-heart"></i>
-                    </span> 
-                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
-                    <iframe
-                        style="margin-left: 2px; margin-bottom:-5px;"
-                        frameborder="0" scrolling="0" width="91px" height="20px"
-                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
-                    </iframe>
-                </p>
-            </div>
-        </div>
-    </div>
+    <footer class="footer">
+  <div>&copy; 2018 Geoff Zhu</div>
+  <div>
+    
+      
+        <a href="/blog//about" target="">About</a>
+      
+    
+      
+        <a href="https://github.com/GeoffZhu" target="_blank">Github</a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/geoffzhu/activities" target="_blank">Zhihu</a>
+      
+    
+      
+        <a href="https://weibo.com/geoffzhu" target="_blank">Weibo</a>
+      
+    
+  </div>
 </footer>
-
-<!-- jQuery -->
-<script src="/blog/js/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="/blog/js/bootstrap.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="/blog/js/hux-blog.min.js"></script>
-
-
-<!-- async load function -->
-<script>
-    function async(u, c) {
-      var d = document, t = 'script',
-          o = d.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-      o.src = u;
-      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
-      s.parentNode.insertBefore(o, s);
-    }
-</script>
-
-<!-- 
-     Because of the native support for backtick-style fenced code blocks 
-     right within the Markdown is landed in Github Pages, 
-     From V1.6, There is no need for Highlight.js, 
-     so Huxblog drops it officially.
-
-     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
-     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
--->
-<!--
-    <script>
-        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
-            hljs.initHighlightingOnLoad();
-        })
-    </script>
-    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
--->
-
-
-<!-- jquery.tagcloud.js -->
-<script>
-    // only load tagcloud.js in tag.html
-    if($('#tag_cloud').length !== 0){
-        async("http://geoffzhu.cn/blog/blog/js/jquery.tagcloud.js",function(){
-            $.fn.tagcloud.defaults = {
-                //size: {start: 1, end: 1, unit: 'em'},
-                color: {start: '#bbbbee', end: '#0085a1'},
-            };
-            $('#tag_cloud a').tagcloud();
-        })
-    }
-</script>
-
-<!--fastClick.js -->
-<script>
-    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
-        var $nav = document.querySelector("nav");
-        if($nav) FastClick.attach($nav);
-    })
-</script>
-
-
-<!-- Google Analytics -->
-
-
-
-
-<!-- Baidu Tongji -->
-
-<script>
-    // dynamic User by Hux
-    var _baId = '14347cf1c49067927d95af6c107cfaab';
-
-    // Originial
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?" + _baId;
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-</script>
-
-
-<!-- Side Catalog -->
-
-
-
-
-
-<!-- Image to hack wechat -->
-<img src="http://geoffzhu.cn/blog/blog/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
-
+  </div>
 </body>
-
 </html>
