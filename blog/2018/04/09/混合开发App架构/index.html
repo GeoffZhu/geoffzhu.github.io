@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Geoff的博客 | Geoff&#39;s Blog</title>
+  
+  <meta name="description" content="混合开发App架构 - Geoff的博客 | Geoff&#39;s Blog">
+  
+  <meta name="keyword" content="前端 js">
+  <link rel="icon" href="/blog//img/favicon.ico" type="image/x-icon"/> 
+  <link rel="shortcut icon" href="" type="image/x-icon"/> 
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/blog/css/style.css">
+  
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+      <div><h1 id="混合开发App架构"><a href="#混合开发App架构" class="headerlink" title="混合开发App架构"></a>混合开发App架构</h1><h2 id="App架构概述"><a href="#App架构概述" class="headerlink" title="App架构概述"></a>App架构概述</h2><blockquote>
+<p>目前博主所做负责的App是一个不太一样的hybrid App，为什么说它不太一样，原因在于他混合了Web(cordova)、Weex和Native。产生这样的杂交方案有一定历史原因，最早它只是一个单纯的Cordova混合App，但随着项目的迭代，web页面的加载和用户体验不能满足产品的需要，所有引入了Weex。</p>
+</blockquote>
+<p>为了讲清楚为何要做技术优化，我先从几个不同的角度来讲讲App整体的状况和开发中的痛点。</p>
+<h3 id="App启动流程"><a href="#App启动流程" class="headerlink" title="App启动流程"></a>App启动流程</h3><ol>
+<li>App启动，拉取配置中心配置</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略了配置中心的模块概念</span></span><br><span class="line">&#123;</span><br><span class="line">  host: <span class="string">'http://75-up.domain-test.cn'</span>,</span><br><span class="line">  loginApi: <span class="string">'/api/m/user/login'</span>,</span><br><span class="line">  homePage: <span class="string">'/api/m/user/getHomePage'</span>,</span><br><span class="line">  ...</span><br><span class="line">  sidebarWeex: &#123;</span><br><span class="line">    <span class="string">'账户中心'</span>: <span class="string">'http://static.domain-test.cn/sy/project/up-mobile-weex/accountCenter.js?weex=1'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  sidebar: &#123;</span><br><span class="line">    <span class="string">'使用反馈'</span>: <span class="string">'http://73-up.domain-test.cn/vip/m/user/getHomePage#/feedback'</span>,</span><br><span class="line">    <span class="string">'更多设置'</span>: <span class="string">'http://73-up.domain-test.cn/vip/m/user/getHomePage#/setting'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>加载首页，也就是配置中心<code>host + homePage</code>字段拼接后的地址，并将侧边栏的item显示出来，设置上跳转地址。</li>
+</ol>
+<h4 id="痛点"><a href="#痛点" class="headerlink" title="痛点"></a>痛点</h4><p>在开发上线的过程中，配置中心给我们带来了无尽的痛</p>
+<ul>
+<li>不同版本App，配置无法按版本兼容</li>
+<li>测试环境配置中心只能配到一台测试服务器，无法做到多人协同测试不同版本</li>
+<li>测试环境配置易出错，导致各种问题，比如：首页是sunyun75，侧边栏是sunyun73，导致token错误，被踢出登录</li>
+<li>主host只能通过配置中心写入，前端无法连到自己的开发电脑开发，降低了开发效率</li>
+<li>配置中心只能配置一个host，无法做到多名前端同时真机调试</li>
+<li>客户端因配置中心导致不必要的复杂度上升</li>
+</ul>
+<h3 id="Web-cordova-页面"><a href="#Web-cordova-页面" class="headerlink" title="Web(cordova)页面"></a>Web(cordova)页面</h3><p>细心的你可能已经发现了，我们的所有web页面是一个单页应用（single page application），后端吐出的HTML始终是同一个，我们通过前端路由（vue-router）来做的多个页面，也就是利用URL中#后的hash。FE还通过异步路由，解决了首屏JS包过大的问题。</p>
+<p>每次提测上线，我们通过脚本，将Web页面引用的静态资源，js、css等发布到公司统一的静态资源服务器。</p>
+<p>公司提供了两套静态资源服务，一个带缓存，用于线上，一个不带缓存，用于测试。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 线上</span><br><span class="line">https://static.domain.com</span><br><span class="line"></span><br><span class="line">// 测试</span><br><span class="line">https://static.test-domain.cn</span><br></pre></td></tr></table></figure>
+<h4 id="痛点-1"><a href="#痛点-1" class="headerlink" title="痛点"></a>痛点</h4><ul>
+<li>多套测试环境共用测试静态资源服务器，无法同时测试不同版本的web页面。</li>
+</ul>
+<h3 id="Weex页面"><a href="#Weex页面" class="headerlink" title="Weex页面"></a>Weex页面</h3><p>weex页面打包后实际上也是一个js文件，目前这个js文件也是放在公司统一的静态资源服务器的，和web页面的静态资源一致。</p>
+<h4 id="痛点-2"><a href="#痛点-2" class="headerlink" title="痛点"></a>痛点</h4><ul>
+<li>多套测试环境共用测试静态资源服务器，无法同时测试不同版本的weex页面</li>
+<li>weex页面因无法知道当前host，所以无法判断请求哪个环境的后端API</li>
+</ul>
+<p>可以说配置中心带来了一系列的问题，从开发体验，到测试流程。而且产品同学还在不断的往配置中心中增加配置，比如加个首页banner图的配置之类的，有配置爆炸的趋势，每次上线弄配置也是如履薄冰。</p>
+<h2 id="我理想中的Hybrid-App架构"><a href="#我理想中的Hybrid-App架构" class="headerlink" title="我理想中的Hybrid App架构"></a>我理想中的Hybrid App架构</h2><p>我理想中的Hybrid App，应该是只改写Host就能在一个新环境跑起来的。就像我们在web开发中，服务跑在a.com上和跑在b.com上除了域名以外并没有区别。如果混合开发的App也将配置收敛到只有一个域名（Host），那岂不完美。这样做以后，我们可以在App中留一个配置Host的口，以便测试同学和前端同学修改App当前环境，以便开发和测试。多个人测试不同版本，完全通过域名隔离，互不影响。</p>
+<p>结合我们目前的项目状况和可以利用的资源，我提供的方案是这样的</p>
+<p>开发阶段，前端将App的Host配置为自己开发电脑的局域网IP，这样所有的静态资源、web页面和API均走前端同学的开发电脑（webpack-dev-server）。</p>
+<p>测试阶段，前端通过<code>npm run build:37 &amp;&amp; npm run deploy:37</code>将源码打包连同<code>index.html</code>发布到测试静态资源服务器的名为/37目录下，如果并行开发几个版本，测试同学可提供新的测试服务器，例如38，前端只需要<code>npm run build:38 &amp;&amp; npm run deploy:38</code>即可。</p>
+<p>上线，前端通过<code>npm run build:prod &amp;&amp; npm run deploy:prod</code>，打包后的JS、CSS发布到带缓存的静态资源服务器的，将<code>index.html</code>发布到不带缓存的静态资源服务器。</p>
+<h3 id="后端需要做的改动"><a href="#后端需要做的改动" class="headerlink" title="后端需要做的改动"></a>后端需要做的改动</h3><p>根据当前服务所在的域名抓取对应的<code>index.html</code>并缓存在内存中。简易流程如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> HtmlPath</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (host为测试环境) &#123;</span><br><span class="line">  <span class="keyword">var</span> 静态资源服务地址 = <span class="string">'http://static.domain-test.cn/'</span></span><br><span class="line">  <span class="keyword">var</span> 当前测试环境编号 = 取得当前测试服务器编号，例如<span class="number">37</span>号</span><br><span class="line">  HtmlPath = 静态资源服务地址 + 项目资源目录 + 当前测试环境编号 + <span class="string">'index.html'</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (host为正式环境) &#123;</span><br><span class="line">  <span class="keyword">var</span> 线上不带缓存的静态资源服务地址 = <span class="string">'http://static.domain.com/'</span></span><br><span class="line">  HtmlPath = 线上不带缓存的静态资源服务地址 + 项目资源目录 + <span class="string">'index.html'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="客户端需要的改动"><a href="#客户端需要的改动" class="headerlink" title="客户端需要的改动"></a>客户端需要的改动</h3><p>移除配置中心，将侧边栏跳转地址等写在App内或由前端控制。Host配置本地化，测试包留口可切换Host。这样Web页面的部分就解决了多人同时开发和测试的问题。</p>
+<p>再说Weex页面，Weex页面的地址也要遵循只依赖Host，大致逻辑如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (host为IP) &#123;</span><br><span class="line">  weexBundleUrl = <span class="string">'从当前IP的9082端口获取'</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (host为测试域名) &#123;</span><br><span class="line">  <span class="keyword">var</span> 当前测试环境编号 = 取得当前测试服务器编号，例如<span class="number">37</span>号</span><br><span class="line">  weexBundleUrl = 静态资源服务地址 + weex项目资源目录 + 当前测试环境编号 + <span class="string">'index.html'</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (host为正式域名) &#123;</span><br><span class="line">  weexBundleUrl = 静态资源服务地址 + weex项目资源目录 + <span class="string">'index.html'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这样一个方法，就可以做到通过Host，算出对应Weex页面的地址。</p>
+<p>写下这篇文章主要是阐述我对整体架构的理解和针对目前团队结构提出的改进方案</p>
+<p>推进整套方案是个漫长的过程，，keep going！！！</p>
+</div>
+<div class="page-date">2018-04-09</div>
+    </div>
+    <footer class="footer">
+  <div>&copy; 2018 Geoff Zhu</div>
+  <div>
+    
+      
+        <a href="/blog//about" target="">About</a>
+      
+    
+      
+        <a href="https://github.com/GeoffZhu" target="_blank">Github</a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/geoffzhu/activities" target="_blank">Zhihu</a>
+      
+    
+      
+        <a href="https://weibo.com/geoffzhu" target="_blank">Weibo</a>
+      
+    
+  </div>
+</footer>
+  </div>
+</body>
+</html>
