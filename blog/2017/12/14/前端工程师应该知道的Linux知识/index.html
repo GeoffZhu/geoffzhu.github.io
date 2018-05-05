@@ -50,8 +50,11 @@
 <p>其他还有一些相应格式安装包对应的安装工具，比如用于安装.deb文件的<code>dpkg</code>，还有用于安装.rpm文件的<code>rpm</code>。</p>
 <p>包的本质是什么？其实就是一个二进制文件而已，比如我们执行<code>node</code>命令，实际上就是执行了一个可执行的二进制文件。</p>
 <p>我们可以使用<code>which</code>命令看看这个可执行文件在哪里？</p>
-<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><h3 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h3><h4 id="help"><a href="#help" class="headerlink" title="help"></a>help</h4><p>help命令可以查看SHELL内部命令的帮助<br>大多数外部命令都可以用 —help / -h 来查看使用帮助</p>
-<h4 id="man"><a href="#man" class="headerlink" title="man"></a>man</h4><p>绝大部分的软件安装都为执行程序提供了帮助手册<br>编译安装的软件，可以配置/etc/man.config<br>指定man手册路径</p>
+<h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><h3 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h3><h4 id="help"><a href="#help" class="headerlink" title="help"></a>help</h4><p>help命令可以查看SHELL内部命令的帮助
+大多数外部命令都可以用 —help / -h 来查看使用帮助</p>
+<h4 id="man"><a href="#man" class="headerlink" title="man"></a>man</h4><p>绝大部分的软件安装都为执行程序提供了帮助手册
+编译安装的软件，可以配置/etc/man.config 
+指定man手册路径</p>
 <h4 id="info"><a href="#info" class="headerlink" title="info"></a>info</h4><p>是另一种在线帮助，功能与man手册相似</p>
 <h3 id="目录-amp-文件命令"><a href="#目录-amp-文件命令" class="headerlink" title="目录&amp;文件命令"></a>目录&amp;文件命令</h3><table>
 <thead>
@@ -129,7 +132,11 @@
 </tr>
 </tbody>
 </table>
-<p>几个常见的命令行参数参数<br>-h -human-readable 以人能看懂的方式展示<br>-r 递归文件夹<br>-d -depth 展示深度<br>-f -force 强制</p>
+<p>几个常见的命令行参数参数
+-h -human-readable 以人能看懂的方式展示
+-r 递归文件夹
+-d -depth 展示深度
+-f -force 强制</p>
 <h3 id="内容查看命令"><a href="#内容查看命令" class="headerlink" title="内容查看命令"></a>内容查看命令</h3><table>
 <thead>
 <tr>
@@ -162,8 +169,8 @@
 <tr>
 <td>grep</td>
 <td>检索过滤文件内容</td>
-<td><code>`</code>cat package.json</td>
-<td>grep ‘vue’<code>`</code></td>
+<td>`cat package.json</td>
+<td>grep ‘vue’`</td>
 </tr>
 </tbody>
 </table>
@@ -199,8 +206,8 @@
 <tr>
 <td>grep</td>
 <td>检索过滤文件内容</td>
-<td><code>`</code>cat package.json</td>
-<td>grep ‘vue’<code>`</code></td>
+<td>`cat package.json</td>
+<td>grep ‘vue’`</td>
 </tr>
 </tbody>
 </table>
